@@ -16,7 +16,8 @@ export class GameService {
     initGame(){
         const faceKeys = this.getFaceKeysByThemeKey();
         const cardsRaw = this.createCardSet(faceKeys);
-
+        const cardsToPlay = this.shuffleCards(cardsRaw);
+        const getStartPlayerId = this.getStartPlayerId();
     }
 
     private getFaceKeysByThemeKey():string[]{
@@ -51,10 +52,46 @@ export class GameService {
         };
     }
 
-    private shuffleCards(){
+    private copyCard(card:Card):Card{
+        return {
+            id:card.id,
+            pairId:card.pairId,
+            faceKey:card.faceKey,
+            isFlipped:card.isFlipped,
+            isMatched:card.isMatched
+        };
+    }
+
+    private shuffleCards(originalCards:Card[]):Card[]{
+        const copyCards = this.createCardsCopy(originalCards);
+        for(let currentIndex = copyCards.length - 1; currentIndex >= 0; currentIndex-- ){
+            const targetIndex = this.getRandomIndex(currentIndex);
+            const targetCardTemp = copyCards[targetIndex];
+            copyCards[targetIndex] = copyCards[currentIndex];
+            copyCards[currentIndex] = targetCardTemp;
+        }
+
+        return copyCards;
+    }
+
+    private createCardsCopy(originalCards:Card[]):Card[]{
+        let copyCards:Card[] = [];
+        originalCards.forEach((card) => {
+            const copyCard = this.copyCard(card);
+            copyCards.push(copyCard);
+        });
+        return copyCards;
+    }
+
+    private getRandomIndex(currentIndex:number):number{
+        return Math.floor(Math.random() * (currentIndex + 1));
     }
 
 
+    private getStartPlayerId():number {
+        const currentPlayerIndex = Math.floor(Math.random() * this.players.length);
+        return this.players[currentPlayerIndex].id;
+    }
 
 
 
