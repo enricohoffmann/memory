@@ -11,7 +11,7 @@ export interface Player {
 export interface Card {
     id:number;
     pairId:number;
-    faceKey:string;
+    facePath:string;
     isFlipped:boolean;
     isMatched:boolean;
 }
@@ -34,6 +34,5 @@ export interface GameState {
 export interface Theme {
     key:ThemeKey;
     name:string;
-    frontFaceBaseDir:string;
-    faceKeys:string[];
+    facePaths:string[];
 }

@@ -1,40 +1,57 @@
-import { Player, ThemeKey, Card, BoardSize } from "../types/game.types";
+import { Player, ThemeKey, Card, BoardSize, GameState, Theme } from "../types/game.types";
+import { ThemeService } from "./theme.service";
 
 
 export class GameService {
 
     private players:Player[];
-    private themeKey:ThemeKey;
+    private readonly theme:Theme;
     private boardSize:BoardSize;
 
-    constructor(players:Player[], themeKey:ThemeKey, boardSize:BoardSize){
-        this.themeKey = themeKey;
+    constructor(players:Player[], theme:Theme, boardSize:BoardSize){
+        this.theme = theme;
         this.players = players;
         this.boardSize = boardSize;
     }
 
-    initGame(){
-        const faceKeys = this.getFaceKeysByThemeKey();
-        const cardsRaw = this.createCardSet(faceKeys);
-        const cardsToPlay = this.shuffleCards(cardsRaw);
-        const getStartPlayerId = this.getStartPlayerId();
+    initGame():GameState {
+        const facePaths = this.getFacePathsBasedOnBoardSize();
+        const cardsRaw = this.createCardSet(facePaths);
+        const cardsToPlay = this.shuffleArray(cardsRaw);
+        const startPlayerId = this.getStartPlayerId();
+        const newGameState = this.createNewGameState(startPlayerId, cardsToPlay);
+        return newGameState;
     }
 
-    private getFaceKeysByThemeKey():string[]{
-        const testArray = ['typeScript', 'python', 'angular'];
-        return testArray;
+    private createNewGameState(startPlayerId:number, cardsToPlay:Card[]):GameState {
+        return {
+            players: this.players,
+            currentPlayerId: startPlayerId,
+            cards:cardsToPlay,
+            selectedCards:[],
+            themeKey:this.theme.key,
+            boardSize:this.boardSize,
+            status:'running'
+        };
+    }
+
+    private getFacePathsBasedOnBoardSize():string[]{
+        const fullFacePaths = this.createThemeFacePathsCopy(this.theme.facePaths);
+        const shuffledFacePaths:string[] = this.shuffleArray(fullFacePaths);
+        const slicedFacePaths:string[] = shuffledFacePaths.slice(0, (this.boardSize.size / 2));
+        return slicedFacePaths;
     }
 
    
-    private createCardSet(faceKeys:string[]):Card[]{
+    private createCardSet(facePaths:string[]):Card[]{
         let cards:Card[] = [];
         let cardId:number = 0;
         let pairId:number = 0;
-        faceKeys.forEach((faceKey)=>{
-            const cardNormal = this.createNewCard(cardId, pairId, faceKey);
+        facePaths.forEach((facePath)=>{
+            const cardNormal = this.createNewCard(cardId, pairId, facePath);
             cards.push(cardNormal);
             cardId = cardId + 1;
-            const cardDuplicated = this.createNewCard(cardId, pairId, faceKey);
+            const cardDuplicated = this.createNewCard(cardId, pairId, facePath);
             cards.push(cardDuplicated);
             cardId = cardId + 1;
             pairId = pairId + 1;
@@ -42,45 +59,34 @@ export class GameService {
         return cards;
     }
 
-    private createNewCard(cardId:number, pairId:number, faceKey:string):Card {
+    private createNewCard(cardId:number, pairId:number, facePath:string):Card {
         return {
             id:cardId,
             pairId:pairId,
-            faceKey:faceKey,
+            facePath:facePath,
             isFlipped:false,
             isMatched:false
         };
     }
 
-    private copyCard(card:Card):Card{
-        return {
-            id:card.id,
-            pairId:card.pairId,
-            faceKey:card.faceKey,
-            isFlipped:card.isFlipped,
-            isMatched:card.isMatched
-        };
-    }
-
-    private shuffleCards(originalCards:Card[]):Card[]{
-        const copyCards = this.createCardsCopy(originalCards);
-        for(let currentIndex = copyCards.length - 1; currentIndex >= 0; currentIndex-- ){
+    private shuffleArray<T>(arr: T[]):T[]{
+        
+        for(let currentIndex = arr.length - 1; currentIndex >= 0; currentIndex-- ){
             const targetIndex = this.getRandomIndex(currentIndex);
-            const targetCardTemp = copyCards[targetIndex];
-            copyCards[targetIndex] = copyCards[currentIndex];
-            copyCards[currentIndex] = targetCardTemp;
+            const targetTemp = arr[targetIndex];
+            arr[targetIndex] = arr[currentIndex];
+            arr[currentIndex] = targetTemp;
         }
 
-        return copyCards;
+        return arr;
     }
 
-    private createCardsCopy(originalCards:Card[]):Card[]{
-        let copyCards:Card[] = [];
-        originalCards.forEach((card) => {
-            const copyCard = this.copyCard(card);
-            copyCards.push(copyCard);
+    private createThemeFacePathsCopy(facePaths:string[]):string[]{
+        let copyFacePaths:string[] = [];
+        facePaths.forEach((path) => {
+            copyFacePaths.push(path);
         });
-        return copyCards;
+        return copyFacePaths;
     }
 
     private getRandomIndex(currentIndex:number):number{
