@@ -1,32 +1,32 @@
-import { Player, ThemeKey, Card, BoardSize, GameState, Theme } from "../types/game.types";
-import { ThemeService } from "./theme.service";
-
+import { Player, Card, BoardSize, GameState, Theme, GameConfig } from "../types/game.types";
 
 export class GameService {
 
-    private players:Player[];
+    private readonly players:Player[];
     private readonly theme:Theme;
     private boardSize:BoardSize;
+    private selectedPlayerId: string;
 
-    constructor(players:Player[], theme:Theme, boardSize:BoardSize){
-        this.theme = theme;
-        this.players = players;
-        this.boardSize = boardSize;
+
+    constructor(gameConfig:GameConfig){
+        this.theme = gameConfig.selectedTheme;
+        this.players = gameConfig.players;
+        this.boardSize = gameConfig.selectedBoardSize;
+        this.selectedPlayerId = gameConfig.selectedStartPlayerId;
     }
 
     initGame():GameState {
         const facePaths = this.getFacePathsBasedOnBoardSize();
         const cardsRaw = this.createCardSet(facePaths);
         const cardsToPlay = this.shuffleArray(cardsRaw);
-        const startPlayerId = this.getStartPlayerId();
-        const newGameState = this.createNewGameState(startPlayerId, cardsToPlay);
+        const newGameState = this.createNewGameState( cardsToPlay);
         return newGameState;
     }
 
-    private createNewGameState(startPlayerId:number, cardsToPlay:Card[]):GameState {
+    private createNewGameState(cardsToPlay:Card[]):GameState {
         return {
             players: this.players,
-            currentPlayerId: startPlayerId,
+            currentPlayerId: this.selectedPlayerId,
             cards:cardsToPlay,
             selectedCards:[],
             themeKey:this.theme.key,
@@ -92,13 +92,6 @@ export class GameService {
     private getRandomIndex(currentIndex:number):number{
         return Math.floor(Math.random() * (currentIndex + 1));
     }
-
-
-    private getStartPlayerId():number {
-        const currentPlayerIndex = Math.floor(Math.random() * this.players.length);
-        return this.players[currentPlayerIndex].id;
-    }
-
 
 
 }

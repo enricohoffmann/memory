@@ -2,7 +2,7 @@ export type ThemeKey = 'code-vibes' | 'games' | 'da-projects' | 'food';
 export type GameStatus = 'idle' | 'running' | 'lost' | 'won';
 
 export interface Player {
-    id:number;
+    id:string;
     name:string;
     color:string;
     score:number;
@@ -23,7 +23,7 @@ export interface BoardSize {
 }
 export interface GameState {
     players: Player[];
-    currentPlayerId:number;
+    currentPlayerId:string;
     cards:Card[];
     selectedCards:number[];
     themeKey:ThemeKey;
@@ -35,4 +35,17 @@ export interface Theme {
     key:ThemeKey;
     name:string;
     facePaths:string[];
+}
+
+export interface GameConfig {
+    selectedTheme: Theme;
+    players: Player[];
+    selectedStartPlayerId: string;
+    selectedBoardSize: BoardSize;
+}
+
+export interface GameConfigValidationResult {
+    success:boolean;
+    errors:string[];
+    gameState:GameState | null
 }
