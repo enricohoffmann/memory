@@ -7,7 +7,6 @@ export class GameService {
     private boardSize:BoardSize;
     private selectedPlayerId: string;
 
-
     constructor(gameConfig:GameConfig){
         this.theme = gameConfig.selectedTheme;
         this.players = gameConfig.players;
@@ -92,6 +91,5 @@ export class GameService {
     private getRandomIndex(currentIndex:number):number{
         return Math.floor(Math.random() * (currentIndex + 1));
     }
-
 
 }

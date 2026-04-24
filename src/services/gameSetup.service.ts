@@ -23,9 +23,8 @@ export class GameSetupService {
 
     }
 
-
     private validatePlayerConfig(playerId: string, players:Player[]): boolean {
-        if(playerId.length === 0 || playerId === null || playerId === undefined) {return false;}
+        if(playerId.length === 0 || playerId === 'player-00') {return false;}
         const player = players.find(p => p.id === playerId);
         return player ? true : false;
     }

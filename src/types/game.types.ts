@@ -1,5 +1,6 @@
 export type ThemeKey = 'code-vibes' | 'games' | 'da-projects' | 'food';
 export type GameStatus = 'idle' | 'running' | 'lost' | 'won';
+export type ViewName = 'home' | 'settings' | 'play' | 'game-over' | 'winner';
 
 export interface Player {
     id:string;
