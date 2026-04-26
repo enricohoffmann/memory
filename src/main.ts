@@ -1,4 +1,5 @@
 import { NavigationManager } from "./manager/navigation.manager";
+import './styles/main.scss';
 
 const app = document.getElementById('app');
 

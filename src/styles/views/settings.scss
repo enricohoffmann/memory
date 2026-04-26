@@ -1,0 +1,10 @@
+@use '../abstract/mixins';
+@use '../abstract/variables' as var;
+
+.settings-section {
+    max-width: var.$max-content-width;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 96px;
+    @include mixins.setup-display-flex(column, center, center);
+}
