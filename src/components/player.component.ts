@@ -1,29 +1,58 @@
-import { Player } from "../types/game.types";
+import { Player, SettingButtonParamter } from "../types/game.types";
 import { RadialButton } from "./radialButton.component";
 
 export class PlayerComponent {
 
-    _players:Player[] = [];
+    _players: Player[] = [];
 
-    constructor(){
+
+    constructor() {
     }
 
-    onInit(players:Player[]){
+    onInit(players: Player[]) {
         this._players = players;
     }
 
-    getPlayersHtml(): string{
+    getPlayers(container: HTMLElement): HTMLElement {
 
-        let playercontainerHtml = '';
 
         this._players.forEach((player) => {
 
-            const radialButton:RadialButton = new RadialButton();
-            playercontainerHtml += radialButton.getRadialButton(player.name, player.id)
+            const buttonParams: SettingButtonParamter = {
+                buttonId: player.id,
+                buttonText: player.name,
+                isInitialActive: false,
+                onClicked: (playerId) => {
+                    this.onPlayerSelected(playerId)
+                }
+            };
+
+            const radialButton: RadialButton = new RadialButton(buttonParams);
+            container.appendChild(radialButton.getRadialButton());
 
 
         });
 
-        return playercontainerHtml;
+        return container;
     }
+
+    onPlayerSelected(playerId: string) {
+
+        const selectedPlayer = this._players.find(p => p.id === playerId);
+
+        if (!selectedPlayer) { return; }
+
+        selectedPlayer.isSelected = !selectedPlayer.isSelected;
+
+        this._players.forEach((player) => {
+
+            if (player.id != playerId) {
+                player.isSelected = !selectedPlayer.isSelected;
+            }
+        });
+
+        console.log(this._players);
+        
+    }
+
 }

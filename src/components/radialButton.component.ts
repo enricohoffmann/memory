@@ -1,36 +1,58 @@
 import '../styles/components/_radialButton.scss';
+import { SettingButtonParamter } from '../types/game.types';
 
 export class RadialButton {
 
-    constructor() {
+    _buttonParams:SettingButtonParamter;
 
+    constructor(buttonParams: SettingButtonParamter) {
+        this._buttonParams = buttonParams;
     }
 
-
-    private buildRadialButtonHtml(buttonText: string, buttonId: string): string {
+    private buildRadialHtmlButton(): HTMLButtonElement {
         const html: string = /* html */ `
 
-            <button type='button' class='radial-button' data-button-id='${buttonId}'>
-
-                <!-- Kreis mit Punkt in der Mitte -->
+            <!-- Kreis mit Punkt in der Mitte -->
                 <div>
                     <span></span>
                 </div>
 
-                <span>${buttonText}</span>
+                <span>${this._buttonParams.buttonText}</span>
 
                 <!-- Pfeil -->
                 <div></div>
-            
-            </button>
 
         `;
 
-        return html;
+        let buttonElemenet: HTMLButtonElement = document.createElement('button');
+        buttonElemenet.type = 'button';
+        buttonElemenet.id = this._buttonParams.buttonId;
+        buttonElemenet.setAttribute('data-button-id', this._buttonParams.buttonId);
+        buttonElemenet.innerHTML = html;
+
+
+
+        return buttonElemenet;
     }
 
-    getRadialButton(buttonText: string, buttonId: string):string{
-        return this.buildRadialButtonHtml(buttonText, buttonId);
+    private registerEventListener(button:HTMLButtonElement):void {
+        button.addEventListener('click', () => {
+            this.toggleIsActive();
+        });
+    }
+
+    private toggleIsActive(){
+        
+        if (this._buttonParams.onClicked) {
+            this._buttonParams.onClicked(this._buttonParams.buttonId);
+        }
+    }
+    
+
+    getRadialButton():HTMLButtonElement{
+        const button = this.buildRadialHtmlButton();
+        this.registerEventListener(button);
+        return button;
     }
 
 

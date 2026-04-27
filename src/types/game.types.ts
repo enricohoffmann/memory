@@ -7,6 +7,7 @@ export interface Player {
     name:string;
     color:string;
     score:number;
+    isSelected:boolean;
 }
 
 export interface Card {
@@ -49,4 +50,11 @@ export interface GameConfigValidationResult {
     success:boolean;
     errors:string[];
     gameState:GameState | null
+}
+
+export interface SettingButtonParamter {
+    buttonId:string;
+    buttonText:string;
+    isInitialActive:boolean;
+    onClicked?: (buttonId: string) => void;
 }

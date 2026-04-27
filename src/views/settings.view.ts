@@ -46,35 +46,46 @@ export class SettingsView {
 
 
     render(container: HTMLElement) {
-        this.renderSettingsSection(container);
+        //this.renderSettingsSection(container);
+        const playerContainer = this.buildPlayersContainer();
+        const sectionContainer = this.buildSettingsSection();
+        
+        sectionContainer.appendChild(playerContainer);
 
-        const playerContent = this.playerComponent.getPlayersHtml();
-
-        this.renderContentInContainer(playerContent, '#players-container');
-
-        this.registerEventListener('.radial-button');
+        
+        container.appendChild(sectionContainer);
     }
 
 
-    private renderSettingsSection(container: HTMLElement) {
-        container.innerHTML = `
-            <section class='settings-section'>
+    private buildSettingsSection():HTMLElement {
+
+        const settingsSection: HTMLElement = document.createElement('section');
+        settingsSection.classList.add('settings-section');
+
+        settingsSection.innerHTML = `
                 <h2>Settings</h2>
-                <article id='players-container'></article>
-            </section>
-            `;
+                `;
+
+        return settingsSection;
     }
 
+    private buildPlayersContainer():HTMLElement {
+        const playersContainer: HTMLElement = document.createElement('article');
+        playersContainer.id = 'players-container';
 
+        const playerContent = this.playerComponent.getPlayers(playersContainer);
 
-    private renderContentInContainer(content:string, containerQuery:string):void {
+        return playerContent;
+    }
+
+    /* private renderContentInContainer(content:string, containerQuery:string):void {
         const container = document.querySelector(containerQuery);
         if(container){
             container.innerHTML = content;
         }
-    }
+    } */
 
-    private registerEventListener(selector:string):void {
+    /* private registerEventListener(selector:string):void {
         document
         .querySelectorAll(selector)
         .forEach((button)=>{
@@ -82,13 +93,13 @@ export class SettingsView {
                 this.radialButtonClick(button);
             });
         });
-    }
+    } */
 
-    private radialButtonClick(button: Element){
+    /* private radialButtonClick(button: Element){
         const btnId = button.getAttribute('data-button-id');
         console.log(btnId);
         
-    }
+    } */
 
 
 }
