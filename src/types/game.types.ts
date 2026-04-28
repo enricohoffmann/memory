@@ -1,13 +1,17 @@
 export type ThemeKey = 'code-vibes' | 'games' | 'da-projects' | 'food';
 export type GameStatus = 'idle' | 'running' | 'lost' | 'won';
 export type ViewName = 'home' | 'settings' | 'play' | 'game-over' | 'winner';
+export type Size = 16 | 24 | 36;
 
-export interface Player {
-    id:string;
-    name:string;
+
+export interface SettingOption {
+    id: string;
+    name: string;
+}
+
+export interface Player extends SettingOption {
     color:string;
     score:number;
-    isSelected:boolean;
 }
 
 export interface Card {
@@ -18,8 +22,8 @@ export interface Card {
     isMatched:boolean;
 }
 
-export interface BoardSize {
-    size: 16 | 24 | 36;
+export interface BoardSize extends SettingOption {
+    size: Size;
     rows:number;
     columns:number;
 }
@@ -33,9 +37,8 @@ export interface GameState {
     status:GameStatus;
 }
 
-export interface Theme {
+export interface Theme extends SettingOption {
     key:ThemeKey;
-    name:string;
     facePaths:string[];
 }
 

@@ -15,10 +15,10 @@ export class ThemeService {
     }
 
     private initThemeArray(){
-        this.themes.push({key: 'code-vibes', name: 'Coding vibes theme', facePaths: []});
-        this.themes.push({key: 'da-projects', name: 'DA Projects theme', facePaths: []});
-        this.themes.push({key: 'food', name: 'Food theme', facePaths: []});
-        this.themes.push({key: 'games', name: 'Gaming theme', facePaths: []});
+        this.themes.push({id:'theme-01', key: 'code-vibes', name: 'Coding vibes theme', facePaths: []});
+        this.themes.push({id:'theme-02', key: 'da-projects', name: 'DA Projects theme', facePaths: []});
+        this.themes.push({id:'theme-03', key: 'food', name: 'Food theme', facePaths: []});
+        this.themes.push({id:'theme-04', key: 'games', name: 'Gaming theme', facePaths: []});
     }
 
     getThemes(): Theme[]{

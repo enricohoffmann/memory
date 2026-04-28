@@ -1,7 +1,18 @@
+@use './functions' as fct;
+@use './variables' as var;
+
 @mixin setup-display-flex($direction: row, $justify: center, $align: center, $gap: 0) {
     display: flex;
     flex-direction: $direction;
     justify-content: $justify;
     align-items: $align;
     gap: $gap;
+}
+
+@mixin setup-font($fontFamiliy: 'Almarai', $fontSize: 16px, $fontWeight: 400, $fontColor: var.$designBlack, $lineHeight: 100%){
+    font-family: $fontFamiliy, sans-serif;
+    font-size: fct.px-to-rem($fontSize);
+    font-weight: $fontWeight;
+    color: $fontColor;
+    line-height: $lineHeight;
 }

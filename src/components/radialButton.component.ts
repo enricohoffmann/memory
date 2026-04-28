@@ -13,19 +13,23 @@ export class RadialButton {
         const html: string = /* html */ `
 
             <!-- Kreis mit Punkt in der Mitte -->
-                <div>
+                <div class='radial-button__circle'>
                     <span></span>
                 </div>
 
-                <span>${this._buttonParams.buttonText}</span>
+                <span class='radial-button__text'>${this._buttonParams.buttonText}</span>
 
                 <!-- Pfeil -->
-                <div></div>
+                <div class='radial-button__selection-indicator'>
+                    <div class='radial-button__selection-indicator__line'></div>
+                    <div class='radial-button__selection-indicator__diamond'></div>
+                </div>
 
         `;
 
         let buttonElemenet: HTMLButtonElement = document.createElement('button');
         buttonElemenet.type = 'button';
+        buttonElemenet.classList.add('radial-button');
         buttonElemenet.id = this._buttonParams.buttonId;
         buttonElemenet.setAttribute('data-button-id', this._buttonParams.buttonId);
         buttonElemenet.innerHTML = html;

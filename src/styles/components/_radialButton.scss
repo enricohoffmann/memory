@@ -1,8 +1,43 @@
 @use '../abstract/functions' as fct;
 @use '../abstract/mixins' as mixins;
-
+@use '../abstract/variables' as var;
 
 
 .radial-button {
     @include mixins.setup-display-flex(row, flex-start, center, 12px);
+    border: unset;
+    outline: unset;
+    background: transparent;
+
+    &__circle {
+        width: 20px;
+        aspect-ratio: 1 / 1;
+        border-radius: 9999px;
+        border: 4px solid var.$designBlack;
+    }
+
+    &__text {
+
+        @include mixins.setup-font("Almarai", 20px, 400);
+
+    }
+
+    &__selection-indicator {
+        @include mixins.setup-display-flex(row, flex-start, center);
+
+
+        &__line {
+            height: 3px;
+            width: 41px;
+            background-color: var.$secondaryYellow;
+        }
+
+        &__diamond {
+            height: 10px;
+            aspect-ratio: 1 / 1;
+            background-color: var.$secondaryYellow;
+            rotate: 45deg;
+        }
+    }
+
 }

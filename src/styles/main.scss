@@ -1,6 +1,8 @@
-@use './views/settings.scss';
+@use './abstract/fonts';
+@use './views/_settings.scss';
 
-body, html {
+* {
+    padding: 0;
     margin: 0;
 }
 

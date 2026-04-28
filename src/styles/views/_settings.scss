@@ -8,3 +8,7 @@
     margin-top: 96px;
     @include mixins.setup-display-flex(column, center, center);
 }
+
+.settings-group {
+    @include mixins.setup-display-flex(column, center, flex-start, 16px);
+}
