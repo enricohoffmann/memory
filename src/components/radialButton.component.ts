@@ -3,60 +3,76 @@ import { SettingButtonParamter } from '../types/game.types';
 
 export class RadialButton {
 
-    _buttonParams:SettingButtonParamter;
+    _buttonParams: SettingButtonParamter;
+    _button: HTMLButtonElement;
+    _isActive:boolean = false;
 
     constructor(buttonParams: SettingButtonParamter) {
         this._buttonParams = buttonParams;
+        this._button = document.createElement('button');
+        this.buildRadialHtmlButton();
+        this.registerEventListener();
     }
 
-    private buildRadialHtmlButton(): HTMLButtonElement {
+    private buildRadialHtmlButton(): void {
+        this._button.type = 'button';
+        this._button.classList.add('radial-button');
+        this._button.id = this._buttonParams.buttonId;
+        this._button.setAttribute('data-button-id', this._buttonParams.buttonId);
+        this._button.innerHTML = this.getButtonHtml();
+    }
+
+    private getButtonHtml(): string {
         const html: string = /* html */ `
 
-            <!-- Kreis mit Punkt in der Mitte -->
-                <div class='radial-button__circle'>
-                    <span></span>
-                </div>
+            <div class='radial-button__circle'>
+                <div class='radial-button__circle__inner'></div>
+            </div>
 
-                <span class='radial-button__text'>${this._buttonParams.buttonText}</span>
+            <span class='radial-button__text'>${this._buttonParams.buttonText}</span>
 
-                <!-- Pfeil -->
-                <div class='radial-button__selection-indicator'>
-                    <div class='radial-button__selection-indicator__line'></div>
-                    <div class='radial-button__selection-indicator__diamond'></div>
-                </div>
+            <div class='radial-button__selection-indicator'>
+                <div class='radial-button__selection-indicator__line'></div>
+                <div class='radial-button__selection-indicator__diamond'></div>
+            </div>
 
         `;
 
-        let buttonElemenet: HTMLButtonElement = document.createElement('button');
-        buttonElemenet.type = 'button';
-        buttonElemenet.classList.add('radial-button');
-        buttonElemenet.id = this._buttonParams.buttonId;
-        buttonElemenet.setAttribute('data-button-id', this._buttonParams.buttonId);
-        buttonElemenet.innerHTML = html;
-
-
-
-        return buttonElemenet;
+        return html;
     }
 
-    private registerEventListener(button:HTMLButtonElement):void {
-        button.addEventListener('click', () => {
-            this.toggleIsActive();
+    private registerEventListener(): void {
+        this._button.addEventListener('click', () => {
+            if (this._buttonParams.onClicked) {
+                this._buttonParams.onClicked(this._buttonParams.buttonId);
+            }
+
+            this.changeButtonActive();
         });
     }
 
-    private toggleIsActive(){
-        
-        if (this._buttonParams.onClicked) {
-            this._buttonParams.onClicked(this._buttonParams.buttonId);
-        }
-    }
-    
+    changeButtonActive(setInActive:boolean = false):void {
 
-    getRadialButton():HTMLButtonElement{
-        const button = this.buildRadialHtmlButton();
-        this.registerEventListener(button);
-        return button;
+        if(setInActive) {
+            this.toggleActive(false);
+            return;
+        }
+
+        if(!this._isActive){
+            this._isActive = true;
+            this.toggleActive(true);
+        }
+        
+    }
+
+    private toggleActive(setActive:boolean):void {
+        setActive 
+        ? this._button.classList.add('radial-button--active') 
+        : this._button.classList.remove('radial-button--active');
+    }
+
+    getRadialButton(): HTMLButtonElement {
+        return this._button;
     }
 
 

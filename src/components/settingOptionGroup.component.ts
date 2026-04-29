@@ -18,6 +18,10 @@ export class SettingOptionGroupComponent {
         return container;
     }
 
+    setButtonActiveById(optionId: string): void {
+        
+    }
+
     private createButtonParameter<T extends SettingOption>(settingOption: T): SettingButtonParamter {
         return {
             buttonId: settingOption.id,

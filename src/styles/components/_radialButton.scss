@@ -8,27 +8,45 @@
     border: unset;
     outline: unset;
     background: transparent;
+    cursor: pointer;
+    box-sizing: border-box;
 
     &__circle {
+        @include mixins.setup-display-flex(row, center, center);
         width: 20px;
         aspect-ratio: 1 / 1;
         border-radius: 9999px;
-        border: 4px solid var.$designBlack;
+        border: 3px solid var.$designBlack;
+        box-sizing: border-box;
+        transition: border 125ms ease-in;
+
+        &__inner {
+            width: 3px;
+            aspect-ratio: 1 / 1;
+            border-radius: 9999px;
+            border: 3px solid var.$designBlack;
+            box-sizing: border-box;
+            opacity: 0;
+            transition: opacity 125ms ease-in;
+        }
+
     }
 
     &__text {
-
+        box-sizing: border-box;
         @include mixins.setup-font("Almarai", 20px, 400);
-
+        transition: text-shadow 125ms ease-in;
+        
     }
 
     &__selection-indicator {
         @include mixins.setup-display-flex(row, flex-start, center);
-
+        opacity: 0;
+        transition: opacity 125ms ease-in;
 
         &__line {
             height: 3px;
-            width: 41px;
+            width: 36px;
             background-color: var.$secondaryYellow;
         }
 
@@ -38,6 +56,32 @@
             background-color: var.$secondaryYellow;
             rotate: 45deg;
         }
+
+
     }
+
+    &:hover,
+    &--active {
+        .radial-button__circle {
+            border: 2px solid var.$designBlack;
+
+            &__inner {
+                opacity: 1;
+            }
+        }
+
+        .radial-button__text {
+            text-shadow:
+                0.2px 0.2px 0 currentColor,
+                -0.2px 0.2px 0 currentColor,
+                -0.2px -0.2px 0 currentColor,
+                0.2px -0.2px 0 currentColor;
+        }
+
+        .radial-button__selection-indicator {
+            opacity: 1;
+        }
+    }
+
 
 }
