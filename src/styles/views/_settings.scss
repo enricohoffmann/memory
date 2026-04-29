@@ -1,14 +1,46 @@
-@use '../abstract/mixins';
+@use '../abstract/mixins' as mixins;
 @use '../abstract/variables' as var;
+
+h2 {
+    @include mixins.setup-font("Almarai", 54px, 700);
+    padding-left: 16px;
+}
 
 .settings-section {
     max-width: var.$max-content-width;
     margin-left: auto;
     margin-right: auto;
     margin-top: 96px;
-    @include mixins.setup-display-flex(column, center, center);
+    width: 80vw;
+    width: 80dvw;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    
 }
 
 .settings-group {
     @include mixins.setup-display-flex(column, center, flex-start, 16px);
+
+
+}
+
+.settings-section-header {
+    @include mixins.setup-display-flex(column, center, flex-start);
+
+    &__decorative-arrow {
+        @include mixins.setup-display-flex(row, flex-start, center);
+
+        &__diamond {
+            height: 10px;
+            aspect-ratio: 1 / 1;
+            background-color: var.$secondaryYellow;
+            rotate: 45deg;
+        }
+
+        &__line {
+            height: 3px;
+            width: 232px;
+            background-color: var.$secondaryYellow;
+        }
+    }
 }

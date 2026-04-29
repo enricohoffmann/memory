@@ -23,7 +23,7 @@ export class SettingsView {
         this.playerService = new PlayerService();
         this.boardSizeService = new BoardSizeService();
 
-        this.playersComponent = new SettingOptionGroupComponent(false, (playerId) => {
+        this.playersComponent = new SettingOptionGroupComponent(true, (playerId) => {
             this.selectedStartPlayerId = playerId;
         });
 
@@ -67,13 +67,8 @@ export class SettingsView {
 
     private fillSectionContainer(section: HTMLElement, playerContainer: HTMLElement) {
         section.appendChild(playerContainer);
-    }
 
-    /* private fillSectionContainer(section: HTMLElement, themesContainer: HTMLElement, playerContainer: HTMLElement, boardSizeContainer: HTMLElement){
-        section.appendChild(themesContainer);
-        section.appendChild(playerContainer);
-        section.appendChild(boardSizeContainer);
-    } */
+    }
 
 
     private buildSettingsSection(): HTMLElement {
@@ -81,37 +76,29 @@ export class SettingsView {
         const settingsSection: HTMLElement = document.createElement('section');
         settingsSection.classList.add('settings-section');
 
-        settingsSection.innerHTML = `
-                <h2>Settings</h2>
+        settingsSection.innerHTML = /* html */ `
+
+                <header class='settings-section-header'>
+                    <h2>Settings</h2>
+                    <div class='settings-section-header__decorative-arrow'>
+                        <div class='settings-section-header__decorative-arrow__diamond'></div>
+                        <div class='settings-section-header__decorative-arrow__line'></div>
+                    </div>
+                </header>
+
+                <main class='settings-sub-grid'>
+                    <div class='settings-sub-grid__left'></div>
+                    <div class="settings-sub-grid__right">
+                        <div class='settings-sub-grid__right__top'></div>
+                        <div class='settings-sub-grid__right__buttom'></div>
+                    </div>
+                </main>
+
                 `;
 
         return settingsSection;
     }
 
     
-
-    /* private renderContentInContainer(content:string, containerQuery:string):void {
-        const container = document.querySelector(containerQuery);
-        if(container){
-            container.innerHTML = content;
-        }
-    } */
-
-    /* private registerEventListener(selector:string):void {
-        document
-        .querySelectorAll(selector)
-        .forEach((button)=>{
-            button.addEventListener('click', () => {
-                this.radialButtonClick(button);
-            });
-        });
-    } */
-
-    /* private radialButtonClick(button: Element){
-        const btnId = button.getAttribute('data-button-id');
-        console.log(btnId);
-        
-    } */
-
 
 }

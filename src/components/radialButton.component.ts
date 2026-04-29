@@ -4,8 +4,8 @@ import { SettingButtonParamter } from '../types/game.types';
 export class RadialButton {
 
     _buttonParams: SettingButtonParamter;
-    _button: HTMLButtonElement;
-    _isActive:boolean = false;
+    private _button: HTMLButtonElement;
+    private _isActive:boolean = false;
 
     constructor(buttonParams: SettingButtonParamter) {
         this._buttonParams = buttonParams;
@@ -20,6 +20,9 @@ export class RadialButton {
         this._button.id = this._buttonParams.buttonId;
         this._button.setAttribute('data-button-id', this._buttonParams.buttonId);
         this._button.innerHTML = this.getButtonHtml();
+        if(this._buttonParams.isInitialActive){
+            this.toggleActive(true);
+        }
     }
 
     private getButtonHtml(): string {
@@ -55,6 +58,7 @@ export class RadialButton {
 
         if(setInActive) {
             this.toggleActive(false);
+            this._isActive = false;
             return;
         }
 

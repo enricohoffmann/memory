@@ -4,29 +4,27 @@ import { RadialButton } from "./radialButton.component";
 export class SettingOptionGroupComponent {
     constructor(private firstElementIsActive: boolean, private onOptionSelected: (optionId: string) => void) { }
 
-    private optionGroupButtons:RadialButton[] = [];
+    private _optionGroupButtons:RadialButton[] = [];
 
     buildContainer<T extends SettingOption>(settingGroupArray: T[], nodeName: string): HTMLElement {
         const container: HTMLElement = document.createElement(nodeName);
-
+        let arrIndex:number = 0;
         settingGroupArray.forEach((settingOption) => {
-            const buttonParams = this.createButtonParameter(settingOption);
+            const buttonParams = this.createButtonParameter(
+                settingOption, this.firstElementIsActive && arrIndex == 0
+            );
             const button: HTMLElement = this.createButton(buttonParams);
             container.appendChild(button);
-
+            arrIndex++;
         });
         return container;
     }
 
-    setButtonActiveById(optionId: string): void {
-        
-    }
-
-    private createButtonParameter<T extends SettingOption>(settingOption: T): SettingButtonParamter {
+    private createButtonParameter<T extends SettingOption>(settingOption: T, isInitialActive:boolean = false): SettingButtonParamter {
         return {
             buttonId: settingOption.id,
             buttonText: settingOption.name,
-            isInitialActive: this.firstElementIsActive,
+            isInitialActive: isInitialActive,
             onClicked: (settingOptionId:string ) => {
                 this.onOptionSelected(settingOptionId)
                 this.handleNewOptionSelected(settingOptionId);
@@ -36,12 +34,18 @@ export class SettingOptionGroupComponent {
 
     private createButton(buttonParams: SettingButtonParamter): HTMLElement {
             const button: RadialButton = new RadialButton(buttonParams);
-            this.optionGroupButtons.push(button);
+            this._optionGroupButtons.push(button);
             return button.getRadialButton();
         }
 
     private handleNewOptionSelected(optionId: string){
-        console.log(optionId);
+
+        this._optionGroupButtons.forEach((optionGroupButton)=>{
+            const btnId = optionGroupButton._buttonParams.buttonId;
+            if(btnId !== optionId){
+                optionGroupButton.changeButtonActive(true);
+            }
+        });
         
     }
 
