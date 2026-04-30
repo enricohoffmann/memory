@@ -1,17 +1,49 @@
-import { SettingButtonParamter, SettingOption } from "../types/game.types";
+import { OptionGroup, SettingButtonParamter, SettingOption } from "../types/game.types";
 import { RadialButton } from "./radialButton.component";
 
 export class SettingOptionGroupComponent {
-    constructor(private firstElementIsActive: boolean, private onOptionSelected: (optionId: string) => void) { }
+    constructor(private onOptionSelected: (optionId: string) => void) { }
 
     private _optionGroupButtons:RadialButton[] = [];
 
-    buildContainer<T extends SettingOption>(settingGroupArray: T[], nodeName: string): HTMLElement {
-        const container: HTMLElement = document.createElement(nodeName);
+    buildContainer<T extends SettingOption>(settingGroupArray: T[], option: OptionGroup): HTMLElement {
+        const container: HTMLElement = document.createElement(option.nodeName);
+        const headerContainer: HTMLElement = this.buildOptionGroupHeader(option);
+        container.appendChild(headerContainer);
+        const optionGroup: HTMLElement = this.buildOptionsGroup(settingGroupArray, option);
+        container.appendChild(optionGroup);
+
+        return container;
+    }
+
+    private buildOptionGroupHeader(option: OptionGroup): HTMLElement {
+        const optionHeader = document.createElement('header');
+        optionHeader.classList.add('option-header')
+        
+        const optionIcon = document.createElement('img');
+        optionIcon.classList.add('option-header__icon');
+        optionIcon.src = option.iconPath;
+        optionIcon.alt = 'Icon';
+
+        const optionTitle = document.createElement('h3');
+        optionTitle.classList.add('option-header__title');
+        optionTitle.innerText = option.title;
+
+        optionHeader.appendChild(optionIcon);
+        optionHeader.appendChild(optionTitle);
+
+        return optionHeader;
+
+    }
+
+    private buildOptionsGroup<T extends SettingOption>(groupArray: T[], option: OptionGroup): HTMLElement {
+        const container: HTMLElement = document.createElement('main');
+        container.classList.add('setting-group-main');
+
         let arrIndex:number = 0;
-        settingGroupArray.forEach((settingOption) => {
+        groupArray.forEach((settingOption) => {
             const buttonParams = this.createButtonParameter(
-                settingOption, this.firstElementIsActive && arrIndex == 0
+                settingOption, option.firstElementIsActive && arrIndex == 0
             );
             const button: HTMLElement = this.createButton(buttonParams);
             container.appendChild(button);

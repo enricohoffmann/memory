@@ -1,5 +1,6 @@
 @use '../abstract/mixins' as mixins;
 @use '../abstract/variables' as var;
+@use '../components/settingGroup';
 
 h2 {
     @include mixins.setup-font("Almarai", 54px, 700);
@@ -18,10 +19,12 @@ h2 {
     
 }
 
+.settings-sub-grid {
+    margin-top: 48px
+}
+
 .settings-group {
     @include mixins.setup-display-flex(column, center, flex-start, 16px);
-
-
 }
 
 .settings-section-header {
@@ -44,3 +47,10 @@ h2 {
         }
     }
 }
+
+.settings-sub-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    
+}
+

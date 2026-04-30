@@ -2,8 +2,8 @@ import { SettingOptionGroupComponent } from "../components/settingOptionGroup.co
 import { BoardSizeService } from "../services/boardSize.service";
 import { PlayerService } from "../services/player.service";
 import { ThemeService } from "../services/theme.service";
-import { BoardSize, Player, Theme, ViewName} from "../types/game.types";
-
+import { BoardSize, OptionGroup, Player, Theme, ViewName} from "../types/game.types";
+import playerGroupIcon from '../assets/icons/player-group.svg';
 
 export class SettingsView {
 
@@ -23,7 +23,7 @@ export class SettingsView {
         this.playerService = new PlayerService();
         this.boardSizeService = new BoardSizeService();
 
-        this.playersComponent = new SettingOptionGroupComponent(true, (playerId) => {
+        this.playersComponent = new SettingOptionGroupComponent((playerId) => {
             this.selectedStartPlayerId = playerId;
         });
 
@@ -55,14 +55,41 @@ export class SettingsView {
 
     render(container: HTMLElement) {
         const sectionContainer = this.buildSettingsSection();
+        container.appendChild(sectionContainer);
+        this.renderOptionGroupsIntoColumnOne();
+
+
         //const themeContainer = this.buildThemeConainer();
-        const playerContainer = this.playersComponent.buildContainer(this.players, 'article');
-        playerContainer.classList.add('settings-group');
+        
         //const boardSizeContainer = this.buildBoardSizeContainer();
 
-        this.fillSectionContainer(sectionContainer, playerContainer);
+        //this.fillSectionContainer(sectionContainer, playerContainer);
 
-        container.appendChild(sectionContainer);
+        
+    }
+
+    private renderOptionGroupsIntoColumnOne(){
+        const columnOne = document.getElementById('setting-sub-col-one');
+        if(!columnOne) {return;}
+
+
+        const playerContainer = this.buildPlayerOptionGroup();
+        columnOne.appendChild(playerContainer);
+    }
+
+    private buildPlayerOptionGroup(): HTMLElement {
+
+        const playerOptionGroup: OptionGroup = {
+            title: 'Choose player',
+            firstElementIsActive: false,
+            nodeName: 'article',
+            iconPath: playerGroupIcon
+        }
+
+        const playerContainer = this.playersComponent.buildContainer(this.players, playerOptionGroup);
+        playerContainer.classList.add('settings-group');
+
+        return playerContainer;
     }
 
     private fillSectionContainer(section: HTMLElement, playerContainer: HTMLElement) {
@@ -87,7 +114,7 @@ export class SettingsView {
                 </header>
 
                 <main class='settings-sub-grid'>
-                    <div class='settings-sub-grid__left'></div>
+                    <div id='setting-sub-col-one' class='settings-sub-grid__left'></div>
                     <div class="settings-sub-grid__right">
                         <div class='settings-sub-grid__right__top'></div>
                         <div class='settings-sub-grid__right__buttom'></div>

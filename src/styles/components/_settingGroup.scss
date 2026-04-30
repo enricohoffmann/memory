@@ -1,0 +1,20 @@
+@use '../abstract/mixins' as mixins;
+@use '../abstract/variables' as var;
+
+
+.option-header {
+    display: grid;
+    grid-template-columns: 30px 1fr;
+
+    &__title {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        @include mixins.setup-font("Almarai", 24px, 700);
+    }
+}
+
+.setting-group-main {
+    margin-left: 36px;
+    @include mixins.setup-display-flex(column, center, flex-start, 12px);
+}

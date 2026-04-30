@@ -61,3 +61,10 @@ export interface SettingButtonParamter {
     isInitialActive:boolean;
     onClicked?: (buttonId: string) => void;
 }
+
+export interface OptionGroup {
+    title: string;
+    firstElementIsActive:boolean;
+    nodeName: string;
+    iconPath: string;
+}
