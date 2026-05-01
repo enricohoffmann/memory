@@ -4,7 +4,7 @@
 
 .option-header {
     display: grid;
-    grid-template-columns: 30px 1fr;
+    grid-template-columns: 34px 1fr;
 
     &__title {
         height: 100%;
@@ -17,4 +17,8 @@
 .setting-group-main {
     margin-left: 36px;
     @include mixins.setup-display-flex(column, center, flex-start, 12px);
+}
+
+.mt-42 {
+    margin-top: 42px;
 }

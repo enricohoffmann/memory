@@ -1,3 +1,5 @@
+import { SettingOptionGroupComponent } from "../components/settingOptionGroup.component";
+
 export type ThemeKey = 'code-vibes' | 'games' | 'da-projects' | 'food';
 export type GameStatus = 'idle' | 'running' | 'lost' | 'won';
 export type ViewName = 'home' | 'settings' | 'play' | 'game-over' | 'winner';
@@ -62,9 +64,11 @@ export interface SettingButtonParamter {
     onClicked?: (buttonId: string) => void;
 }
 
-export interface OptionGroup {
+export interface OptionGroupSpecification<T> {
     title: string;
     firstElementIsActive:boolean;
     nodeName: string;
     iconPath: string;
+    groupComponent: SettingOptionGroupComponent;
+    groupArray: T[];
 }

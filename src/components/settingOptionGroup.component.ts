@@ -1,4 +1,4 @@
-import { OptionGroup, SettingButtonParamter, SettingOption } from "../types/game.types";
+import { BoardSize, OptionGroupSpecification, Player, SettingButtonParamter, SettingOption, Theme } from "../types/game.types";
 import { RadialButton } from "./radialButton.component";
 
 export class SettingOptionGroupComponent {
@@ -6,17 +6,17 @@ export class SettingOptionGroupComponent {
 
     private _optionGroupButtons:RadialButton[] = [];
 
-    buildContainer<T extends SettingOption>(settingGroupArray: T[], option: OptionGroup): HTMLElement {
-        const container: HTMLElement = document.createElement(option.nodeName);
-        const headerContainer: HTMLElement = this.buildOptionGroupHeader(option);
+    buildContainer<T extends SettingOption>(specification: OptionGroupSpecification<Theme | Player | BoardSize>): HTMLElement {
+        const container: HTMLElement = document.createElement(specification.nodeName);
+        const headerContainer: HTMLElement = this.buildOptionGroupHeader(specification);
         container.appendChild(headerContainer);
-        const optionGroup: HTMLElement = this.buildOptionsGroup(settingGroupArray, option);
+        const optionGroup: HTMLElement = this.buildOptionsGroup(specification.groupArray, specification);
         container.appendChild(optionGroup);
 
         return container;
     }
 
-    private buildOptionGroupHeader(option: OptionGroup): HTMLElement {
+    private buildOptionGroupHeader(option: OptionGroupSpecification<Theme | Player | BoardSize>): HTMLElement {
         const optionHeader = document.createElement('header');
         optionHeader.classList.add('option-header')
         
@@ -36,7 +36,7 @@ export class SettingOptionGroupComponent {
 
     }
 
-    private buildOptionsGroup<T extends SettingOption>(groupArray: T[], option: OptionGroup): HTMLElement {
+    private buildOptionsGroup<T extends SettingOption>(groupArray: T[], option: OptionGroupSpecification<Theme | Player | BoardSize>): HTMLElement {
         const container: HTMLElement = document.createElement('main');
         container.classList.add('setting-group-main');
 

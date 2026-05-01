@@ -2,20 +2,32 @@ import { SettingOptionGroupComponent } from "../components/settingOptionGroup.co
 import { BoardSizeService } from "../services/boardSize.service";
 import { PlayerService } from "../services/player.service";
 import { ThemeService } from "../services/theme.service";
-import { BoardSize, OptionGroup, Player, Theme, ViewName} from "../types/game.types";
+import { BoardSize, OptionGroupSpecification, Player, Theme, ViewName } from "../types/game.types";
+import themeGroupeIcon from '../assets/icons/theme-group.svg';
 import playerGroupIcon from '../assets/icons/player-group.svg';
+import boardSizeIcon from '../assets/icons/bordSize-group.svg';
+
 
 export class SettingsView {
 
     private themes: Theme[] = [];
-    private boardSizes: BoardSize[] = [];
-    private selectedStartPlayerId: string = 'player-00';
     private players: Player[] = [];
+    private boardSizes: BoardSize[] = [];
+
+    private selectedStartPlayerId: string | null = null;;
+    private selectdeThemeId: string | null = null;
+    private selectedBoardSizeId: string | null = null;
+
+    private optionGroupSpecifications: OptionGroupSpecification<Theme | Player | BoardSize>[] = [];
+
     private themeService: ThemeService;
     private playerService: PlayerService;
     private boardSizeService: BoardSizeService;
 
+    private themesComponent: SettingOptionGroupComponent;
     private playersComponent: SettingOptionGroupComponent;
+    private boardSizeComponent: SettingOptionGroupComponent;
+
 
 
     constructor(private navigate: (view: ViewName) => void) {
@@ -23,8 +35,16 @@ export class SettingsView {
         this.playerService = new PlayerService();
         this.boardSizeService = new BoardSizeService();
 
+        this.themesComponent = new SettingOptionGroupComponent((themeId) => {
+            this.changeThemeSelection(themeId);
+        });
+
         this.playersComponent = new SettingOptionGroupComponent((playerId) => {
-            this.selectedStartPlayerId = playerId;
+            this.changePlayerSelection(playerId);
+        });
+
+        this.boardSizeComponent = new SettingOptionGroupComponent((boardSizeId) => {
+            this.changeBoardSizeSelection(boardSizeId);
         });
 
     }
@@ -33,7 +53,7 @@ export class SettingsView {
         this.loadThemes();
         this.loadPlayers();
         this.loadBoardSizes();
-        this.selectedStartPlayerId = 'player-00';
+        this.createOptionGroupSpecifications();
 
     }
 
@@ -50,51 +70,62 @@ export class SettingsView {
         this.boardSizes = this.boardSizeService.getBoardSizes();
     }
 
-    
+    private changePlayerSelection(playerId: string): void {
+        this.selectedStartPlayerId = playerId;
+        //change View on Startbutton
+    }
+
+    private changeThemeSelection(themeId: string): void {
+        this.selectdeThemeId = themeId;
+        //change View on Startbutton
+    }
+
+    private changeBoardSizeSelection(boardSizeId: string): void {
+        this.selectedBoardSizeId = boardSizeId;
+        //change View on Startbutton
+    }
+
+    private createOptionGroupSpecifications(): void {
+        const themeOptionGroupSpecification: OptionGroupSpecification<Theme> = 
+        { title: 'Game themes', firstElementIsActive: true, nodeName: 'article', iconPath: themeGroupeIcon, groupComponent: this.themesComponent, groupArray: this.themes };
+        this.optionGroupSpecifications.push(themeOptionGroupSpecification);
+        const playerOptionGroupSpecification: OptionGroupSpecification<Player> = 
+        { title: 'Choose player', firstElementIsActive: false, nodeName: 'article', iconPath: playerGroupIcon, groupComponent: this.playersComponent, groupArray: this.players };
+        this.optionGroupSpecifications.push(playerOptionGroupSpecification);
+        const boardSizeOptionGroupSpecification: OptionGroupSpecification<BoardSize> = 
+        { title: 'BoardSize', firstElementIsActive: false, nodeName: 'article', iconPath: boardSizeIcon, groupComponent: this.boardSizeComponent, groupArray: this.boardSizes };
+        this.optionGroupSpecifications.push(boardSizeOptionGroupSpecification);
+    }
 
 
     render(container: HTMLElement) {
         const sectionContainer = this.buildSettingsSection();
         container.appendChild(sectionContainer);
         this.renderOptionGroupsIntoColumnOne();
-
-
-        //const themeContainer = this.buildThemeConainer();
-        
-        //const boardSizeContainer = this.buildBoardSizeContainer();
-
-        //this.fillSectionContainer(sectionContainer, playerContainer);
-
-        
     }
 
-    private renderOptionGroupsIntoColumnOne(){
+    private renderOptionGroupsIntoColumnOne() {
         const columnOne = document.getElementById('setting-sub-col-one');
-        if(!columnOne) {return;}
+        if (!columnOne) { return; }
 
+        let firstGroup = true;
 
-        const playerContainer = this.buildPlayerOptionGroup();
-        columnOne.appendChild(playerContainer);
+        this.optionGroupSpecifications.forEach((specification) => {
+            const optionContainer = this.buildOptionGroupBySpecification(specification);
+            if(firstGroup) {
+                firstGroup = false;
+            } else {
+                optionContainer.classList.add('mt-42');
+            }
+            columnOne.appendChild(optionContainer);
+        });
+
     }
 
-    private buildPlayerOptionGroup(): HTMLElement {
-
-        const playerOptionGroup: OptionGroup = {
-            title: 'Choose player',
-            firstElementIsActive: false,
-            nodeName: 'article',
-            iconPath: playerGroupIcon
-        }
-
-        const playerContainer = this.playersComponent.buildContainer(this.players, playerOptionGroup);
-        playerContainer.classList.add('settings-group');
-
-        return playerContainer;
-    }
-
-    private fillSectionContainer(section: HTMLElement, playerContainer: HTMLElement) {
-        section.appendChild(playerContainer);
-
+    private buildOptionGroupBySpecification(specification: OptionGroupSpecification<Theme | Player | BoardSize>): HTMLElement {
+        const container = specification.groupComponent.buildContainer(specification);
+        container.classList.add('settings-group');
+        return container;
     }
 
 
@@ -126,6 +157,6 @@ export class SettingsView {
         return settingsSection;
     }
 
-    
+
 
 }
