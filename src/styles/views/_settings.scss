@@ -27,6 +27,10 @@ h2 {
     @include mixins.setup-display-flex(column, center, flex-start, 16px);
 }
 
+.settings-group + .settings-group {
+    margin-top: 42px;
+}
+
 .settings-section-header {
     @include mixins.setup-display-flex(column, center, flex-start);
 
@@ -52,5 +56,12 @@ h2 {
     display: grid;
     grid-template-columns: auto 1fr;
     
+    &__right {
+
+        &__top {
+            display: flex;
+            justify-content: flex-end;
+        }
+    }
 }
 

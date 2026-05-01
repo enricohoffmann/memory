@@ -15,7 +15,7 @@ export class SettingsView {
     private boardSizes: BoardSize[] = [];
 
     private selectedStartPlayerId: string | null = null;;
-    private selectdeThemeId: string | null = null;
+    private selectedThemeId: string | null = null;
     private selectedBoardSizeId: string | null = null;
 
     private optionGroupSpecifications: OptionGroupSpecification<Theme | Player | BoardSize>[] = [];
@@ -27,7 +27,6 @@ export class SettingsView {
     private themesComponent: SettingOptionGroupComponent;
     private playersComponent: SettingOptionGroupComponent;
     private boardSizeComponent: SettingOptionGroupComponent;
-
 
 
     constructor(private navigate: (view: ViewName) => void) {
@@ -54,7 +53,7 @@ export class SettingsView {
         this.loadPlayers();
         this.loadBoardSizes();
         this.createOptionGroupSpecifications();
-
+        this.selectedThemeId = this.themes[0].id;
     }
 
     private loadThemes() {
@@ -76,7 +75,8 @@ export class SettingsView {
     }
 
     private changeThemeSelection(themeId: string): void {
-        this.selectdeThemeId = themeId;
+        this.selectedThemeId = themeId;
+        this.showThemePreviewImage();
         //change View on Startbutton
     }
 
@@ -102,21 +102,14 @@ export class SettingsView {
         const sectionContainer = this.buildSettingsSection();
         container.appendChild(sectionContainer);
         this.renderOptionGroupsIntoColumnOne();
+        this.showThemePreviewImage();
     }
 
     private renderOptionGroupsIntoColumnOne() {
         const columnOne = document.getElementById('setting-sub-col-one');
         if (!columnOne) { return; }
-
-        let firstGroup = true;
-
         this.optionGroupSpecifications.forEach((specification) => {
             const optionContainer = this.buildOptionGroupBySpecification(specification);
-            if(firstGroup) {
-                firstGroup = false;
-            } else {
-                optionContainer.classList.add('mt-42');
-            }
             columnOne.appendChild(optionContainer);
         });
 
@@ -128,6 +121,11 @@ export class SettingsView {
         return container;
     }
 
+    private showThemePreviewImage(){
+        const imageElement = document.getElementById('theme-preview-image') as HTMLImageElement;
+        if(!imageElement) { return; }
+        imageElement.src = this.themeService.getThemeImageById(this.selectedThemeId || '');
+    }
 
     private buildSettingsSection(): HTMLElement {
 
@@ -147,7 +145,9 @@ export class SettingsView {
                 <main class='settings-sub-grid'>
                     <div id='setting-sub-col-one' class='settings-sub-grid__left'></div>
                     <div class="settings-sub-grid__right">
-                        <div class='settings-sub-grid__right__top'></div>
+                        <div class='settings-sub-grid__right__top'>
+                            <img id='theme-preview-image' src='' name='Theme previewimage'/>
+                        </div>
                         <div class='settings-sub-grid__right__buttom'></div>
                     </div>
                 </main>
