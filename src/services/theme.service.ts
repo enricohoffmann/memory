@@ -22,16 +22,12 @@ export class ThemeService {
 
     private initThemeArray(){
 
-        this.themes.push({id:'theme-01', key: 'code-vibes', name: 'Coding vibes theme', facePaths: []});
-        this.themes.push({id:'theme-02', key: 'da-projects', name: 'DA Projects theme', facePaths: []});
-        this.themes.push({id:'theme-03', key: 'food', name: 'Food theme', facePaths: []});
-        this.themes.push({id:'theme-04', key: 'games', name: 'Gaming theme', facePaths: []});
+        this.themes.push({id:'theme-01', key: 'code-vibes', name: 'Coding vibes theme', facePaths: [], selectionText: 'Coding Theme'});
+        this.themes.push({id:'theme-02', key: 'da-projects', name: 'DA Projects theme', facePaths: [], selectionText: 'DA Projects Theme'});
+        this.themes.push({id:'theme-03', key: 'food', name: 'Food theme', facePaths: [], selectionText: 'Food Theme'});
+        this.themes.push({id:'theme-04', key: 'games', name: 'Gaming theme', facePaths: [], selectionText: 'Game Theme'});
     }
 
-    private getThemePreviewImageFileName(previewFileNames: string[], themeKey: ThemeKey): string {
-        const fileName = previewFileNames.filter(n => n.startsWith(`../assets/images/theme-visual/${themeKey}`));
-        return fileName.length > 0 ? fileName[0] : "";
-    }
 
     getThemes(): Theme[]{
         return this.themes;
@@ -42,6 +38,11 @@ export class ThemeService {
         if(!theme) {return '';}
         const imageKey = `../assets/images/theme-visual/${theme.key}-preview.svg`;
         return String(this.previewFiles[imageKey]);
+    }
+
+    getThemeById(themeId: string): (Theme | null) {
+        const theme = this.themes.find(t => t.id === themeId);
+        return theme ? theme : null;
     }
 
 
@@ -56,20 +57,6 @@ export class ThemeService {
         return assetFileNames;
 
     }
-
-    /* private loadPreviewImageFileNames():string[]{
-        let previewFiles = import.meta.glob<{ default: string}>('../assets/images/theme-visual/*.svg');
-        let previewFileNames: string[] = [];
-
-        console.log(previewFiles);
-        
-
-        Object.keys(previewFiles).forEach((fileName) => {
-            previewFileNames.push(fileName);
-        });
-
-        return previewFileNames;
-    } */
 
     private sortAssetFileNamesIntoThemes(assetFileNames:string[]):void {
         this.themes.forEach((theme) => {

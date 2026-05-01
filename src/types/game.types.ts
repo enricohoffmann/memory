@@ -42,6 +42,7 @@ export interface GameState {
 export interface Theme extends SettingOption {
     key:ThemeKey;
     facePaths:string[];
+    selectionText:string;
 }
 
 export interface GameConfig {

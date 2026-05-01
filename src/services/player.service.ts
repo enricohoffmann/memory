@@ -17,5 +17,10 @@ export class PlayerService {
         return this.players;
     }
 
+    getPlayerById(playerId: string): (Player | null) {
+        const player = this.players.find(p => p.id === playerId);
+        return player ? player : null; 
+    }
+
     
 }

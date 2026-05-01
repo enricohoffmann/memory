@@ -71,29 +71,35 @@ export class SettingsView {
 
     private changePlayerSelection(playerId: string): void {
         this.selectedStartPlayerId = playerId;
-        //change View on Startbutton
+        const player = this.playerService.getPlayerById(playerId);
+        if (player === null) { return; }
+        this.changeSettingsSelectionContent('player', `${player.name} Player`);
     }
 
     private changeThemeSelection(themeId: string): void {
         this.selectedThemeId = themeId;
         this.showThemePreviewImage();
-        //change View on Startbutton
+        const theme = this.themeService.getThemeById(themeId);
+        if (theme === null) { return; }
+        this.changeSettingsSelectionContent('theme', `${theme.selectionText}`);
     }
 
     private changeBoardSizeSelection(boardSizeId: string): void {
         this.selectedBoardSizeId = boardSizeId;
-        //change View on Startbutton
+        const boardSize = this.boardSizeService.getBoardSizeById(boardSizeId);
+        if (boardSize === null) { return; }
+        this.changeSettingsSelectionContent('boardSize', `Board-${boardSize.size} Cards`);
     }
 
     private createOptionGroupSpecifications(): void {
-        const themeOptionGroupSpecification: OptionGroupSpecification<Theme> = 
-        { title: 'Game themes', firstElementIsActive: true, nodeName: 'article', iconPath: themeGroupeIcon, groupComponent: this.themesComponent, groupArray: this.themes };
+        const themeOptionGroupSpecification: OptionGroupSpecification<Theme> =
+            { title: 'Game themes', firstElementIsActive: true, nodeName: 'article', iconPath: themeGroupeIcon, groupComponent: this.themesComponent, groupArray: this.themes };
         this.optionGroupSpecifications.push(themeOptionGroupSpecification);
-        const playerOptionGroupSpecification: OptionGroupSpecification<Player> = 
-        { title: 'Choose player', firstElementIsActive: false, nodeName: 'article', iconPath: playerGroupIcon, groupComponent: this.playersComponent, groupArray: this.players };
+        const playerOptionGroupSpecification: OptionGroupSpecification<Player> =
+            { title: 'Choose player', firstElementIsActive: false, nodeName: 'article', iconPath: playerGroupIcon, groupComponent: this.playersComponent, groupArray: this.players };
         this.optionGroupSpecifications.push(playerOptionGroupSpecification);
-        const boardSizeOptionGroupSpecification: OptionGroupSpecification<BoardSize> = 
-        { title: 'BoardSize', firstElementIsActive: false, nodeName: 'article', iconPath: boardSizeIcon, groupComponent: this.boardSizeComponent, groupArray: this.boardSizes };
+        const boardSizeOptionGroupSpecification: OptionGroupSpecification<BoardSize> =
+            { title: 'BoardSize', firstElementIsActive: false, nodeName: 'article', iconPath: boardSizeIcon, groupComponent: this.boardSizeComponent, groupArray: this.boardSizes };
         this.optionGroupSpecifications.push(boardSizeOptionGroupSpecification);
     }
 
@@ -102,7 +108,7 @@ export class SettingsView {
         const sectionContainer = this.buildSettingsSection();
         container.appendChild(sectionContainer);
         this.renderOptionGroupsIntoColumnOne();
-        this.showThemePreviewImage();
+        this.changeThemeSelection(this.selectedThemeId!);
     }
 
     private renderOptionGroupsIntoColumnOne() {
@@ -121,11 +127,31 @@ export class SettingsView {
         return container;
     }
 
-    private showThemePreviewImage(){
+    private showThemePreviewImage() {
         const imageElement = document.getElementById('theme-preview-image') as HTMLImageElement;
-        if(!imageElement) { return; }
+        if (!imageElement) { return; }
         imageElement.src = this.themeService.getThemeImageById(this.selectedThemeId || '');
     }
+
+    private changeSettingsSelectionContent(selectionName: string, content: string) {
+        const selectionElemets = document.querySelectorAll('#selection-container p');
+        if (!selectionElemets) { return; }
+
+        selectionElemets.forEach((element) => {
+            if (element.id.startsWith(selectionName)) {
+                const selectionElement = document.getElementById(element.id);
+                if (selectionElement) {
+                    //Fade out
+                    selectionElement.innerText = content;
+                    //Fade in
+                }
+            }
+
+        });
+
+    }
+
+
 
     private buildSettingsSection(): HTMLElement {
 
@@ -143,13 +169,29 @@ export class SettingsView {
                 </header>
 
                 <main class='settings-sub-grid'>
-                    <div id='setting-sub-col-one' class='settings-sub-grid__left'></div>
-                    <div class="settings-sub-grid__right">
-                        <div class='settings-sub-grid__right__top'>
+                    <section id='setting-sub-col-one' class='settings-sub-grid__left'></section>
+                    <aside class="settings-sub-grid__right">
+                        <figure class='settings-sub-grid__right__top'>
                             <img id='theme-preview-image' src='' name='Theme previewimage'/>
-                        </div>
-                        <div class='settings-sub-grid__right__buttom'></div>
-                    </div>
+                        </figure>
+                        <dl id='selection-container' class='settings-sub-grid__right__buttom'>
+                            <p id='theme-selection'>Theme</p>
+                            <div class='selection-seperator selection-seperator--default'>
+                                <div class='selection-seperator--default__line'></div>
+                                <div class='selection-seperator--default__diamond'></div>
+                            </div>
+                            <p id='player-selection'>Player</p>
+                            <div class='selection-seperator selection-seperator--default'>
+                                <div class='selection-seperator--default__line'></div>
+                                <div class='selection-seperator--default__diamond'></div>
+                            </div>
+                            <p id='boardSize-selection'>Board size</p>
+                            <button class='setting-start-button setting-start-button--disabled'>
+                                <img src='/src/assets/icons/setting-game.svg' alt='Icon'/>
+                                <span>Start</span>
+                            </button>
+                        </dl>
+                    </aside>
                 </main>
 
                 `;

@@ -14,6 +14,11 @@ export class BoardSizeService {
         return this.boardSizes;
     }
 
+    getBoardSizeById(boardSizeId: string):(BoardSize | null) {
+        const boardSize = this.boardSizes.find(b => b.id === boardSizeId);
+        return boardSize ? boardSize : null;
+    }
+
     private getBoardSizeName(size: Size):string {
         return `${size} cards`;
     }

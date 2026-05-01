@@ -3,8 +3,9 @@
 @use '../components/settingGroup';
 
 h2 {
-    @include mixins.setup-font("Almarai", 54px, 700);
+    @include mixins.setup-font("RedRose", 54px, 700);
     padding-left: 16px;
+    padding-bottom: 4px;
 }
 
 .settings-section {
@@ -12,11 +13,11 @@ h2 {
     margin-left: auto;
     margin-right: auto;
     margin-top: 96px;
-    width: 80vw;
-    width: 80dvw;
+    width: clamp(900px, 80vw, 1000px);
+    width: clamp(900px, 80dvw, 1000px);
     display: grid;
     grid-template-rows: auto 1fr;
-    
+
 }
 
 .settings-sub-grid {
@@ -27,8 +28,8 @@ h2 {
     @include mixins.setup-display-flex(column, center, flex-start, 16px);
 }
 
-.settings-group + .settings-group {
-    margin-top: 42px;
+.settings-group+.settings-group {
+    margin-top: 60px;
 }
 
 .settings-section-header {
@@ -38,16 +39,11 @@ h2 {
         @include mixins.setup-display-flex(row, flex-start, center);
 
         &__diamond {
-            height: 10px;
-            aspect-ratio: 1 / 1;
-            background-color: var.$secondaryYellow;
-            rotate: 45deg;
+            @include mixins.style-diamond(10px);
         }
 
         &__line {
-            height: 3px;
-            width: 232px;
-            background-color: var.$secondaryYellow;
+            @include mixins.style-line(3px, 232px);
         }
     }
 }
@@ -55,13 +51,99 @@ h2 {
 .settings-sub-grid {
     display: grid;
     grid-template-columns: auto 1fr;
-    
+
     &__right {
 
         &__top {
             display: flex;
             justify-content: flex-end;
         }
+
+        &__buttom {
+            margin-top: 48px;
+            padding-right: 32px;
+            @include mixins.setup-display-flex(row, flex-end, center);
+
+            p {
+                @include mixins.setup-font("Almarai", 20px, 400);
+                padding: 2px 0px;
+                opacity: 0;
+                @include mixins.fade-in(2s);
+            }
+        }
     }
 }
 
+.selection-seperator {
+    @include mixins.setup-display-flex(row, flex-start, center);
+    box-sizing: border-box;
+
+    rotate: 115deg;
+
+    &--default {
+
+        &__diamond {
+            opacity: 0;
+        }
+
+        &__line {
+            @include mixins.style-line(8px, 40px);
+        }
+
+    }
+
+    &--completed {
+        &__diamond {
+            @include mixins.style-diamond(10px);
+        }
+
+        &__line {
+            @include mixins.style-line(4px, 30px);
+        }
+    }
+
+
+}
+
+
+.setting-start-button {
+    height: 53px;
+    width: 126px;
+    background-color: var.$secondaryYellow;
+    border: unset;
+    outline: unset;
+    cursor: pointer;
+    margin-left: 16px;
+    transition: scale 100ms ease-in;
+    @include mixins.setup-display-flex(row, center, center, 6px);
+
+    &:hover:not(&--disabled) {
+        scale: 1.11;
+
+        img {
+            rotate: -5.3deg;
+        }
+    }
+
+    img {
+        transition: rotate 100ms ease-in;
+    }
+
+    span {
+        @include mixins.setup-font("RedRose", 20px, 700);
+    }
+
+    &--disabled {
+        cursor: not-allowed;
+        pointer-events: none;
+        background-color: rgba(219, 219, 214, 1);
+        
+
+        img, span {
+            filter: brightness(3);
+        }
+
+    } 
+
+
+}
