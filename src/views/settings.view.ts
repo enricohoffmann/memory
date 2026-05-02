@@ -2,10 +2,11 @@ import { SettingOptionGroupComponent } from "../components/settingOptionGroup.co
 import { BoardSizeService } from "../services/boardSize.service";
 import { PlayerService } from "../services/player.service";
 import { ThemeService } from "../services/theme.service";
-import { BoardSize, OptionGroupSpecification, Player, Theme, ViewName } from "../types/game.types";
+import { BoardSize, GameConfig, OptionGroupSpecification, Player, Theme, ViewName } from "../types/game.types";
 import themeGroupeIcon from '../assets/icons/theme-group.svg';
 import playerGroupIcon from '../assets/icons/player-group.svg';
 import boardSizeIcon from '../assets/icons/bordSize-group.svg';
+import { GameSetupService } from "../services/gameSetup.service";
 
 
 export class SettingsView {
@@ -112,6 +113,7 @@ export class SettingsView {
         container.appendChild(sectionContainer);
         this.renderOptionGroupsIntoColumnOne();
         this.changeThemeSelection(this.selectedThemeId!);
+        this.registerButtonEvent();
     }
 
     private renderOptionGroupsIntoColumnOne() {
@@ -237,6 +239,30 @@ export class SettingsView {
         return settingsSection;
     }
 
+
+    private registerButtonEvent(){
+        const button = document.getElementById('settings-start-button');
+        if(!button) {return;}
+        button.addEventListener('click', () => this.createNewGame());
+    }
+
+
+    private createNewGame(){
+        const theme = this.themeService.getThemeById(this.selectedThemeId!);
+        const boardSize = this.boardSizeService.getBoardSizeById(this.selectedBoardSizeId!);
+        if(!theme || !boardSize) {return;}
+        const gameConfig:GameConfig = {
+            selectedTheme: theme,
+            players: this.players,
+            selectedStartPlayerId: this.selectedStartPlayerId!,
+            selectedBoardSize: boardSize
+        };
+        const gameSetupService:GameSetupService = new GameSetupService();
+        const gameSetupResult = gameSetupService.setupGame(gameConfig, this.themes);
+        
+        console.log(gameSetupResult);
+        
+    }
 
 
 }
