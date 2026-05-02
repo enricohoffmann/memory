@@ -57,6 +57,14 @@ export class SettingsView {
         this.selectedThemeId = this.themes[0].id;
     }
 
+    render(container: HTMLElement) {
+        const sectionContainer = this.buildSettingsSection();
+        container.appendChild(sectionContainer);
+        this.renderOptionGroupsIntoColumnOne();
+        this.changeThemeSelection(this.selectedThemeId!);
+        this.registerButtonEvent();
+    }
+
     private loadThemes() {
         this.themeService.init();
         this.themes = this.themeService.getThemes();
@@ -70,31 +78,6 @@ export class SettingsView {
         this.boardSizes = this.boardSizeService.getBoardSizes();
     }
 
-    private changePlayerSelection(playerId: string): void {
-        this.selectedStartPlayerId = playerId;
-        const player = this.playerService.getPlayerById(playerId);
-        if (player === null) { return; }
-        this.changeSettingsSelectionContent('player', `${player.name} Player`);
-        this.checkIfAllSelectionCompleted();
-    }
-
-    private changeThemeSelection(themeId: string): void {
-        this.selectedThemeId = themeId;
-        this.showThemePreviewImage();
-        const theme = this.themeService.getThemeById(themeId);
-        if (theme === null) { return; }
-        this.changeSettingsSelectionContent('theme', `${theme.selectionText}`);
-        this.checkIfAllSelectionCompleted();
-    }
-
-    private changeBoardSizeSelection(boardSizeId: string): void {
-        this.selectedBoardSizeId = boardSizeId;
-        const boardSize = this.boardSizeService.getBoardSizeById(boardSizeId);
-        if (boardSize === null) { return; }
-        this.changeSettingsSelectionContent('boardSize', `Board-${boardSize.size} Cards`);
-        this.checkIfAllSelectionCompleted();
-    }
-
     private createOptionGroupSpecifications(): void {
         const themeOptionGroupSpecification: OptionGroupSpecification<Theme> =
             { title: 'Game themes', firstElementIsActive: true, nodeName: 'article', iconPath: themeGroupeIcon, groupComponent: this.themesComponent, groupArray: this.themes };
@@ -105,92 +88,6 @@ export class SettingsView {
         const boardSizeOptionGroupSpecification: OptionGroupSpecification<BoardSize> =
             { title: 'BoardSize', firstElementIsActive: false, nodeName: 'article', iconPath: boardSizeIcon, groupComponent: this.boardSizeComponent, groupArray: this.boardSizes };
         this.optionGroupSpecifications.push(boardSizeOptionGroupSpecification);
-    }
-
-
-    render(container: HTMLElement) {
-        const sectionContainer = this.buildSettingsSection();
-        container.appendChild(sectionContainer);
-        this.renderOptionGroupsIntoColumnOne();
-        this.changeThemeSelection(this.selectedThemeId!);
-        this.registerButtonEvent();
-    }
-
-    private renderOptionGroupsIntoColumnOne() {
-        const columnOne = document.getElementById('setting-sub-col-one');
-        if (!columnOne) { return; }
-        this.optionGroupSpecifications.forEach((specification) => {
-            const optionContainer = this.buildOptionGroupBySpecification(specification);
-            columnOne.appendChild(optionContainer);
-        });
-
-    }
-
-    private buildOptionGroupBySpecification(specification: OptionGroupSpecification<Theme | Player | BoardSize>): HTMLElement {
-        const container = specification.groupComponent.buildContainer(specification);
-        container.classList.add('settings-group');
-        return container;
-    }
-
-    private showThemePreviewImage() {
-        const imageElement = document.getElementById('theme-preview-image') as HTMLImageElement;
-        if (!imageElement) { return; }
-        imageElement.src = this.themeService.getThemeImageById(this.selectedThemeId || '');
-    }
-
-    private changeSettingsSelectionContent(selectionName: string, content: string) {
-        const selectionElemets = document.querySelectorAll('#selection-container p');
-        if (!selectionElemets) { return; }
-
-        selectionElemets.forEach((element) => {
-            if (element.id.startsWith(selectionName)) {
-                const selectionElement = document.getElementById(element.id);
-                if (selectionElement) {
-                    this.fadeOutSumaryText(selectionElement);
-
-                    setTimeout(() => {
-                        selectionElement.innerText = content;
-                        this.fadeInSumaryText(selectionElement);
-                    },100);
-                    
-                }
-            }
-
-        });
-
-    }
-
-    private checkIfAllSelectionCompleted(){
-        if(this.selectedThemeId !== null && this.selectedStartPlayerId !== null && this.selectedBoardSizeId !== null){
-            this.enableStartButton();
-            this.changeSelectionSeperatorView();
-        }
-    }
-
-    private fadeOutSumaryText(element: HTMLElement): void {
-        element.classList.add('sumary-text--hide');
-        element.classList.remove('sumary-text--show');
-    }
-
-    private fadeInSumaryText(element: HTMLElement): void {
-        element.classList.remove('sumary-text--hide');
-        element.classList.add('sumary-text--show');
-    }
-
-    private enableStartButton(): void{
-        const startButton = document.getElementById('settings-start-button');
-        if(!startButton) {return;}
-        startButton.classList.remove('setting-start-button--disabled');
-    }
-
-    private changeSelectionSeperatorView(): void{
-        const seperators = document.querySelectorAll('.selection-seperator');
-        if(!seperators) {return;}
-
-        seperators.forEach((seperator) => {
-            seperator.classList.remove('selection-seperator--default');
-            seperator.classList.add('selection-seperator--completed');
-        });
     }
 
     private buildSettingsSection(): HTMLElement {
@@ -239,6 +136,107 @@ export class SettingsView {
         return settingsSection;
     }
 
+    private renderOptionGroupsIntoColumnOne() {
+        const columnOne = document.getElementById('setting-sub-col-one');
+        if (!columnOne) { return; }
+        this.optionGroupSpecifications.forEach((specification) => {
+            const optionContainer = this.buildOptionGroupBySpecification(specification);
+            columnOne.appendChild(optionContainer);
+        });
+
+    }
+
+    private changePlayerSelection(playerId: string): void {
+        this.selectedStartPlayerId = playerId;
+        const player = this.playerService.getPlayerById(playerId);
+        if (player === null) { return; }
+        this.changeSettingsSelectionContent('player', `${player.name} Player`);
+        this.checkIfAllSelectionCompleted();
+    }
+
+    private changeThemeSelection(themeId: string): void {
+        this.selectedThemeId = themeId;
+        this.showThemePreviewImage();
+        const theme = this.themeService.getThemeById(themeId);
+        if (theme === null) { return; }
+        this.changeSettingsSelectionContent('theme', `${theme.selectionText}`);
+        this.checkIfAllSelectionCompleted();
+    }
+
+    private changeBoardSizeSelection(boardSizeId: string): void {
+        this.selectedBoardSizeId = boardSizeId;
+        const boardSize = this.boardSizeService.getBoardSizeById(boardSizeId);
+        if (boardSize === null) { return; }
+        this.changeSettingsSelectionContent('boardSize', `Board-${boardSize.size} Cards`);
+        this.checkIfAllSelectionCompleted();
+    }
+
+    private buildOptionGroupBySpecification(specification: OptionGroupSpecification<Theme | Player | BoardSize>): HTMLElement {
+        const container = specification.groupComponent.buildContainer(specification);
+        container.classList.add('settings-group');
+        return container;
+    }
+
+    private showThemePreviewImage() {
+        const imageElement = document.getElementById('theme-preview-image') as HTMLImageElement;
+        if (!imageElement) { return; }
+        imageElement.src = this.themeService.getThemeImageById(this.selectedThemeId || '');
+    }
+
+    private changeSettingsSelectionContent(selectionName: string, content: string) {
+        const selectionElemets = document.querySelectorAll('#selection-container p');
+        if (!selectionElemets) { return; }
+
+        selectionElemets.forEach((element) => {
+            if (element.id.startsWith(selectionName)) {
+                const selectionElement = document.getElementById(element.id);
+                if (selectionElement) {
+                    this.fadeOutSumaryText(selectionElement);
+
+                    setTimeout(() => {
+                        selectionElement.innerText = content;
+                        this.fadeInSumaryText(selectionElement);
+                    },100);
+                    
+                }
+            }
+
+        });
+
+    }
+
+    private fadeOutSumaryText(element: HTMLElement): void {
+        element.classList.add('sumary-text--hide');
+        element.classList.remove('sumary-text--show');
+    }
+
+    private fadeInSumaryText(element: HTMLElement): void {
+        element.classList.remove('sumary-text--hide');
+        element.classList.add('sumary-text--show');
+    }
+
+    private checkIfAllSelectionCompleted(){
+        if(this.selectedThemeId !== null && this.selectedStartPlayerId !== null && this.selectedBoardSizeId !== null){
+            this.enableStartButton();
+            this.changeSelectionSeperatorView();
+        }
+    }
+
+    private enableStartButton(): void{
+        const startButton = document.getElementById('settings-start-button');
+        if(!startButton) {return;}
+        startButton.classList.remove('setting-start-button--disabled');
+    }
+
+    private changeSelectionSeperatorView(): void{
+        const seperators = document.querySelectorAll('.selection-seperator');
+        if(!seperators) {return;}
+
+        seperators.forEach((seperator) => {
+            seperator.classList.remove('selection-seperator--default');
+            seperator.classList.add('selection-seperator--completed');
+        });
+    }
 
     private registerButtonEvent(){
         const button = document.getElementById('settings-start-button');

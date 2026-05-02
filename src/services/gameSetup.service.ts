@@ -50,11 +50,7 @@ export class GameSetupService {
     private buildGameStateFromConfig(gameConfig: GameConfig): GameState {
         const gameService = new GameService(gameConfig);
         const state = gameService.initGame();
-
-        console.log(state);
-
         return state;
-
     }
 
 
