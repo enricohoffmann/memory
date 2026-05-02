@@ -1,15 +1,19 @@
 @use './abstract/fonts';
 @use './views/_settings.scss';
+@use './abstract/mixins' as mixins;
+
+html {
+    overflow: hidden;
+}
 
 * {
     padding: 0;
     margin: 0;
-    overflow: hidden;
 }
 
 #app {
     width: 100%;
     height: 100vh;
     height: 100dvh;
-    
+    @include mixins.setup-display-flex(column, center, center);
 }

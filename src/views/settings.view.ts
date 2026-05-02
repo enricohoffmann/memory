@@ -74,6 +74,7 @@ export class SettingsView {
         const player = this.playerService.getPlayerById(playerId);
         if (player === null) { return; }
         this.changeSettingsSelectionContent('player', `${player.name} Player`);
+        this.checkIfAllSelectionCompleted();
     }
 
     private changeThemeSelection(themeId: string): void {
@@ -82,6 +83,7 @@ export class SettingsView {
         const theme = this.themeService.getThemeById(themeId);
         if (theme === null) { return; }
         this.changeSettingsSelectionContent('theme', `${theme.selectionText}`);
+        this.checkIfAllSelectionCompleted();
     }
 
     private changeBoardSizeSelection(boardSizeId: string): void {
@@ -89,6 +91,7 @@ export class SettingsView {
         const boardSize = this.boardSizeService.getBoardSizeById(boardSizeId);
         if (boardSize === null) { return; }
         this.changeSettingsSelectionContent('boardSize', `Board-${boardSize.size} Cards`);
+        this.checkIfAllSelectionCompleted();
     }
 
     private createOptionGroupSpecifications(): void {
@@ -141,9 +144,13 @@ export class SettingsView {
             if (element.id.startsWith(selectionName)) {
                 const selectionElement = document.getElementById(element.id);
                 if (selectionElement) {
-                    //Fade out
-                    selectionElement.innerText = content;
-                    //Fade in
+                    this.fadeOutSumaryText(selectionElement);
+
+                    setTimeout(() => {
+                        selectionElement.innerText = content;
+                        this.fadeInSumaryText(selectionElement);
+                    },100);
+                    
                 }
             }
 
@@ -151,7 +158,38 @@ export class SettingsView {
 
     }
 
+    private checkIfAllSelectionCompleted(){
+        if(this.selectedThemeId !== null && this.selectedStartPlayerId !== null && this.selectedBoardSizeId !== null){
+            this.enableStartButton();
+            this.changeSelectionSeperatorView();
+        }
+    }
 
+    private fadeOutSumaryText(element: HTMLElement): void {
+        element.classList.add('sumary-text--hide');
+        element.classList.remove('sumary-text--show');
+    }
+
+    private fadeInSumaryText(element: HTMLElement): void {
+        element.classList.remove('sumary-text--hide');
+        element.classList.add('sumary-text--show');
+    }
+
+    private enableStartButton(): void{
+        const startButton = document.getElementById('settings-start-button');
+        if(!startButton) {return;}
+        startButton.classList.remove('setting-start-button--disabled');
+    }
+
+    private changeSelectionSeperatorView(): void{
+        const seperators = document.querySelectorAll('.selection-seperator');
+        if(!seperators) {return;}
+
+        seperators.forEach((seperator) => {
+            seperator.classList.remove('selection-seperator--default');
+            seperator.classList.add('selection-seperator--completed');
+        });
+    }
 
     private buildSettingsSection(): HTMLElement {
 
@@ -175,18 +213,18 @@ export class SettingsView {
                             <img id='theme-preview-image' src='' name='Theme previewimage'/>
                         </figure>
                         <dl id='selection-container' class='settings-sub-grid__right__buttom'>
-                            <p id='theme-selection'>Theme</p>
+                            <p id='theme-selection' class='sumary-text sumary-text--show'>Theme</p>
                             <div class='selection-seperator selection-seperator--default'>
-                                <div class='selection-seperator--default__line'></div>
-                                <div class='selection-seperator--default__diamond'></div>
+                                <div class='selection-seperator-line'></div>
+                                <div class='selection-seperator-diamond'></div>
                             </div>
-                            <p id='player-selection'>Player</p>
+                            <p id='player-selection' class='sumary-text sumary-text--show'>Player</p>
                             <div class='selection-seperator selection-seperator--default'>
-                                <div class='selection-seperator--default__line'></div>
-                                <div class='selection-seperator--default__diamond'></div>
+                                <div class='selection-seperator-line'></div>
+                                <div class='selection-seperator-diamond'></div>
                             </div>
-                            <p id='boardSize-selection'>Board size</p>
-                            <button class='setting-start-button setting-start-button--disabled'>
+                            <p id='boardSize-selection' class='sumary-text sumary-text--show'>Board size</p>
+                            <button id='settings-start-button' class='setting-start-button setting-start-button--disabled'>
                                 <img src='/src/assets/icons/setting-game.svg' alt='Icon'/>
                                 <span>Start</span>
                             </button>

@@ -19,7 +19,6 @@
 
 @mixin style-diamond ($height: 10px) {
     height: fct.px-to-rem($height);
-    ;
     aspect-ratio: 1 / 1;
     background-color: var.$secondaryYellow;
     rotate: 45deg;
@@ -31,7 +30,7 @@
     background-color: var.$secondaryYellow;
 }
 
-@mixin fade-in($time:0.3s, $ease: ease-in-out){
+@mixin fade-in($time:0.5s, $ease: ease-in-out){
     animation: fadeIn $time $ease forwards;
 }
 
@@ -40,5 +39,17 @@
         opacity: 0;
     } to {
         opacity: 1;
+    }
+}
+
+@mixin fade-out($time:0.5s, $ease: ease-in-out){
+    animation: fadeOut $time, $ease forwards;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    } to {
+        opacity: 0;
     }
 }

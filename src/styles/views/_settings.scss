@@ -12,7 +12,6 @@ h2 {
     max-width: var.$max-content-width;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 96px;
     width: clamp(900px, 80vw, 1000px);
     width: clamp(900px, 80dvw, 1000px);
     display: grid;
@@ -64,13 +63,21 @@ h2 {
             padding-right: 32px;
             @include mixins.setup-display-flex(row, flex-end, center);
 
-            p {
-                @include mixins.setup-font("Almarai", 20px, 400);
-                padding: 2px 0px;
-                opacity: 0;
-                @include mixins.fade-in(2s);
-            }
         }
+    }
+}
+
+.sumary-text {
+    @include mixins.setup-font("Almarai", 20px, 400);
+    padding: 2px 0px;
+    opacity: 0;
+
+    &--show {
+        @include mixins.fade-in(0.2s);
+    }
+
+    &--hide {
+        @include mixins.fade-out(0.2s);
     }
 }
 
@@ -82,22 +89,23 @@ h2 {
 
     &--default {
 
-        &__diamond {
+        .selection-seperator-diamond {
             opacity: 0;
         }
 
-        &__line {
+        .selection-seperator-line {
             @include mixins.style-line(8px, 40px);
         }
 
     }
 
     &--completed {
-        &__diamond {
+        .selection-seperator-diamond {
+            opacity: 1;
             @include mixins.style-diamond(10px);
         }
 
-        &__line {
+        .selection-seperator-line {
             @include mixins.style-line(4px, 30px);
         }
     }
@@ -137,13 +145,14 @@ h2 {
         cursor: not-allowed;
         pointer-events: none;
         background-color: rgba(219, 219, 214, 1);
-        
 
-        img, span {
+
+        img,
+        span {
             filter: brightness(3);
         }
 
-    } 
+    }
 
 
 }
