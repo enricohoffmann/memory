@@ -31,6 +31,7 @@ export interface BoardSize extends SettingOption {
 }
 export interface GameState {
     players: Player[];
+    startPlayerId:string;
     currentPlayerId:string;
     cards:Card[];
     selectedCards:number[];

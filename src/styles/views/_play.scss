@@ -1,0 +1,60 @@
+@use '../abstract/mixins' as mixins;
+@use '../abstract/variables' as var;
+
+.play-wrapper {
+    width: 100%;
+    @include mixins.setup-display-flex(column, center, center);
+
+    &--code-vibes {
+        background: linear-gradient(45deg,
+                #6d6d6d 0%,
+                #555 20%,
+                #3a3b3b 50%,
+                #2a2b2b 100%);
+    }
+
+    &--da-projects {
+        background-color: rgba(191, 229, 242, 1);
+    }
+
+    &--food {
+        background-color: rgba(232, 226, 220, 1);
+    }
+
+    &--games {
+        background: linear-gradient(45deg,
+                rgb(32, 134, 180) 0%,
+                rgb(36, 110, 145) 40%,
+                rgb(41, 79, 96) 100%);
+    }
+}
+
+
+.play-section {
+    @include mixins.setup-display-flex(column, flex-start, center);
+    max-width: var.$max-content-width;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+
+}
+
+.header-section {
+    max-width: var.$max-content-width;
+    width: 90vw;
+    height: 36px;
+    margin-top: 24px;
+
+    &--code-vibes {
+        background-color: rgba(77, 213, 188, 0.2);
+        box-shadow: 3px 2px 10.1px 0px rgba(0, 0, 0, 0.2);
+    }
+
+    &--da-projects {}
+
+    &--food {}
+
+    &--games {}
+}

@@ -6,12 +6,14 @@ export class GameService {
     private readonly theme:Theme;
     private boardSize:BoardSize;
     private selectedPlayerId: string;
+    private startPlayerId: string;
 
     constructor(gameConfig:GameConfig){
         this.theme = gameConfig.selectedTheme;
         this.players = gameConfig.players;
         this.boardSize = gameConfig.selectedBoardSize;
         this.selectedPlayerId = gameConfig.selectedStartPlayerId;
+        this.startPlayerId = gameConfig.selectedStartPlayerId;
     }
 
     initGame():GameState {
@@ -26,6 +28,7 @@ export class GameService {
         return {
             players: this.players,
             currentPlayerId: this.selectedPlayerId,
+            startPlayerId: this.startPlayerId,
             cards:cardsToPlay,
             selectedCards:[],
             themeKey:this.theme.key,

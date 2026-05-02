@@ -2,7 +2,7 @@ import { SettingOptionGroupComponent } from "../components/settingOptionGroup.co
 import { BoardSizeService } from "../services/boardSize.service";
 import { PlayerService } from "../services/player.service";
 import { ThemeService } from "../services/theme.service";
-import { BoardSize, GameConfig, OptionGroupSpecification, Player, Theme, ViewName } from "../types/game.types";
+import { BoardSize, GameConfig, GameState, OptionGroupSpecification, Player, Theme, ViewName } from "../types/game.types";
 import themeGroupeIcon from '../assets/icons/theme-group.svg';
 import playerGroupIcon from '../assets/icons/player-group.svg';
 import boardSizeIcon from '../assets/icons/bordSize-group.svg';
@@ -30,7 +30,7 @@ export class SettingsView {
     private boardSizeComponent: SettingOptionGroupComponent;
 
 
-    constructor(private navigate: (view: ViewName) => void) {
+    constructor(private navigate: (view: ViewName, gameState?: GameState) => void) {
         this.themeService = new ThemeService();
         this.playerService = new PlayerService();
         this.boardSizeService = new BoardSizeService();
@@ -49,7 +49,8 @@ export class SettingsView {
 
     }
 
-    onInit() {
+    //Wenn ich zu dieser Seite zurückkomme muss ich die alten Einstllungen wieder anzeigen
+    onInit(gameState?: GameState):void {
         this.loadThemes();
         this.loadPlayers();
         this.loadBoardSizes();
@@ -57,7 +58,7 @@ export class SettingsView {
         this.selectedThemeId = this.themes[0].id;
     }
 
-    render(container: HTMLElement) {
+    render(container: HTMLElement):void {
         const sectionContainer = this.buildSettingsSection();
         container.appendChild(sectionContainer);
         this.renderOptionGroupsIntoColumnOne();
@@ -196,8 +197,8 @@ export class SettingsView {
                     setTimeout(() => {
                         selectionElement.innerText = content;
                         this.fadeInSumaryText(selectionElement);
-                    },100);
-                    
+                    }, 100);
+
                 }
             }
 
@@ -215,22 +216,22 @@ export class SettingsView {
         element.classList.add('sumary-text--show');
     }
 
-    private checkIfAllSelectionCompleted(){
-        if(this.selectedThemeId !== null && this.selectedStartPlayerId !== null && this.selectedBoardSizeId !== null){
+    private checkIfAllSelectionCompleted() {
+        if (this.selectedThemeId !== null && this.selectedStartPlayerId !== null && this.selectedBoardSizeId !== null) {
             this.enableStartButton();
             this.changeSelectionSeperatorView();
         }
     }
 
-    private enableStartButton(): void{
+    private enableStartButton(): void {
         const startButton = document.getElementById('settings-start-button');
-        if(!startButton) {return;}
+        if (!startButton) { return; }
         startButton.classList.remove('setting-start-button--disabled');
     }
 
-    private changeSelectionSeperatorView(): void{
+    private changeSelectionSeperatorView(): void {
         const seperators = document.querySelectorAll('.selection-seperator');
-        if(!seperators) {return;}
+        if (!seperators) { return; }
 
         seperators.forEach((seperator) => {
             seperator.classList.remove('selection-seperator--default');
@@ -238,28 +239,44 @@ export class SettingsView {
         });
     }
 
-    private registerButtonEvent(){
+    private registerButtonEvent() {
         const button = document.getElementById('settings-start-button');
-        if(!button) {return;}
-        button.addEventListener('click', () => this.createNewGame());
+        if (!button) { return; }
+        button.addEventListener('click', () => {
+            this.settingStartButtonEvent();
+        });
     }
 
+    private settingStartButtonEvent() {
+        const gameState: GameState | null = this.createNewGame();
+        if (gameState) {
+            this.navivigateToPlay(gameState);
+        }
+    }
 
-    private createNewGame(){
+    private createNewGame(): (GameState | null) {
         const theme = this.themeService.getThemeById(this.selectedThemeId!);
         const boardSize = this.boardSizeService.getBoardSizeById(this.selectedBoardSizeId!);
-        if(!theme || !boardSize) {return;}
-        const gameConfig:GameConfig = {
+        if (!theme || !boardSize) { return null; }
+        const gameConfig: GameConfig = {
             selectedTheme: theme,
             players: this.players,
             selectedStartPlayerId: this.selectedStartPlayerId!,
             selectedBoardSize: boardSize
         };
-        const gameSetupService:GameSetupService = new GameSetupService();
+        const gameSetupService: GameSetupService = new GameSetupService();
         const gameSetupResult = gameSetupService.setupGame(gameConfig, this.themes);
-        
-        console.log(gameSetupResult);
-        
+
+        if (gameSetupResult.success && gameSetupResult.gameState) {
+            return gameSetupResult.gameState;
+        }
+
+        return null;
+
+    }
+
+    private navivigateToPlay(gameState: GameState): void {
+        this.navigate('play', gameState);
     }
 
 
