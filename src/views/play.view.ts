@@ -49,12 +49,33 @@ export class PlayView {
         headerSection.classList.add('header-section');
         headerSection.classList.add(`header-section--${this.gameState.themeKey}`);
 
+        headerSection.innerHTML = /* html */ `
+            <section class='header-player-section header-player-section--${this.gameState.themeKey}'>
+                <img class="header-player-section--${this.gameState.themeKey}__icon-one" alt='Player one icon'/>
+                <span class='header-player-section--${this.gameState.themeKey}__player-text'>Blue</span>
+                <span class='header-player-section--${this.gameState.themeKey}__player-score' id='player-one-score'>0</span>
+                <img class="header-player-section--${this.gameState.themeKey}__icon-two" alt='Player two icon'/>
+                <span class='header-player-section--${this.gameState.themeKey}__player-text'>Orange</span>
+                <span class='header-player-section--${this.gameState.themeKey}__player-score' id='player-two-score'>0</span>
+            </section>
+
+            <div class='header-currentPlayer-container'>
+                <span>Current player:</span>
+                <img alt='Current player icon'/>
+            </div>
+
+            <button class='header-exit-button' type='button'>
+                <img src='' alt='Exit icon'/>
+                <span>Exit game</span>
+            </button>
+        `;
 
         return headerSection;
     }
 
     private bildMainSection():HTMLElement {
         const mainSection:HTMLElement = document.createElement('main');
+
 
 
 

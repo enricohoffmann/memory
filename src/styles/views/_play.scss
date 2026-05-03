@@ -46,10 +46,12 @@
     width: 90vw;
     height: 36px;
     margin-top: 24px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
 
     &--code-vibes {
-        background-color: rgba(77, 213, 188, 0.2);
-        box-shadow: 3px 2px 10.1px 0px rgba(0, 0, 0, 0.2);
+        /* Nur als Test */
+        /* background-color: rgb(41, 79, 96, 0.5); */
     }
 
     &--da-projects {}
@@ -57,4 +59,41 @@
     &--food {}
 
     &--games {}
+}
+
+.header-player-section {
+    @include mixins.setup-display-flex(row, center, center);
+
+    &--code-vibes {
+        height: 62px;
+        background-color: rgba(134, 233, 214, 0.2);
+        padding: 0 24px;
+
+        &__player-text {
+            
+        }
+
+        &__icon-one {
+            height: 24px;
+            content: url('../../assets/icons/coding-vibes-player-blue.svg');
+            object-fit: contain;
+            object-position: center;
+        }
+
+        &__icon-two {
+            height: 24px;
+            content: url('../../assets/icons/coding-vibes-player-orange.svg');
+            object-fit: contain;
+            object-position: center;
+        }
+    
+    }
+}
+
+.header-currentPlayer-container {
+    @include mixins.setup-display-flex(row, center, center);
+}
+
+.header-exit-button {
+
 }
