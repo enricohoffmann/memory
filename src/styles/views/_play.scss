@@ -61,7 +61,9 @@
         background-color: rgba(240, 243, 244, 1);
     }
 
-    &--food {}
+    &--food {
+        background-color: rgba(240, 229, 217, 1);
+    }
 
     &--games {
         background-color: rgba(253, 150, 201, 0.2);
@@ -76,128 +78,111 @@
     padding: 0 24px;
     margin-left: 32px;
 
+    &__icon {
+        height: 28px;
+        object-fit: contain;
+        object-position: center;
+        margin-right: 8px;
+    }
+
+    &__player-text {
+        display: none;
+    }
+
+    &__player-score {
+        width: 32px;
+    }
+
     &--code-vibes {
         height: 62px;
         background-color: rgba(134, 233, 214, 0.2);
         margin-left: 0;
+        border-radius: 0;
 
-        &__player-text {
+        .header-player-section__player-text {
             @include mixins.setup-font("RedRose", 24px, 700);
             padding: 0px 8px;
-
-            &--one {
-                color: rgba(43, 177, 255, 1);
-            }
-
-            &--two {
-                color: rgba(245, 142, 57, 1);
-            }
+            display: block;
         }
 
-        &__icon-one {
+        .header-player-section__player-text--one {
+            color: rgba(43, 177, 255, 1);
+        }
+
+        .header-player-section__player-text--two {
+            color: rgba(245, 142, 57, 1);
+        }
+
+        .header-player-section__icon {
             height: 24px;
+            margin-right: 0px;
+        }
+
+        .header-player-section__icon--one {
             content: url('../../assets/icons/coding-vibes-player-blue.svg');
-            object-fit: contain;
-            object-position: center;
         }
 
-        &__icon-two {
-            height: 24px;
+        .header-player-section__icon--two {
             content: url('../../assets/icons/coding-vibes-player-orange.svg');
-            object-fit: contain;
-            object-position: center;
         }
 
-        &__player-score {
+        .header-player-section__player-score {
             @include mixins.setup-font("RedRose", 24px, 700);
-            width: 32px;
+        }
 
-            &--one {
-                color: rgba(43, 177, 255, 1);
-            }
+        .header-player-section__player-score--one {
+            color: rgba(43, 177, 255, 1);
+        }
 
-            &--two {
-                color: rgba(245, 142, 57, 1);
-            }
-
+        .header-player-section__player-score--two {
+            color: rgba(245, 142, 57, 1);
         }
 
     }
 
+
+    &--games,
+    &--da-projects,
+    &--food {
+        .header-player-section__player-score--one {
+            color: rgba(9, 127, 197, 1) !important;
+            margin-right: 32px !important;
+        }
+
+        .header-player-section__player-score--two {
+            color: rgba(234, 105, 0, 1) !important;
+        }
+
+        .header-player-section__icon--one {
+            content: url('../../assets/icons/games-player-blue.svg') !important;
+        }
+
+        .header-player-section__icon--two {
+            content: url('../../assets/icons/games-player-orange.svg') !important;
+        }
+    }
+
+
     &--games {
 
-        &__player-text {
-            display: none;
-        }
-
-        &__icon-one {
-            height: 28px;
-            content: url('../../assets/icons/games-player-blue.svg');
-            object-fit: contain;
-            object-position: center;
-            margin-right: 8px;
-        }
-
-        &__icon-two {
-            height: 28px;
-            content: url('../../assets/icons/games-player-orange.svg');
-            object-fit: contain;
-            object-position: center;
-            margin-right: 8px;
-        }
-
-        &__player-score {
+        .header-player-section__player-score {
             @include mixins.setup-font("Orbitron", 30px, 700);
-            width: 32px;
-
-            &--one {
-                color: rgba(9, 127, 197, 1);
-                margin-right: 32px;
-            }
-
-            &--two {
-                color: rgba(234, 105, 0, 1);
-            }
-
         }
 
     }
 
     &--da-projects {
 
-        &__player-text {
-            display: none;
-        }
-
-        &__icon-one {
-            height: 28px;
-            content: url('../../assets/icons/games-player-blue.svg');
-            object-fit: contain;
-            object-position: center;
-            margin-right: 8px;
-        }
-
-        &__icon-two {
-            height: 28px;
-            content: url('../../assets/icons/games-player-orange.svg');
-            object-fit: contain;
-            object-position: center;
-            margin-right: 8px;
-        }
-
-        &__player-score {
+        .header-player-section__player-score {
             @include mixins.setup-font("FigTree", 30px, 700);
-            width: 32px;
+        }
 
-            &--one {
-                color: rgba(9, 127, 197, 1);
-                margin-right: 32px;
-            }
+    }
 
-            &--two {
-                color: rgba(234, 105, 0, 1);
-            }
+    &--food {
 
+        .header-player-section__player-score {
+            @include mixins.setup-font("DeliusUnicase", 30px, 700);
         }
 
     }
@@ -205,55 +190,60 @@
 
 .header-currentPlayer-container {
     @include mixins.setup-display-flex(row, center, center);
-
+    height: 100%;
+     
     span {
         margin-right: 12px;
         padding-bottom: 2px;
     }
 
+    &__current-icon {
+        height: 24px;
+        width: 24px;
+        object-fit: contain;
+        object-position: center;
+        padding: 8px;
+    }
+
 
     &--code-vibes {
         @include mixins.setup-display-flex(row, center, flex-end);
-        padding-bottom: 4px;
 
         span {
             @include mixins.setup-font("RedRose", 26px, 400);
             color: rgba(255, 255, 255, 1);
         }
 
-        &__current-icon {
+        .header-currentPlayer-container__current-icon {
             height: 29px;
-            object-fit: contain;
-            object-position: center;
+            padding: 0;
+        }
 
-            &--one {
-                content: url('../../assets/icons/coding-vibes-player-blue.svg');
-            }
+        .header-currentPlayer-container__current-icon--one {
+            content: url('../../assets/icons/coding-vibes-player-blue.svg');
+        }
 
-            &--two {
-                content: url('../../assets/icons/coding-vibes-player-orange.svg');
-            }
-
-
+        .header-currentPlayer-container__current-icon--two {
+            content: url('../../assets/icons/coding-vibes-player-orange.svg');
         }
     }
 
-    &--games, &--da-projects {
-        &__current-icon {
-            height: 24px;
-            width: 24px;
-            object-fit: contain;
-            object-position: center;
-            padding: 8px;
+    &--games,
+    &--da-projects,
+    &--food {
 
-             &--one {
-                background-color: rgba(9, 127, 197, 1);
-            }
-
-            &--two {
-                background-color: rgba(234, 105, 0, 1);
-            }
+        .header-currentPlayer-container__current-icon {
+            content: url('/src/assets/icons/games-current-player.svg');
         }
+
+        .header-currentPlayer-container__current-icon--one  {
+            background-color: rgba(9, 127, 197, 1);
+        }
+
+        .header-currentPlayer-container__current-icon--two {
+            background-color: rgba(234, 105, 0, 1);
+        }
+
     }
 
     &--games {
@@ -263,11 +253,9 @@
             color: rgba(255, 255, 255, 1);
         }
 
-        &__current-icon {
+        .header-currentPlayer-container__current-icon {
             border-radius: 3px;
-            content: url('/src/assets/icons/games-current-player.svg');
         }
-
 
     }
 
@@ -278,9 +266,20 @@
             color: rgba(30, 117, 148, 1);
         }
 
-        &__current-icon {
+        .header-currentPlayer-container__current-icon {
             border-radius: 10px;
-            content: url('/src/assets/icons/games-current-player.svg');
+        }
+
+    }
+
+    &--food {
+        span {
+            @include mixins.setup-font("KleeOne", 32px, 600);
+            color: rgba(164, 82, 18, 1)
+        }
+
+        .header-currentPlayer-container__current-icon {
+            border-radius: 10px;
         }
     }
 
@@ -327,13 +326,10 @@
         }
     }
 
-    &--games, &--da-projects {
-
-    }
-
     &--games {
         background-color: rgba(237, 27, 118, 0.08);
         border: 2px solid rgba(231, 28, 79, 1);
+
         span {
             @include mixins.setup-font("RedRose", 24px, 400);
             color: rgba(255, 255, 255, 1);
@@ -341,7 +337,7 @@
 
         &:hover {
             border: 3px solid rgba(231, 28, 79, 1);
-            box-shadow: 4px 4px 4px 0px rgba(240, 234, 110, 0.2);
+            box-shadow: 4px 4px 4px 0px rgba(255,255,255, 0.2);
 
         }
     }
@@ -360,6 +356,26 @@
         }
 
         &:hover {
+            box-shadow: 4px 4px 4px 0px rgba(30, 117, 148, 0.2);
+
+        }
+    }
+
+    &--food {
+        background-color: rgba(255, 249, 242, 1);
+        border: 3px solid rgba(243, 131, 45, 1);
+
+        span {
+            @include mixins.setup-font("DeliusUnicase", 16px, 700);
+            color: rgba(243, 131, 45, 1);
+        }
+
+        img {
+            content: url('../../assets/icons/food-exit-icon.svg');
+        }
+
+        &:hover {
+            border: 4px solid rgba(243, 131, 45, 1);
             box-shadow: 4px 4px 4px 0px rgba(30, 117, 148, 0.2);
 
         }

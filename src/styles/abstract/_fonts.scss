@@ -44,3 +44,29 @@
     src: url('../../assets/fonts/Figtree-VariableFont_wght.ttf');
     font-style: normal;
 }
+
+@font-face {
+    font-family: "DeliusUnicase";
+    src: url('../../assets/fonts/DeliusUnicase-Regular.ttf') format('truetype');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "DeliusUnicase";
+    src: url('../../assets/fonts/DeliusUnicase-Bold.ttf') format('truetype');
+    font-weight: 700;
+}
+
+@font-face {
+  font-family: "KleeOne";
+  src: url('../../assets/fonts/KleeOne-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
+.klee-one-semibold {
+  font-family: "KleeOne";
+  src: url('../../assets/fonts/KleeOne-SemiBold.ttf');
+  font-weight: 600;
+  font-style: normal;
+}
