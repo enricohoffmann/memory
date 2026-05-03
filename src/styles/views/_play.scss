@@ -44,30 +44,42 @@
 .header-section {
     max-width: var.$max-content-width;
     width: 80vw;
-    height: 36px;
+    height: 102px;
     margin-top: 24px;
     display: grid;
-    grid-template-columns: auto 1fr 210px;
+    grid-template-columns: auto 1fr 256px;
+    align-items: center;
+    border-radius: 10px;
 
     &--code-vibes {
-        /* Nur als Test */
-        /* background-color: rgb(41, 79, 96, 0.5); */
+        grid-template-columns: auto 1fr 210px;
+        height: 36px;
+        border-radius: 0;
     }
 
-    &--da-projects {}
+    &--da-projects {
+        background-color: rgba(240, 243, 244, 1);
+    }
 
     &--food {}
 
-    &--games {}
+    &--games {
+        background-color: rgba(253, 150, 201, 0.2);
+    }
 }
 
 .header-player-section {
     @include mixins.setup-display-flex(row, center, center);
+    height: 54px;
+    background-color: rgba(255, 255, 255, 1);
+    border-radius: 10px;
+    padding: 0 24px;
+    margin-left: 32px;
 
     &--code-vibes {
         height: 62px;
         background-color: rgba(134, 233, 214, 0.2);
-        padding: 0 24px;
+        margin-left: 0;
 
         &__player-text {
             @include mixins.setup-font("RedRose", 24px, 700);
@@ -109,11 +121,96 @@
             }
 
         }
-    
+
+    }
+
+    &--games {
+
+        &__player-text {
+            display: none;
+        }
+
+        &__icon-one {
+            height: 28px;
+            content: url('../../assets/icons/games-player-blue.svg');
+            object-fit: contain;
+            object-position: center;
+            margin-right: 8px;
+        }
+
+        &__icon-two {
+            height: 28px;
+            content: url('../../assets/icons/games-player-orange.svg');
+            object-fit: contain;
+            object-position: center;
+            margin-right: 8px;
+        }
+
+        &__player-score {
+            @include mixins.setup-font("Orbitron", 30px, 700);
+            width: 32px;
+
+            &--one {
+                color: rgba(9, 127, 197, 1);
+                margin-right: 32px;
+            }
+
+            &--two {
+                color: rgba(234, 105, 0, 1);
+            }
+
+        }
+
+    }
+
+    &--da-projects {
+
+        &__player-text {
+            display: none;
+        }
+
+        &__icon-one {
+            height: 28px;
+            content: url('../../assets/icons/games-player-blue.svg');
+            object-fit: contain;
+            object-position: center;
+            margin-right: 8px;
+        }
+
+        &__icon-two {
+            height: 28px;
+            content: url('../../assets/icons/games-player-orange.svg');
+            object-fit: contain;
+            object-position: center;
+            margin-right: 8px;
+        }
+
+        &__player-score {
+            @include mixins.setup-font("FigTree", 30px, 700);
+            width: 32px;
+
+            &--one {
+                color: rgba(9, 127, 197, 1);
+                margin-right: 32px;
+            }
+
+            &--two {
+                color: rgba(234, 105, 0, 1);
+            }
+
+        }
+
     }
 }
 
 .header-currentPlayer-container {
+    @include mixins.setup-display-flex(row, center, center);
+
+    span {
+        margin-right: 12px;
+        padding-bottom: 2px;
+    }
+
 
     &--code-vibes {
         @include mixins.setup-display-flex(row, center, flex-end);
@@ -122,8 +219,6 @@
         span {
             @include mixins.setup-font("RedRose", 26px, 400);
             color: rgba(255, 255, 255, 1);
-            margin-right: 12px;
-            padding-bottom: 2px;
         }
 
         &__current-icon {
@@ -143,35 +238,130 @@
         }
     }
 
+    &--games, &--da-projects {
+        &__current-icon {
+            height: 24px;
+            width: 24px;
+            object-fit: contain;
+            object-position: center;
+            padding: 8px;
+
+             &--one {
+                background-color: rgba(9, 127, 197, 1);
+            }
+
+            &--two {
+                background-color: rgba(234, 105, 0, 1);
+            }
+        }
+    }
+
+    &--games {
+
+        span {
+            @include mixins.setup-font("Orbitron", 32px, 400, 100%, 7%);
+            color: rgba(255, 255, 255, 1);
+        }
+
+        &__current-icon {
+            border-radius: 3px;
+            content: url('/src/assets/icons/games-current-player.svg');
+        }
+
+
+    }
+
+    &--da-projects {
+
+        span {
+            @include mixins.setup-font("FigTree", 32px, 700);
+            color: rgba(30, 117, 148, 1);
+        }
+
+        &__current-icon {
+            border-radius: 10px;
+            content: url('/src/assets/icons/games-current-player.svg');
+        }
+    }
+
 }
 
 .header-exit-button {
     height: 54px;
     cursor: pointer;
     @include mixins.setup-display-flex(row, center, center);
+    width: max-content;
+    margin-left: auto;
+    margin-right: auto;
+    transition: border 200ms ease-out, box-shadow 200ms ease-out;
+    border-radius: 10px;
+
+    img {
+        height: 30px;
+        object-fit: contain;
+        object-position: center;
+        content: url('../../assets/icons/coding-vibes-exit-icon.svg');
+        margin-left: 16px;
+    }
+
+    span {
+        margin-left: 12px;
+        margin-right: 16px;
+    }
 
     &--code-vibes {
         height: 62px;
         background-color: rgba(134, 233, 214, 0.2);
         border: 1px solid rgba(77, 213, 188, 1);
-        transition: border 200ms ease-out, box-shadow 200ms ease-out;
-
-        img {
-            height: 30px;
-            object-fit: contain;
-            object-position: center;
-            content: url('../../assets/icons/coding-vibes-exit-icon.svg');
-        }
+        border-radius: 0px;
 
         span {
             @include mixins.setup-font("RedRose", 24px, 400);
             color: rgba(255, 255, 255, 1);
-            margin-left: 12px;
         }
 
         &:hover {
             border: 3px solid rgba(77, 213, 188, 1);
             box-shadow: 4px 4px 4px 0px rgba(240, 234, 110, 0.2);
+
+        }
+    }
+
+    &--games, &--da-projects {
+
+    }
+
+    &--games {
+        background-color: rgba(237, 27, 118, 0.08);
+        border: 2px solid rgba(231, 28, 79, 1);
+        span {
+            @include mixins.setup-font("RedRose", 24px, 400);
+            color: rgba(255, 255, 255, 1);
+        }
+
+        &:hover {
+            border: 3px solid rgba(231, 28, 79, 1);
+            box-shadow: 4px 4px 4px 0px rgba(240, 234, 110, 0.2);
+
+        }
+    }
+
+    &--da-projects {
+        background-color: rgba(191, 229, 242, 1);
+        border: unset;
+
+        span {
+            @include mixins.setup-font("FigTree", 20px, 700);
+            color: rgba(30, 117, 148, 1);
+        }
+
+        img {
+            content: url('../../assets/icons/da-project-exit-icon.svg');
+        }
+
+        &:hover {
+            box-shadow: 4px 4px 4px 0px rgba(30, 117, 148, 0.2);
+
         }
     }
 }
