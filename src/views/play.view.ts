@@ -52,19 +52,24 @@ export class PlayView {
         headerSection.innerHTML = /* html */ `
             <section class='header-player-section header-player-section--${this.gameState.themeKey}'>
                 <img class="header-player-section--${this.gameState.themeKey}__icon-one" alt='Player one icon'/>
-                <span class='header-player-section--${this.gameState.themeKey}__player-text'>Blue</span>
-                <span class='header-player-section--${this.gameState.themeKey}__player-score' id='player-one-score'>0</span>
-                <img class="header-player-section--${this.gameState.themeKey}__icon-two" alt='Player two icon'/>
-                <span class='header-player-section--${this.gameState.themeKey}__player-text'>Orange</span>
-                <span class='header-player-section--${this.gameState.themeKey}__player-score' id='player-two-score'>0</span>
+                <span class='header-player-section--${this.gameState.themeKey}__player-text 
+                    header-player-section--${this.gameState.themeKey}__player-text--one'>Blue</span>
+                <span class='header-player-section--${this.gameState.themeKey}__player-score 
+                    header-player-section--${this.gameState.themeKey}__player-score--one' id='player-one-score'>0</span>
+                <img class='header-player-section--${this.gameState.themeKey}__icon-two' alt='Player two icon'/>
+                <span class='header-player-section--${this.gameState.themeKey}__player-text 
+                    header-player-section--${this.gameState.themeKey}__player-text--two'>Orange</span>
+                <span class='header-player-section--${this.gameState.themeKey}__player-score 
+                    header-player-section--${this.gameState.themeKey}__player-score--two' id='player-two-score'>0</span>
             </section>
 
-            <div class='header-currentPlayer-container'>
+            <div class='header-currentPlayer-container header-currentPlayer-container--${this.gameState.themeKey}'>
                 <span>Current player:</span>
-                <img alt='Current player icon'/>
+                <img alt='Current player icon' id='current-player-icon' class='header-currentPlayer-container--${this.gameState.themeKey}__current-icon 
+                    header-currentPlayer-container--${this.gameState.themeKey}__current-icon--two'/>
             </div>
 
-            <button class='header-exit-button' type='button'>
+            <button class='header-exit-button header-exit-button--${this.gameState.themeKey}' type='button'>
                 <img src='' alt='Exit icon'/>
                 <span>Exit game</span>
             </button>
