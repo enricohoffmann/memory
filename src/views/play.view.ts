@@ -19,20 +19,22 @@ export class PlayView {
         wrapper.appendChild(playSection);
         const headerSection = this.buildHeaderSection();
         playSection.appendChild(headerSection);
-        const mainSection = this.bildMainSection();
+        const mainSection = this.buildMainSection();
         playSection.appendChild(mainSection);
 
         container.appendChild(wrapper);
-        
+
+        this.showCurrentPlayer();
+
     }
 
-    initGameState(): boolean{
+    initGameState(): boolean {
         this.currentGameState = this.gameStates.setGameState(this.gameState);
         return this.currentGameState ? true : false;
     }
 
     private buildWrapper(): HTMLElement {
-        const wrapper:HTMLElement = document.createElement('div');
+        const wrapper: HTMLElement = document.createElement('div');
         wrapper.classList.add('play-wrapper');
         wrapper.classList.add(`play-wrapper--${this.gameState.themeKey}`);
         return wrapper;
@@ -44,7 +46,7 @@ export class PlayView {
         return playSection;
     }
 
-    private buildHeaderSection():HTMLElement {
+    private buildHeaderSection(): HTMLElement {
         const headerSection: HTMLElement = document.createElement('header');
         headerSection.classList.add('header-section');
         headerSection.classList.add(`header-section--${this.gameState.themeKey}`);
@@ -72,8 +74,7 @@ export class PlayView {
 
             <div class='header-currentPlayer-container header-currentPlayer-container--${this.gameState.themeKey}'>
                 <span>Current player:</span>
-                <img alt='Current player icon' id='current-player-icon' class='header-currentPlayer-container__current-icon 
-                    header-currentPlayer-container__current-icon--two'/>
+                <img alt='Current player icon' src='' id='current-player-icon' class='header-currentPlayer-container__current-icon icon-hide'/>
             </div>
 
             <button class='header-exit-button header-exit-button--${this.gameState.themeKey}' type='button'>
@@ -85,10 +86,40 @@ export class PlayView {
         return headerSection;
     }
 
-    private bildMainSection():HTMLElement {
-        const mainSection:HTMLElement = document.createElement('main');
+    private showCurrentPlayer() {
+        const playerIcon = document.getElementById('current-player-icon');
+        if (!playerIcon) return;
+
+        playerIcon.classList.remove('icon-show');
+        playerIcon.classList.add('icon-hide');
+
+        const playerOneClass = 'header-currentPlayer-container__current-icon--one';
+        const playerTwoClass = 'header-currentPlayer-container__current-icon--two';
+
+        playerIcon.classList.remove(playerOneClass, playerTwoClass);
+
+        const currentPlayerClass = this.gameState.currentPlayerId.endsWith('01')
+            ? playerOneClass
+            : playerTwoClass;
+
+        playerIcon.classList.add(currentPlayerClass);
+
+        requestAnimationFrame(() => {
+            playerIcon.classList.remove('icon-hide');
+            playerIcon.classList.add('icon-show');
+        });
 
 
+    }
+
+    private buildMainSection(): HTMLElement {
+        const mainSection: HTMLElement = document.createElement('main');
+        mainSection.classList.add(`playing-field-section`);
+        mainSection.classList.add(`playing-field-section--${this.gameState.boardSize.rows}-${this.gameState.boardSize.columns}`);
+
+        this.gameState.cards.forEach((card) => {
+            
+        });
 
 
 

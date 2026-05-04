@@ -1,5 +1,12 @@
 @use '../abstract/mixins' as mixins;
 @use '../abstract/variables' as var;
+@use '../abstract/functions' as fct;
+
+
+.visually-hidden {
+    position: absolute;
+    left: -9999px;
+}
 
 .play-wrapper {
     width: 100%;
@@ -53,7 +60,6 @@
 
     &--code-vibes {
         grid-template-columns: auto 1fr 210px;
-        height: 36px;
         border-radius: 0;
     }
 
@@ -79,6 +85,7 @@
     margin-left: 32px;
 
     &__icon {
+        display: block;
         height: 28px;
         object-fit: contain;
         object-position: center;
@@ -191,7 +198,8 @@
 .header-currentPlayer-container {
     @include mixins.setup-display-flex(row, center, center);
     height: 100%;
-     
+    transform: translateX(-30px);
+
     span {
         margin-right: 12px;
         padding-bottom: 2px;
@@ -236,7 +244,7 @@
             content: url('/src/assets/icons/games-current-player.svg');
         }
 
-        .header-currentPlayer-container__current-icon--one  {
+        .header-currentPlayer-container__current-icon--one {
             background-color: rgba(9, 127, 197, 1);
         }
 
@@ -283,6 +291,15 @@
         }
     }
 
+}
+
+.icon-hide {
+    opacity: 0;
+    transition: opacity 125ms ease-in;
+}
+
+.icon-show {
+    opacity: 1;
 }
 
 .header-exit-button {
@@ -337,7 +354,7 @@
 
         &:hover {
             border: 3px solid rgba(231, 28, 79, 1);
-            box-shadow: 4px 4px 4px 0px rgba(255,255,255, 0.2);
+            box-shadow: 4px 4px 4px 0px rgba(255, 255, 255, 0.2);
 
         }
     }
@@ -379,5 +396,31 @@
             box-shadow: 4px 4px 4px 0px rgba(30, 117, 148, 0.2);
 
         }
+    }
+}
+
+
+.playing-field-section {
+    margin-top: auto;
+    margin-bottom: auto;
+    display: grid;
+    column-gap: 6px;
+    row-gap: 6px;
+
+    &--4-4 {
+        column-gap: 12px;
+        row-gap: 12px;
+        grid-template-rows: repeat(4, fct.px-to-rem(120px));
+        grid-template-columns: repeat(4, fct.px-to-rem(120px));
+    }
+
+    &--4-6 {
+        grid-template-rows: repeat(4, fct.px-to-rem(120px));
+        grid-template-columns: repeat(6, fct.px-to-rem(120px));
+    }
+
+    &--6-6 {
+        grid-template-rows: repeat(6, fct.px-to-rem(120px));
+        grid-template-columns: repeat(6, fct.px-to-rem(120px));
     }
 }
