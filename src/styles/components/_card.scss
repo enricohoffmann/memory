@@ -1,0 +1,32 @@
+@use '../abstract/mixins' as mixins;
+@use '../abstract/variables' as var;
+
+.card {
+    height: var.$card-height;
+    aspect-ratio: 1 / 1;
+    background-color: transparent;
+    border: unset;
+    outline: unset;
+    cursor: pointer;
+
+    &__inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        transition: all 300ms ease-in-out;
+        
+    }
+
+    &__face {
+        position: absolute;
+        inset: 0;
+        background-color: aqua; /* Hier die Rückseite, diese für jedes Thema fest*/
+        backface-visibility: hidden;
+    }
+}
+
+.is-flipped .card__inner {
+    transform: rotateY(180deg);
+    /* background-color: red; */ /* Hier muss die Frontseite rein */
+}

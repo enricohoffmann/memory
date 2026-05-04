@@ -1,5 +1,6 @@
+import { CardComponent } from "../components/card.Component";
 import { GameStates } from "../states/game.state";
-import { GameState, ViewName } from "../types/game.types";
+import { Card, GameState, ViewName } from "../types/game.types";
 
 export class PlayView {
 
@@ -118,12 +119,18 @@ export class PlayView {
         mainSection.classList.add(`playing-field-section--${this.gameState.boardSize.rows}-${this.gameState.boardSize.columns}`);
 
         this.gameState.cards.forEach((card) => {
-            
+            const cardElement = new CardComponent(card, (c) => this.cardSelected(c));
+            mainSection.appendChild(cardElement.buildCard());
         });
 
 
 
         return mainSection;
+    }
+
+    private cardSelected(card: Card){
+        console.log(card);
+        
     }
 
 }
