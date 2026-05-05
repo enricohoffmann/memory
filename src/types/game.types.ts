@@ -74,3 +74,8 @@ export interface OptionGroupSpecification<T> {
     groupComponent: SettingOptionGroupComponent;
     groupArray: T[];
 }
+
+export interface AssetFile {
+    key: string;
+    url: string;
+}

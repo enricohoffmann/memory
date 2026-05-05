@@ -10,34 +10,38 @@ export class CardComponent {
         this._cardElement = document.createElement('section');
     }
 
-    buildCard():HTMLElement {
+    buildCard(): HTMLElement {
 
         this._cardElement.innerHTML = /* html */ `
-            <button class='card' id='$card-{this.card.id}'>
+            <button class='card' id='card-${this.card.id}'>
                 <div class='card__inner'>
-                    <div class='card__face'></div>
-                    <div class='card__face'></div>
+                    <div class='card__face card__face--back'></div>
+                    <div class='card__face card__face--front'></div>
                 </div>
             </button>
         `;
 
         this._cardElement.addEventListener('click', () => this.fipCard());
-        
+
         this.setCardImage();
 
         return this._cardElement;
     }
 
-    private fipCard(){
+    private fipCard() {
+        this.card.isFlipped = true;
         this.cardSelected(this.card);
 
         this._cardElement.classList.toggle('is-flipped');
     }
 
     private setCardImage() {
-        const cardInner = document.querySelector(`#card-${this.card.id} .card-inner`);
-        if(!cardInner) {return;}
+        const cardInner = this._cardElement.querySelector(`.card__face--front`);
+        if (!cardInner) { return; }
 
-        cardInner.setAttribute('background-image', this.card.facePath);
+        (cardInner as HTMLElement).style.setProperty(
+            '--card-image',
+            `url("${this.card.facePath}")`
+        );
     }
 }

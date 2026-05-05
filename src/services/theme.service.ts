@@ -1,4 +1,4 @@
-import { Theme, ThemeKey } from "../types/game.types";
+import { AssetFile, Theme, ThemeKey } from "../types/game.types";
 
 export class ThemeService {
 
@@ -13,10 +13,9 @@ export class ThemeService {
 
     init(){
         if(this.themes.length === 0){
-            //const previewFileNames: string[] = this.loadPreviewImageFileNames();
             this.initThemeArray();
-            const assetFileNames:string[] = this.loadAssetFileNames();
-            this.sortAssetFileNamesIntoThemes(assetFileNames);
+            const assetFiles:AssetFile[] = this.loadAssetFileNames();
+            this.sortAssetFileNamesIntoThemes(assetFiles);
         }
     }
 
@@ -46,22 +45,32 @@ export class ThemeService {
     }
 
 
-    private loadAssetFileNames():string[] {
-        let assetFiles = import.meta.glob<{ default: string }>('../assets/icons/*/*.svg');
-        let assetFileNames:string[] = [];
+    private loadAssetFileNames():AssetFile[] {
+        let assetFiles = import.meta.glob<{ default: string }>('../assets/icons/*/*.svg', {
+            eager: true,
+            import: 'default'
+        });
+
+        const assetFileNames:AssetFile[] = [];
 
         Object.keys(assetFiles).forEach((fileName) => {
-            assetFileNames.push(fileName);
+
+            const assetFile:AssetFile = {
+                key: fileName,
+                url: String(assetFiles[fileName])
+            }
+
+            assetFileNames.push(assetFile);
         });
 
         return assetFileNames;
 
     }
 
-    private sortAssetFileNamesIntoThemes(assetFileNames:string[]):void {
+    private sortAssetFileNamesIntoThemes(assetFiles:AssetFile[]):void {
         this.themes.forEach((theme) => {
-            const themeFileNames = assetFileNames.filter(n => n.startsWith(`../assets/icons/${theme.key}/`));
-            theme.facePaths = themeFileNames;
+            const themeFileNames = assetFiles.filter(n => n.key.startsWith(`../assets/icons/${theme.key}/`));
+            theme.facePaths = themeFileNames.map(f => f.url);
         });
     }
 
