@@ -2,10 +2,14 @@ import { CardComponent } from "../components/card.Component";
 import { GameStates } from "../states/game.state";
 import { Card, GameState, ViewName } from "../types/game.types";
 
+import '../styles/views/_play.scss';
+
 export class PlayView {
 
     private gameStates: GameStates;
     private currentGameState: GameState | null = null;
+    private cardComponents: CardComponent[] = [];
+
 
     constructor(
         private gameState: GameState,
@@ -119,18 +123,43 @@ export class PlayView {
         mainSection.classList.add(`playing-field-section--${this.gameState.boardSize.rows}-${this.gameState.boardSize.columns}`);
 
         this.gameState.cards.forEach((card) => {
-            const cardElement = new CardComponent(card, (c) => this.cardSelected(c));
+            const cardElement = new CardComponent(card, this.gameState.themeKey, (c) => this.cardSelected(c));
+            this.cardComponents.push(cardElement);
             mainSection.appendChild(cardElement.buildCard());
         });
-
-
 
         return mainSection;
     }
 
-    private cardSelected(card: Card){
-        console.log(card);
+    private cardSelected(card: Card) {
+
+        if (card.isFlipped) { return; }
+        if(this.gameState.selectedCards.length === 2){
+            return;
+        }
+
+        this.gameState.selectedCards.push(card.id);
+        this.gameStates.setGameState(this.gameState);
+        this.findSelectedCardAndFlip(card);
+
+        if(this.gameState.selectedCards.length === 2){
+            this.compareCards();
+        }
+
+    }
+
+    private findSelectedCardAndFlip(card: Card): void {
+        const currentCardComponent: CardComponent | undefined = this.cardComponents.find(c => c._cardId === card.id);
+        if (!currentCardComponent) { return; }
+        currentCardComponent.fipCard();
+    }
+
+    private compareCards() {
+        console.log('Hier die Karten vergleichen.');
+        
         
     }
+
+
 
 }

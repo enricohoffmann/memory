@@ -8,6 +8,8 @@ import playerGroupIcon from '../assets/icons/player-group.svg';
 import boardSizeIcon from '../assets/icons/bordSize-group.svg';
 import { GameSetupService } from "../services/gameSetup.service";
 
+import '../styles/views/_settings.scss';
+
 
 export class SettingsView {
 

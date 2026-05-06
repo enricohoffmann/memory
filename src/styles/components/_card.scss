@@ -2,8 +2,8 @@
 @use '../abstract/variables' as var;
 
 .card {
-    height: var.$card-height;
-    aspect-ratio: 1 / 1;
+    height: 100%;
+    width: 100%;
     background-color: transparent;
     border: unset;
     outline: unset;
@@ -16,28 +16,82 @@
         transform-style: preserve-3d;
         transition: all 300ms ease-in-out;
         transform: rotateY(180deg);
+
     }
 
     &__face {
         position: absolute;
         inset: 0;
 
-
         &.card__face--front {
-            background:
-                var(--card-image) center / 50% no-repeat,
-                rgba(232, 243, 240, 1);
             backface-visibility: hidden;
+
+            &-code-vibes {
+                background:
+                    var(--card-image) center / 50% no-repeat,
+                    rgba(232, 243, 240, 1);
+            }
+
+            &-da-projects {
+                border-radius: 13px;
+                background:
+                    var(--card-image) center / 50% no-repeat,
+                    rgba(234, 242, 244, 1);
+            }
+
+            &-food {
+                background:
+                    var(--card-image) center / 50% no-repeat,
+                    rgba(244, 236, 228, 1);
+            }
+
+            &-games {
+                border-radius: 12px;
+                background:
+                    var(--card-image) center / 50% no-repeat,
+                    rgba(246, 241, 243, 1);
+                box-shadow: 6px 6px 12px 0px rgba(0,0,0,0.25);
+            }
+
         }
 
 
         &.card__face--back {
-            background-color: red;
+
+            &-code-vibes {
+                background: url('/src/assets/icons/code-vibes-card-back.svg') center / 50% no-repeat,
+                    linear-gradient(-25deg,
+                        rgba(40, 111, 98, 1) 0%,
+                        rgba(77, 213, 188, 1) 100%);
+            }
+
+            &-da-projects {
+                border-radius: 13px;
+                background: url('/src/assets/icons/da-project-card-back.svg') center / 50% no-repeat,
+                    rgba(30, 117, 148, 1);
+            }
+
+            &-food {
+                background: url('/src/assets/icons/food-card-back.svg') center / 50% no-repeat,
+                    rgba(243, 131, 45, 1);
+            }
+
+            &-games {
+                border-radius: 12px;
+                background: linear-gradient(-25deg, rgba(10, 40, 53, 1) 0%, rgba(237, 27, 118, 1) 100%);
+                box-shadow: 6px 6px 12px 0px rgba(0,0,0,0.25);
+            }
+
         }
     }
 
 
+
 }
+
+
+
+
 
 .is-flipped .card__inner {
     transform: rotateY(0deg);

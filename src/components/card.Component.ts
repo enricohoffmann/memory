@@ -1,41 +1,46 @@
-import { Card } from "../types/game.types";
+import { Card, ThemeKey } from "../types/game.types";
 import '../styles/components/_card.scss';
 
 
 export class CardComponent {
 
     private _cardElement: HTMLElement
+    readonly _cardId: number;
 
-    constructor(private card: Card, private cardSelected: (card: Card) => void) {
+    constructor(private card: Card, private themeKey: ThemeKey, private cardSelected: (card: Card) => void) {
         this._cardElement = document.createElement('section');
+        this._cardId = this.card.id;
     }
 
     buildCard(): HTMLElement {
 
         this._cardElement.innerHTML = /* html */ `
-            <button class='card' id='card-${this.card.id}'>
+            <button class='card' id='card-${this._cardId}'>
                 <div class='card__inner'>
-                    <div class='card__face card__face--back'></div>
-                    <div class='card__face card__face--front'></div>
+                    <div class='card__face card__face--back card__face--back-${this.themeKey}'></div>
+                    <div class='card__face card__face--front card__face--front-${this.themeKey}'></div>
                 </div>
             </button>
         `;
 
-        this._cardElement.addEventListener('click', () => this.fipCard());
-
         this.setCardImage();
+        this.registerEvent();
 
         return this._cardElement;
     }
 
-    private fipCard() {
-        this.card.isFlipped = true;
-        this.cardSelected(this.card);
-
+    turnCardBack(): void{
+        this.card.isFlipped = false;
         this._cardElement.classList.toggle('is-flipped');
     }
 
-    private setCardImage() {
+    fipCard():void {
+        if(this.card.isFlipped) {return;}
+        this.card.isFlipped = true;
+        this._cardElement.classList.toggle('is-flipped');
+    }
+
+    private setCardImage(): void {
         const cardInner = this._cardElement.querySelector(`.card__face--front`);
         if (!cardInner) { return; }
 
@@ -44,4 +49,9 @@ export class CardComponent {
             `url("${this.card.facePath}")`
         );
     }
+
+    private registerEvent(): void {
+        this._cardElement.addEventListener('click', () => this.cardSelected(this.card));
+    }
+
 }

@@ -18,14 +18,20 @@
                 #555 20%,
                 #3a3b3b 50%,
                 #2a2b2b 100%);
+        --card-width: 120px;
+        --card-height: 120px;
     }
 
     &--da-projects {
         background-color: rgba(191, 229, 242, 1);
+        --card-width: 120px;
+        --card-height: 100px;
     }
 
     &--food {
         background-color: rgba(232, 226, 220, 1);
+        --card-width: 122px;
+        --card-height: 122px;
     }
 
     &--games {
@@ -33,6 +39,8 @@
                 rgb(32, 134, 180) 0%,
                 rgb(36, 110, 145) 40%,
                 rgb(41, 79, 96) 100%);
+        --card-width: 105px;
+        --card-height: 120px;
     }
 }
 
@@ -404,23 +412,26 @@
     margin-top: auto;
     margin-bottom: auto;
     display: grid;
-    column-gap: 6px;
-    row-gap: 6px;
+    column-gap: var(--card-gap);
+    row-gap: var(--card-gap);
+    grid-template-rows: repeat(var(--board-rows), var(--card-height));
+    grid-template-columns: repeat(var(--board-columns), var(--card-width));
 
     &--4-4 {
-        column-gap: 12px;
-        row-gap: 12px;
-        grid-template-rows: repeat(4, fct.px-to-rem(120px));
-        grid-template-columns: repeat(4, fct.px-to-rem(120px));
+        --board-rows: 4;
+        --board-columns: 4;
+        --card-gap: 12px;
     }
 
     &--4-6 {
-        grid-template-rows: repeat(4, fct.px-to-rem(120px));
-        grid-template-columns: repeat(6, fct.px-to-rem(120px));
+        --board-rows: 4;
+        --board-columns: 6;
+        --card-gap: 6px;
     }
 
     &--6-6 {
-        grid-template-rows: repeat(6, fct.px-to-rem(120px));
-        grid-template-columns: repeat(6, fct.px-to-rem(120px));
+        --board-rows: 6;
+        --board-columns: 6;
+        --card-gap: 6px;
     }
 }
