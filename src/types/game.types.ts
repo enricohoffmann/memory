@@ -1,3 +1,4 @@
+import { CardComponent } from "../components/card.Component";
 import { SettingOptionGroupComponent } from "../components/settingOptionGroup.component";
 
 export type ThemeKey = 'code-vibes' | 'games' | 'da-projects' | 'food';
@@ -78,4 +79,9 @@ export interface OptionGroupSpecification<T> {
 export interface AssetFile {
     key: string;
     url: string;
+}
+
+export interface CompareCardsResult {
+    result: 'successfully' | 'unsuccessful' | 'failed';
+    cardsToTurnBack?: CardComponent[];
 }

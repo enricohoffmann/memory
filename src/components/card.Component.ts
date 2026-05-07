@@ -40,6 +40,10 @@ export class CardComponent {
         this._cardElement.classList.toggle('is-flipped');
     }
 
+    getCardPairId(): number{
+        return this.card.pairId;
+    }
+
     private setCardImage(): void {
         const cardInner = this._cardElement.querySelector(`.card__face--front`);
         if (!cardInner) { return; }

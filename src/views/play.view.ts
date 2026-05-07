@@ -1,21 +1,19 @@
 import { CardComponent } from "../components/card.Component";
-import { GameStates } from "../states/game.state";
-import { Card, GameState, ViewName } from "../types/game.types";
+import { PlayService } from "../services/play.service";
+import { Card, CompareCardsResult, GameState, ViewName } from "../types/game.types";
 
 import '../styles/views/_play.scss';
 
+
 export class PlayView {
 
-    private gameStates: GameStates;
-    private currentGameState: GameState | null = null;
-    private cardComponents: CardComponent[] = [];
-
+    private _playService: PlayService;
 
     constructor(
         private gameState: GameState,
         private navigate: (view: ViewName, gameState?: GameState) => void
     ) {
-        this.gameStates = new GameStates();
+        this._playService = new PlayService(gameState);
     }
 
     render(container: HTMLElement): void {
@@ -34,14 +32,13 @@ export class PlayView {
     }
 
     initGameState(): boolean {
-        this.currentGameState = this.gameStates.setGameState(this.gameState);
-        return this.currentGameState ? true : false;
+        return true;
     }
 
     private buildWrapper(): HTMLElement {
         const wrapper: HTMLElement = document.createElement('div');
         wrapper.classList.add('play-wrapper');
-        wrapper.classList.add(`play-wrapper--${this.gameState.themeKey}`);
+        wrapper.classList.add(`play-wrapper--${this._playService.themeKey}`);
         return wrapper;
     }
 
@@ -54,10 +51,10 @@ export class PlayView {
     private buildHeaderSection(): HTMLElement {
         const headerSection: HTMLElement = document.createElement('header');
         headerSection.classList.add('header-section');
-        headerSection.classList.add(`header-section--${this.gameState.themeKey}`);
+        headerSection.classList.add(`header-section--${this._playService.themeKey}`);
 
         headerSection.innerHTML = /* html */ `
-            <section class='header-player-section header-player-section--${this.gameState.themeKey}'>
+            <section class='header-player-section header-player-section--${this._playService.themeKey}'>
 
                 <img class="header-player-section__icon header-player-section__icon--one" alt='Player one icon'/>
 
@@ -65,7 +62,7 @@ export class PlayView {
                     header-player-section__player-text--one'>Blue</span>
 
                 <span class='header-player-section__player-score 
-                    header-player-section__player-score--one' id='player-one-score'>0</span>
+                    header-player-section__player-score--one' id='player-01-score'>0</span>
 
                 <img class='header-player-section__icon header-player-section__icon--two' alt='Player two icon'/>
 
@@ -73,16 +70,16 @@ export class PlayView {
                     header-player-section__player-text--two'>Orange</span>
 
                 <span class='header-player-section__player-score 
-                    header-player-section__player-score--two' id='player-two-score'>0</span>
+                    header-player-section__player-score--two' id='player-02-score'>0</span>
 
             </section>
 
-            <div class='header-currentPlayer-container header-currentPlayer-container--${this.gameState.themeKey}'>
+            <div class='header-currentPlayer-container header-currentPlayer-container--${this._playService.themeKey}'>
                 <span>Current player:</span>
                 <img alt='Current player icon' src='' id='current-player-icon' class='header-currentPlayer-container__current-icon icon-hide'/>
             </div>
 
-            <button class='header-exit-button header-exit-button--${this.gameState.themeKey}' type='button'>
+            <button class='header-exit-button header-exit-button--${this._playService.themeKey}' type='button'>
                 <img src='' alt='Exit icon'/>
                 <span>Exit game</span>
             </button>
@@ -103,9 +100,7 @@ export class PlayView {
 
         playerIcon.classList.remove(playerOneClass, playerTwoClass);
 
-        const currentPlayerClass = this.gameState.currentPlayerId.endsWith('01')
-            ? playerOneClass
-            : playerTwoClass;
+        const currentPlayerClass = this._playService.currentPlayerId.endsWith('01') ? playerOneClass : playerTwoClass;
 
         playerIcon.classList.add(currentPlayerClass);
 
@@ -120,11 +115,11 @@ export class PlayView {
     private buildMainSection(): HTMLElement {
         const mainSection: HTMLElement = document.createElement('main');
         mainSection.classList.add(`playing-field-section`);
-        mainSection.classList.add(`playing-field-section--${this.gameState.boardSize.rows}-${this.gameState.boardSize.columns}`);
+        mainSection.classList.add(`playing-field-section--${this._playService.boardSize.rows}-${this._playService.boardSize.columns}`);
 
         this.gameState.cards.forEach((card) => {
-            const cardElement = new CardComponent(card, this.gameState.themeKey, (c) => this.cardSelected(c));
-            this.cardComponents.push(cardElement);
+            const cardElement = new CardComponent(card, this._playService.themeKey, (c) => this.cardSelected(c));
+            this._playService.addCardToCardComponents(cardElement);
             mainSection.appendChild(cardElement.buildCard());
         });
 
@@ -134,32 +129,51 @@ export class PlayView {
     private cardSelected(card: Card) {
 
         if (card.isFlipped) { return; }
-        if(this.gameState.selectedCards.length === 2){
+        if (this._playService.twoCardsAlreadySelected) {
             return;
         }
 
-        this.gameState.selectedCards.push(card.id);
-        this.gameStates.setGameState(this.gameState);
-        this.findSelectedCardAndFlip(card);
+        const currentCard: CardComponent | null = this._playService.addSelectedCard(card.id);
+        if (!currentCard) { return; }
 
-        if(this.gameState.selectedCards.length === 2){
-            this.compareCards();
+        this.flipSelectedCard(currentCard);
+
+        if (this._playService.twoCardsAlreadySelected) {
+            const result: CompareCardsResult = this._playService.compareSelection();
+            this.processTheCompareResult(result);
         }
 
     }
 
-    private findSelectedCardAndFlip(card: Card): void {
-        const currentCardComponent: CardComponent | undefined = this.cardComponents.find(c => c._cardId === card.id);
-        if (!currentCardComponent) { return; }
-        currentCardComponent.fipCard();
+    private processTheCompareResult(result: CompareCardsResult): void {
+        if (result.result === 'failed') { return; }
+        if (result.result === 'unsuccessful') { this.turnSelectedCardsBack(result.cardsToTurnBack!); }
+        this.showCurrentPlayer();
+        if (result.result === 'successfully') { this.showScoreForPlayers(); }
     }
 
-    private compareCards() {
-        console.log('Hier die Karten vergleichen.');
-        
-        
+    private flipSelectedCard(card: CardComponent): void {
+        card.fipCard();
     }
 
+    private turnSelectedCardsBack(cards: CardComponent[]): void {
+        setTimeout(() => {
+            cards[0].turnCardBack();
+            cards[1].turnCardBack();
+        }, 2000);
+    }
 
+    private showScoreForPlayers() {
+
+        const players = this._playService.getPlayers();
+
+        players.forEach((player) => {
+            const element = document.getElementById(`${player.id}-score`);
+            if (element) {
+                element.innerText = String(player.score);
+            }
+        });
+
+    }
 
 }

@@ -1,6 +1,6 @@
 import { GameState } from "../types/game.types";
 
-export class GameStates {
+export class GameStateStorage {
 
     private gameState: GameState | null = null;
     private readonly STORAGE_KEY: string = "game_state";
@@ -15,7 +15,7 @@ export class GameStates {
 
     setGameState(gameState: GameState): GameState {
         this.gameState = gameState;
-        this.safeStateToLocalStorage();
+        this.saveStateToLocalStorage();
         return this.gameState;
     }
 
@@ -28,7 +28,7 @@ export class GameStates {
         }
     }
 
-    private safeStateToLocalStorage(): void {
+    private saveStateToLocalStorage(): void {
         try {
             if (this.gameState) {
                 localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.gameState));
