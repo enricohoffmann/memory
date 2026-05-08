@@ -145,22 +145,29 @@ export class PlayView {
 
     }
 
-    private processTheCompareResult(result: CompareCardsResult): void {
+    private async processTheCompareResult(result: CompareCardsResult): Promise<void> {
         if (result.result === 'failed') { return; }
-        if (result.result === 'unsuccessful') { this.turnSelectedCardsBack(result.cardsToTurnBack!); }
+        if (result.result === 'unsuccessful') { await this.turnSelectedCardsBack(result.cardsToTurnBack!); }
         this.showCurrentPlayer();
         if (result.result === 'successfully') { this.showScoreForPlayers(); }
+        this._playService.clearSelectedCards();
     }
 
     private flipSelectedCard(card: CardComponent): void {
         card.fipCard();
     }
 
-    private turnSelectedCardsBack(cards: CardComponent[]): void {
-        setTimeout(() => {
+    private turnSelectedCardsBack(cards: CardComponent[]): Promise<void> {
+
+        return new Promise((resolve) => {
+            setTimeout(() => {
             cards[0].turnCardBack();
             cards[1].turnCardBack();
+            resolve();
         }, 2000);
+        });
+
+        
     }
 
     private showScoreForPlayers() {

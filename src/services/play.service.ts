@@ -68,7 +68,6 @@ export class PlayService {
         }
 
         this.setNextPlayer();
-        this.clearSelectedCards();
         return result;
     }
 
@@ -101,14 +100,14 @@ export class PlayService {
         
     }
 
-    private clearSelectedCards(): void {
+    clearSelectedCards(): void {
         this._gameState.selectedCards = [];
     }
 
     setNextPlayer():(string | null) {
         if(!this._currentPlayer) { return null; }
         const currentIndex = this._gameState.players.indexOf(this._currentPlayer);
-        const nextIndex = currentIndex === 0 ? 1 : 0;
+        const nextIndex = (currentIndex + 1) % this._gameState.players.length;
         this._currentPlayer = this._gameState.players[nextIndex];
         this._gameState.currentPlayerId = this._currentPlayer.id;
         this._gameStateStor.setGameState(this._gameState);
