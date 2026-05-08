@@ -1,4 +1,5 @@
 import { GameState, ViewName } from "../types/game.types";
+import { HomeView } from "../views/home.view";
 import { PlayView } from "../views/play.view";
 import { SettingsView } from "../views/settings.view";
 
@@ -14,7 +15,8 @@ export class NavigationManager {
     }
 
     private callHome(){
-
+        const home:HomeView = new HomeView((view) => this.navigateTo(view));
+        home.render(this.app);
     }
 
     private callSettings(){
