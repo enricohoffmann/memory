@@ -8,7 +8,6 @@
     background-color: rgba(255, 255, 255, 1);
     border-radius: 10px;
     padding: 0 24px;
-    margin-left: 32px;
 
     &__icon {
         display: block;
@@ -30,8 +29,9 @@
     &--code-vibes {
         height: 62px;
         background-color: rgba(134, 233, 214, 0.2);
-        margin-left: 0;
         border-radius: 0;
+        margin-left: 0;
+    
 
         .score-board__player-text {
             @include mixins.setup-font("RedRose", 24px, 700);
@@ -78,6 +78,15 @@
     &--games,
     &--da-projects,
     &--food {
+
+        &-play {
+            margin-left: 32px;
+        }
+
+        &-game-over {
+            margin-left: 0;
+        }
+
         .score-board__player-score--one {
             color: rgba(9, 127, 197, 1) !important;
             margin-right: 32px !important;
@@ -121,3 +130,4 @@
 
     }
 }
+

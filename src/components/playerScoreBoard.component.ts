@@ -1,4 +1,4 @@
-import { Player, ThemeKey } from "../types/game.types";
+import { Player, ScoreBoardVariant, ThemeKey } from "../types/game.types";
 import '../styles/components/_playerScoreBoard.scss';
 
 export class PlayerScoreBordComponent {
@@ -6,9 +6,9 @@ export class PlayerScoreBordComponent {
     private _scoreBoard: HTMLElement;
 
 
-    constructor(private theme: ThemeKey){
+    constructor(private theme: ThemeKey, private scoreBoardVariant: ScoreBoardVariant){
         this._scoreBoard = document.createElement('section');
-        this._scoreBoard.classList.add('score-board', `score-board--${this.theme}`);
+        this._scoreBoard.classList.add('score-board', `score-board--${this.theme}`, `score-board--${this.theme}-${scoreBoardVariant}`);
     }
 
     render(): HTMLElement {

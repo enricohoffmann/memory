@@ -13,7 +13,27 @@
         background-color: rgba(48, 49, 49, 1);
 
         &__headline {
-            @include mixins.setup-font("RedRose", 26px, 400, rgba(77, 213, 188, 1));
+            @include mixins.setup-font("RedRose", 188px, 700, rgba(77, 213, 188, 1));
+            text-shadow: -7px 0px 8px rgba(77, 213, 188, 0.5);
+        }
+
+        &__textline {
+            @include mixins.setup-font("RedRose", 26px, 400, rgba(255, 255, 255, 1));
+            margin-top: 64px;
+        }
+    }
+
+    &--da-projects {
+        background-color: rgba(30, 117, 148, 1);
+
+        &__headline {
+            @include mixins.setup-font("FigTree", 130px, 800, rgba(253, 91, 79, 1));
+            text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        }
+    
+        &__textline {
+            @include mixins.setup-font("Figtree", 40px, 500, rgba(255, 255, 255, 1));
+            margin-top: 64px;
         }
     }
 

@@ -5,6 +5,7 @@ import { Card, CompareCardsResult, GameState, ViewName } from "../types/game.typ
 import '../styles/views/_play.scss';
 import { ButtonComponent } from "../components/button.component";
 import { PlayerScoreBordComponent } from "../components/playerScoreBoard.component";
+import { GameOverComponent } from "../components/gameOver.component";
 
 
 export class PlayView {
@@ -17,7 +18,7 @@ export class PlayView {
         private navigate: (view: ViewName, gameState?: GameState) => void
     ) {
         this._playService = new PlayService(gameState);
-        this._scoreBoard = new PlayerScoreBordComponent(this._playService.themeKey);
+        this._scoreBoard = new PlayerScoreBordComponent(this._playService.themeKey, 'play');
     }
 
     render(container: HTMLElement): void {
@@ -31,6 +32,13 @@ export class PlayView {
         wrapper.appendChild(this.buildGameOverContainer());
         container.appendChild(wrapper);
         this.showCurrentPlayer();
+
+
+        setTimeout(() => {
+
+            this.showGameOver();
+
+        }, 2000);
 
     }
 
@@ -78,8 +86,8 @@ export class PlayView {
         return container;
     }
 
-    private renderDialogButton(headerSection: HTMLElement){
-        const button:ButtonComponent = new ButtonComponent('exit-btn', () => this.showDialog());
+    private renderDialogButton(headerSection: HTMLElement) {
+        const button: ButtonComponent = new ButtonComponent('exit-btn', () => this.showDialog());
         button.renderThemeButton(headerSection, this._playService.themeKey, 'Exit game', true);
     }
 
@@ -163,21 +171,31 @@ export class PlayView {
 
         return new Promise((resolve) => {
             setTimeout(() => {
-            cards[0].turnCardBack();
-            cards[1].turnCardBack();
-            resolve();
-        }, 2000);
+                cards[0].turnCardBack();
+                cards[1].turnCardBack();
+                resolve();
+            }, 2000);
         });
 
-        
+
     }
 
-    private showDialog(){
+    private showDialog() {
 
     }
 
     private showGameOver(): void {
-        
+        const gameOver = document.getElementById('game-over-container');
+        if (gameOver) {
+
+            const gameOverSection:GameOverComponent = new GameOverComponent(this._playService.themeKey);
+            const gameOverElement = gameOverSection.buildGameOverElement(this._playService.getPlayers());
+            gameOver.appendChild(gameOverElement);
+
+            requestAnimationFrame(() => {
+                gameOver.classList.add('game-over-container--show');
+            });
+        }
     }
 
 }
