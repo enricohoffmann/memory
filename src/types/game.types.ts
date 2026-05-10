@@ -5,6 +5,8 @@ export type ThemeKey = 'code-vibes' | 'games' | 'da-projects' | 'food';
 export type GameStatus = 'idle' | 'running' | 'lost' | 'won';
 export type ViewName = 'home' | 'settings' | 'play' | 'game-over' | 'winner';
 export type Size = 16 | 24 | 36;
+export type ButtonVariant = 'home-btn' | 'setting-btn' | 'exit-btn' | 'win-draw-btn'; 
+
 
 
 export interface SettingOption {
@@ -85,3 +87,4 @@ export interface CompareCardsResult {
     result: 'successfully' | 'unsuccessful' | 'failed';
     cardsToTurnBack?: CardComponent[];
 }
+

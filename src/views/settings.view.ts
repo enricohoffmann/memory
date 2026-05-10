@@ -9,6 +9,7 @@ import boardSizeIcon from '../assets/icons/bordSize-group.svg';
 import { GameSetupService } from "../services/gameSetup.service";
 
 import '../styles/views/_settings.scss';
+import { ButtonComponent } from "../components/button.component";
 
 
 export class SettingsView {
@@ -30,6 +31,8 @@ export class SettingsView {
     private themesComponent: SettingOptionGroupComponent;
     private playersComponent: SettingOptionGroupComponent;
     private boardSizeComponent: SettingOptionGroupComponent;
+    private playButton: ButtonComponent;
+
 
 
     constructor(private navigate: (view: ViewName, gameState?: GameState) => void) {
@@ -49,6 +52,8 @@ export class SettingsView {
             this.changeBoardSizeSelection(boardSizeId);
         });
 
+        this.playButton = new ButtonComponent('setting-btn', () => this.settingStartButtonEvent());
+
     }
 
     //Wenn ich zu dieser Seite zurückkomme muss ich die alten Einstllungen wieder anzeigen
@@ -62,10 +67,10 @@ export class SettingsView {
 
     render(container: HTMLElement):void {
         const sectionContainer = this.buildSettingsSection();
+        this.renderSettingsButton(sectionContainer);
         container.appendChild(sectionContainer);
         this.renderOptionGroupsIntoColumnOne();
         this.changeThemeSelection(this.selectedThemeId!);
-        this.registerButtonEvent();
     }
 
     private loadThemes() {
@@ -126,10 +131,6 @@ export class SettingsView {
                                 <div class='selection-seperator-diamond'></div>
                             </div>
                             <p id='boardSize-selection' class='sumary-text sumary-text--show'>Board size</p>
-                            <button id='settings-start-button' class='setting-start-button setting-start-button--disabled'>
-                                <img src='/src/assets/icons/setting-game.svg' alt='Icon'/>
-                                <span>Start</span>
-                            </button>
                         </dl>
                     </aside>
                 </main>
@@ -137,6 +138,14 @@ export class SettingsView {
                 `;
 
         return settingsSection;
+    }
+
+    private renderSettingsButton(container: HTMLElement): void {
+        const selectionContainer: Element | null = container.querySelector('#selection-container');
+        if(selectionContainer){
+            this.playButton.renderButton(selectionContainer as HTMLElement);
+        }
+
     }
 
     private renderOptionGroupsIntoColumnOne() {
@@ -220,15 +229,9 @@ export class SettingsView {
 
     private checkIfAllSelectionCompleted() {
         if (this.selectedThemeId !== null && this.selectedStartPlayerId !== null && this.selectedBoardSizeId !== null) {
-            this.enableStartButton();
+            this.playButton.enableButton();
             this.changeSelectionSeperatorView();
         }
-    }
-
-    private enableStartButton(): void {
-        const startButton = document.getElementById('settings-start-button');
-        if (!startButton) { return; }
-        startButton.classList.remove('setting-start-button--disabled');
     }
 
     private changeSelectionSeperatorView(): void {
@@ -241,13 +244,6 @@ export class SettingsView {
         });
     }
 
-    private registerButtonEvent() {
-        const button = document.getElementById('settings-start-button');
-        if (!button) { return; }
-        button.addEventListener('click', () => {
-            this.settingStartButtonEvent();
-        });
-    }
 
     private settingStartButtonEvent() {
         const gameState: GameState | null = this.createNewGame();

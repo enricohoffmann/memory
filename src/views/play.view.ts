@@ -3,6 +3,7 @@ import { PlayService } from "../services/play.service";
 import { Card, CompareCardsResult, GameState, ViewName } from "../types/game.types";
 
 import '../styles/views/_play.scss';
+import { ButtonComponent } from "../components/button.component";
 
 
 export class PlayView {
@@ -21,6 +22,7 @@ export class PlayView {
         const playSection = this.buildPlaySection();
         wrapper.appendChild(playSection);
         const headerSection = this.buildHeaderSection();
+        this.renderDialogButton(headerSection);
         playSection.appendChild(headerSection);
         const mainSection = this.buildMainSection();
         playSection.appendChild(mainSection);
@@ -79,13 +81,14 @@ export class PlayView {
                 <img alt='Current player icon' src='' id='current-player-icon' class='header-currentPlayer-container__current-icon icon-hide'/>
             </div>
 
-            <button class='header-exit-button header-exit-button--${this._playService.themeKey}' type='button'>
-                <img src='' alt='Exit icon'/>
-                <span>Exit game</span>
-            </button>
         `;
 
         return headerSection;
+    }
+
+    private renderDialogButton(headerSection: HTMLElement){
+        const button:ButtonComponent = new ButtonComponent('exit-btn', () => this.showDialog());
+        button.renderThemeButton(headerSection, this._playService.themeKey, 'Exit game', true);
     }
 
     private showCurrentPlayer() {
@@ -180,6 +183,10 @@ export class PlayView {
                 element.innerText = String(player.score);
             }
         });
+
+    }
+
+    private showDialog(){
 
     }
 

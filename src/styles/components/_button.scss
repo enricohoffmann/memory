@@ -1,0 +1,246 @@
+@use '../abstract/mixins' as mixins;
+@use '../abstract/variables' as var;
+@use '../abstract/functions' as fct;
+
+
+.home-start-btn {
+    border: unset;
+    cursor: pointer;
+    background-color: rgba(240, 234, 110, 1);
+    padding: 24px;
+    transition: transform 125ms ease-in;
+    @include mixins.setup-display-flex(row, center, center, 20px);
+
+    &__icon {
+
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        outline: none;
+        border: none;
+        background-color: transparent;
+        width: 44px;
+        transition: transform 100ms ease-in;
+
+        &--left {
+            height: 32px;
+            background-image: url('/src/assets/icons/stadia_controller.svg');
+
+        }
+
+    }
+
+    .home-start-btn__arrow {
+
+        width: 32px;
+        height: 20px;
+        position: relative;
+
+        &-icon {
+            position: absolute;
+            left: 0;
+            top: 0;
+            inset: 0;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            outline: none;
+            border: none;
+            background-color: transparent;
+            transition: opacity 100ms ease-in;
+
+            &--default {
+                background-image: url('/src/assets/icons/arrow-sm.svg');
+                opacity: 1;
+            }
+
+            &--hover {
+                background-image: url('/src/assets/icons/arrow-lg.svg');
+                opacity: 0;
+            }
+
+        }
+
+
+    }
+
+
+    &__text {
+        @include mixins.setup-font("RedRose", 40px, 700, rgba(48, 49, 49, 1));
+    }
+
+    &:hover {
+        transform: scale(1.1);
+
+        .home-start-btn__icon--left {
+            transform: rotate(-20deg);
+        }
+
+        .home-start-btn__arrow-icon {
+            &--default {
+                opacity: 0;
+            }
+
+            &--hover {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+.setting-start-button {
+    height: 53px;
+    width: 126px;
+    background-color: var.$secondaryYellow;
+    border: unset;
+    outline: unset;
+    cursor: pointer;
+    margin-left: 16px;
+    transition: scale 100ms ease-in;
+    @include mixins.setup-display-flex(row, center, center, 6px);
+
+    &:hover:not(&--disabled) {
+        scale: 1.11;
+
+        img {
+            rotate: -5.3deg;
+        }
+    }
+
+    img {
+        transition: rotate 100ms ease-in;
+    }
+
+    span {
+        @include mixins.setup-font("RedRose", 20px, 700);
+    }
+
+    &--disabled {
+        cursor: not-allowed;
+        pointer-events: none;
+        background-color: rgba(219, 219, 214, 1);
+
+
+        img,
+        span {
+            filter: brightness(3);
+        }
+
+    }
+
+
+}
+
+
+.theme-btn {
+    height: 54px;
+    cursor: pointer;
+    @include mixins.setup-display-flex(row, center, center);
+    width: max-content;
+    margin-left: auto;
+    margin-right: auto;
+    transition: border 200ms ease-out, box-shadow 200ms ease-out;
+    border-radius: 10px;
+
+    &__icon {
+
+        &--visible {
+            display: block;
+            height: 30px;
+            width: 30px;
+            margin-left: 16px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-image: url('/src/assets/icons/coding-vibes-exit-icon.svg');
+        }
+
+        &--hidden {
+            display: none;
+        }
+    }
+
+    span {
+        margin-left: 12px;
+        margin-right: 16px;
+    }
+
+    &--code-vibes {
+        height: 62px;
+        background-color: rgba(134, 233, 214, 0.2);
+        border: 1px solid rgba(77, 213, 188, 1);
+        border-radius: 0px;
+
+        span {
+            @include mixins.setup-font("RedRose", 24px, 400);
+            color: rgba(255, 255, 255, 1);
+        }
+
+        &:hover {
+            border: 3px solid rgba(77, 213, 188, 1);
+            box-shadow: 4px 4px 4px 0px rgba(240, 234, 110, 0.2);
+
+        }
+    }
+
+    &--games {
+        background-color: rgba(237, 27, 118, 0.08);
+        border: 2px solid rgba(231, 28, 79, 1);
+
+        span {
+            @include mixins.setup-font("RedRose", 24px, 400);
+            color: rgba(255, 255, 255, 1);
+        }
+
+        &:hover {
+            border: 3px solid rgba(231, 28, 79, 1);
+            box-shadow: 4px 4px 4px 0px rgba(255, 255, 255, 0.2);
+
+        }
+    }
+
+    &--da-projects {
+        background-color: rgba(191, 229, 242, 1);
+        border: unset;
+
+        span {
+            @include mixins.setup-font("FigTree", 20px, 700);
+            color: rgba(30, 117, 148, 1);
+        }
+
+        .theme-btn__icon {
+
+            &--visible{
+                background-image: url('/src/assets/icons/da-project-exit-icon.svg');
+            }
+        }
+
+        &:hover {
+            box-shadow: 4px 4px 4px 0px rgba(30, 117, 148, 0.2);
+
+        }
+    }
+
+    &--food {
+        background-color: rgba(255, 249, 242, 1);
+        border: 3px solid rgba(243, 131, 45, 1);
+
+        span {
+            @include mixins.setup-font("DeliusUnicase", 16px, 700);
+            color: rgba(243, 131, 45, 1);
+        }
+
+        .theme-btn__icon {
+
+            &--visible{
+                background-image: url('/src/assets/icons/food-exit-icon.svg');
+            }
+        }
+
+        &:hover {
+            border: 4px solid rgba(243, 131, 45, 1);
+            box-shadow: 4px 4px 4px 0px rgba(30, 117, 148, 0.2);
+
+        }
+    }
+}
