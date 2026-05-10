@@ -28,6 +28,7 @@ export class PlayView {
         playSection.appendChild(header);
         const mainSection = this.buildMainSection();
         playSection.appendChild(mainSection);
+        wrapper.appendChild(this.buildGameOverContainer());
         container.appendChild(wrapper);
         this.showCurrentPlayer();
 
@@ -120,6 +121,13 @@ export class PlayView {
         return mainSection;
     }
 
+    private buildGameOverContainer(): HTMLElement {
+        const gameOverContainer = document.createElement('div');
+        gameOverContainer.classList.add('game-over-container');
+        gameOverContainer.id = 'game-over-container';
+        return gameOverContainer;
+    }
+
     private cardSelected(card: Card) {
 
         if (card.isFlipped) { return; }
@@ -166,6 +174,10 @@ export class PlayView {
 
     private showDialog(){
 
+    }
+
+    private showGameOver(): void {
+        
     }
 
 }

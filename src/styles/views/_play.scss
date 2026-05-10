@@ -223,3 +223,20 @@
         --card-gap: 6px;
     }
 }
+
+.game-over-container {
+    position: absolute;
+    top: 0;
+    left:0;
+    inset: 0;
+    pointer-events: none;
+    height: 100vh;
+    width: 100%;
+    z-index: 10;
+    transform: translateY(-100%);
+    transition: transform 500ms ease-out;
+
+    &--show {
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,21 @@
+@use '../abstract/mixins' as mixins;
+@use '../abstract/variables' as var;
+@use '../abstract/functions' as fct;
+
+.game-over-screen {
+    @include mixins.setup-display-flex(column, center, center, 24px);
+    height: 100vh;
+    height: 100dvh;
+    width: 100%;
+    overflow: hidden;
+
+    &--code-vibes {
+        background-color: rgba(48, 49, 49, 1);
+
+        &__headline {
+            @include mixins.setup-font("RedRose", 26px, 400, rgba(77, 213, 188, 1));
+        }
+    }
+
+
+}
