@@ -4,31 +4,31 @@ import { Card, CompareCardsResult, GameState, ViewName } from "../types/game.typ
 
 import '../styles/views/_play.scss';
 import { ButtonComponent } from "../components/button.component";
+import { PlayerScoreBordComponent } from "../components/playerScoreBoard.component";
 
 
 export class PlayView {
 
     private _playService: PlayService;
+    private _scoreBoard: PlayerScoreBordComponent;
 
     constructor(
         private gameState: GameState,
         private navigate: (view: ViewName, gameState?: GameState) => void
     ) {
         this._playService = new PlayService(gameState);
+        this._scoreBoard = new PlayerScoreBordComponent(this._playService.themeKey);
     }
 
     render(container: HTMLElement): void {
         const wrapper = this.buildWrapper();
         const playSection = this.buildPlaySection();
         wrapper.appendChild(playSection);
-        const headerSection = this.buildHeaderSection();
-        this.renderDialogButton(headerSection);
-        playSection.appendChild(headerSection);
+        const header = this.composeHeader();
+        playSection.appendChild(header);
         const mainSection = this.buildMainSection();
         playSection.appendChild(mainSection);
-
         container.appendChild(wrapper);
-
         this.showCurrentPlayer();
 
     }
@@ -50,40 +50,31 @@ export class PlayView {
         return playSection;
     }
 
+    private composeHeader(): HTMLElement {
+        const headerSection = this.buildHeaderSection();
+        const scoreBoardElement = this._scoreBoard.render();
+        headerSection.appendChild(scoreBoardElement);
+        const currentPlayerElement = this.buildCurrentPlayerContainer();
+        headerSection.appendChild(currentPlayerElement);
+        this.renderDialogButton(headerSection);
+        return headerSection;
+    }
+
     private buildHeaderSection(): HTMLElement {
         const headerSection: HTMLElement = document.createElement('header');
         headerSection.classList.add('header-section');
         headerSection.classList.add(`header-section--${this._playService.themeKey}`);
-
-        headerSection.innerHTML = /* html */ `
-            <section class='header-player-section header-player-section--${this._playService.themeKey}'>
-
-                <img class="header-player-section__icon header-player-section__icon--one" alt='Player one icon'/>
-
-                <span class='header-player-section__player-text 
-                    header-player-section__player-text--one'>Blue</span>
-
-                <span class='header-player-section__player-score 
-                    header-player-section__player-score--one' id='player-01-score'>0</span>
-
-                <img class='header-player-section__icon header-player-section__icon--two' alt='Player two icon'/>
-
-                <span class='header-player-section__player-text 
-                    header-player-section__player-text--two'>Orange</span>
-
-                <span class='header-player-section__player-score 
-                    header-player-section__player-score--two' id='player-02-score'>0</span>
-
-            </section>
-
-            <div class='header-currentPlayer-container header-currentPlayer-container--${this._playService.themeKey}'>
-                <span>Current player:</span>
-                <img alt='Current player icon' src='' id='current-player-icon' class='header-currentPlayer-container__current-icon icon-hide'/>
-            </div>
-
-        `;
-
         return headerSection;
+    }
+
+    private buildCurrentPlayerContainer(): HTMLElement {
+        const container: HTMLElement = document.createElement('div');
+        container.classList.add('header-currentPlayer-container', `header-currentPlayer-container--${this._playService.themeKey}`);
+        container.innerHTML = /* html */ `
+            <span>Current player:</span>
+            <div id='current-player-icon' class='header-currentPlayer-container__current-icon icon-hide'></div>
+        `;
+        return container;
     }
 
     private renderDialogButton(headerSection: HTMLElement){
@@ -152,7 +143,7 @@ export class PlayView {
         if (result.result === 'failed') { return; }
         if (result.result === 'unsuccessful') { await this.turnSelectedCardsBack(result.cardsToTurnBack!); }
         this.showCurrentPlayer();
-        if (result.result === 'successfully') { this.showScoreForPlayers(); }
+        if (result.result === 'successfully') { this._scoreBoard.showScoreForPlayers(this._playService.getPlayers()); }
         this._playService.clearSelectedCards();
     }
 
@@ -171,19 +162,6 @@ export class PlayView {
         });
 
         
-    }
-
-    private showScoreForPlayers() {
-
-        const players = this._playService.getPlayers();
-
-        players.forEach((player) => {
-            const element = document.getElementById(`${player.id}-score`);
-            if (element) {
-                element.innerText = String(player.score);
-            }
-        });
-
     }
 
     private showDialog(){

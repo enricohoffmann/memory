@@ -65,9 +65,9 @@ export class PlayService {
         }else {
             result.result = 'unsuccessful';
             result.cardsToTurnBack = currentCards;
+            this.setNextPlayer();
         }
-
-        this.setNextPlayer();
+        
         return result;
     }
 
