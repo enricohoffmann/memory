@@ -5,13 +5,12 @@ import '../styles/views/_home.scss';
 
 export class HomeView {
 
-    constructor(private navigate: (view: ViewName) => void) {
-
-    }
+    constructor(private navigate: (view: ViewName) => void) {}
 
     render(container: HTMLElement): void {
         const homeWrapper = this.buildWrapper();
         const homeSection = this.buildHomeSection();
+        this.registerEvent(homeSection);
         homeWrapper.appendChild(homeSection);
 
         container.appendChild(homeWrapper);
@@ -36,10 +35,11 @@ export class HomeView {
             <div class='home-section__home-btn-container'>
 
                 <button class='home-start-btn'>
-                    <div class='home-start-btn__icon-left'></div>
+                    <div class='home-start-btn__icon home-start-btn__icon--left'></div>
                     <span class='home-start-btn__text'>Play</span>
-                    <div class='home-start-btn__icon-right'>
-                        
+                    <div class='home-start-btn__arrow'>
+                        <div class='home-start-btn__arrow-icon home-start-btn__arrow-icon--default'></div>
+                        <div class='home-start-btn__arrow-icon home-start-btn__arrow-icon--hover'></div>
                     </div>
                 </button>
             
@@ -50,5 +50,12 @@ export class HomeView {
         `;
 
         return homeSection;
+    }
+
+    private registerEvent(homeSection: HTMLElement): void {
+        const btn = homeSection.querySelector('.home-start-btn');
+        if(btn) {
+            btn.addEventListener('click', () => this.navigate('settings'));
+        }
     }
 }
