@@ -37,5 +37,33 @@
         }
     }
 
+    &--food {
+        background-color: rgba(243, 131, 45, 1);
+
+        &__headline {
+            @include mixins.setup-font("KleeOne", 130px, 600, rgba(255, 255, 255, 1));
+            text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        }
+
+        &__textline {
+            @include mixins.setup-font("KleeOne", 42px, 600, rgba(255, 255, 255, 1));
+            margin-top: 64px;
+        }
+    }
+
+    &--games {
+        background-color: rgba(41, 79, 96, 1);
+
+        &__headline {
+            @include mixins.setup-font("Orbitron", 124px, 900, rgba(237, 27, 118, 1));
+            text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        }
+
+        &__textline {
+            @include mixins.setup-font("Orbitron", 28px, 700, rgba(255, 255, 255, 1), 100%, 7%);
+            margin-top: 64px;
+        }
+    }
+
 
 }

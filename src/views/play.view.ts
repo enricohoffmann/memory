@@ -22,14 +22,14 @@ export class PlayView {
     }
 
     render(container: HTMLElement): void {
-        const wrapper = this.buildWrapper();
+        let wrapper = this.buildWrapper();
         const playSection = this.buildPlaySection();
         wrapper.appendChild(playSection);
         const header = this.composeHeader();
         playSection.appendChild(header);
         const mainSection = this.buildMainSection();
         playSection.appendChild(mainSection);
-        wrapper.appendChild(this.buildGameOverContainer());
+        wrapper = this.addOverlayToWrapper(wrapper);
         container.appendChild(wrapper);
         this.showCurrentPlayer();
 
@@ -50,6 +50,13 @@ export class PlayView {
         const wrapper: HTMLElement = document.createElement('div');
         wrapper.classList.add('play-wrapper');
         wrapper.classList.add(`play-wrapper--${this._playService.themeKey}`);
+        return wrapper;
+    }
+
+    private addOverlayToWrapper(wrapper: HTMLElement): HTMLElement{
+        wrapper.appendChild(this.buildOverlayContainerContainer('exit-dialog'));
+        wrapper.appendChild(this.buildOverlayContainerContainer('game-over-container'));
+        wrapper.appendChild(this.buildOverlayContainerContainer('play-result-container'));
         return wrapper;
     }
 
@@ -129,11 +136,11 @@ export class PlayView {
         return mainSection;
     }
 
-    private buildGameOverContainer(): HTMLElement {
-        const gameOverContainer = document.createElement('div');
-        gameOverContainer.classList.add('game-over-container');
-        gameOverContainer.id = 'game-over-container';
-        return gameOverContainer;
+    private buildOverlayContainerContainer(elementId: string): HTMLElement {
+        const overlayContainer = document.createElement('div');
+        overlayContainer.classList.add('overlay-container');
+        overlayContainer.id = elementId;
+        return overlayContainer;
     }
 
     private cardSelected(card: Card) {
@@ -193,9 +200,13 @@ export class PlayView {
             gameOver.appendChild(gameOverElement);
 
             requestAnimationFrame(() => {
-                gameOver.classList.add('game-over-container--show');
+                gameOver.classList.add('overlay-container--show');
             });
         }
+    }
+
+    private showPlayEndScreen(): void {
+        
     }
 
 }
