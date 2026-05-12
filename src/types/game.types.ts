@@ -7,7 +7,7 @@ export type ViewName = 'home' | 'settings' | 'play' | 'game-over' | 'winner';
 export type Size = 16 | 24 | 36;
 export type ButtonVariant = 'home-btn' | 'setting-btn' | 'exit-btn' | 'win-draw-btn'; 
 export type ScoreBoardVariant = 'play' | 'game-over';
-
+export type TrophyType = 'winner' | 'draw';
 
 
 export interface SettingOption {

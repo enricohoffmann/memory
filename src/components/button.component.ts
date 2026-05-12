@@ -31,6 +31,15 @@ export class ButtonComponent {
         container.appendChild(this._button);
     }
 
+    getWinDrawBackButton(theme: ThemeKey, buttonText: string): HTMLElement {
+        this._button.classList.add('win-draw-btn', `win-draw-btn--${theme}`);
+        this._button.innerHTML = /* html */ `
+            <span class='home-start-btn__text'>${buttonText}</span>
+        `;
+        this.registerEvent();
+        return this._button;
+    }
+
     private variantHomeBtn(): void{
         this._button.classList.add('home-start-btn');
 
