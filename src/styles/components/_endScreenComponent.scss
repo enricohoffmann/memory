@@ -1,0 +1,95 @@
+@use '../abstract/mixins' as mixins;
+@use '../abstract/variables' as var;
+@use '../abstract/functions' as fct;
+
+.end-screen-section {
+    @include mixins.setup-display-flex(column, center, center, 24px);
+    height: 100vh;
+    height: 100dvh;
+    width: 100%;
+    overflow: hidden;
+
+    &--code-vibes {
+        background-color: rgba(48, 49, 49, 1);
+    }
+
+    &--da-projects {
+        background-color: rgba(30, 117, 148, 1);
+    }
+
+    &--food {
+        background-color: rgba(243, 131, 45, 1);
+    }
+
+    &--games {
+        background-color: rgba(41, 79, 96, 1);
+    }
+}
+
+.result-message {
+    &--code-vibes {
+        
+    }
+
+    &--da-projects {
+       @include mixins.setup-font("FigTree", 40px, 400, rgba(255, 255, 255, 1));
+    }
+
+    &--food {
+        
+    }
+
+    &--games {
+        
+    }
+}
+
+.winner-headline {
+    &--code-vibes {
+        
+    }
+
+    &--da-projects {
+       @include mixins.setup-font("FigTree", 80px, 700, rgba(255, 255, 255, 1));
+    }
+
+    &--food {
+        
+    }
+
+    &--games {
+        
+    }
+}
+
+.trophy {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 200px;
+    height: 250px;
+    margin-top: 52px;
+    margin-bottom: 52px;
+
+    &--code-vibes {
+        
+    }
+
+    &--da-projects {
+        &--winner-orange {
+            background-image: url('/src/assets/icons/da-project-win-orange.svg');
+        }
+
+        &--winner-blue {
+            background-image: url('/src/assets/icons/da-project-win-blue.svg');
+        }
+    }
+
+    &--food {
+        
+    }
+
+    &--games {
+        
+    }
+}

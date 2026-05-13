@@ -1,6 +1,6 @@
 import { GameOverResult, ThemeKey, TrophyType } from "../types/game.types";
 import { ButtonComponent } from "./button.component";
-
+import '../styles/components/_endScreenComponent.scss';
 
 export class EndScreenComponent {
 
@@ -26,8 +26,12 @@ export class EndScreenComponent {
 
 
     private composeCodeVibeWinner(): void{
+        
         //top
         this._endScreenElement.appendChild(this.buildTopElement());
+
+        //einen Main erstellen und alle Elemente reinpacken
+
         //result
         this._endScreenElement.appendChild(this.buildResultMessageElement('winner'));
         //Winner
@@ -91,7 +95,9 @@ export class EndScreenComponent {
         let classList: string[] = [];
         classList.push('trophy', `trophy--${this.theme}`);
 
-        trophyType === 'draw' ? classList.push(`trophy--${this.theme}--draw`) : classList.push(`trophy--${this.theme}--winner`);
+        trophyType === 'draw' ? classList.push(
+            `trophy--${this.theme}--draw`) 
+            : classList.push(`trophy--${this.theme}--winner-${this.gameEndResult.winner.color}`);
         const trophyElement = this.createHtmlElement('div', classList);
         return trophyElement;
     }

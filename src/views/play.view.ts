@@ -33,6 +33,8 @@ export class PlayView {
         wrapper = this.addOverlayToWrapper(wrapper);
         container.appendChild(wrapper);
         this.showCurrentPlayer();
+
+        this.showPlayEndScreen();
     }
 
     initGameState(): boolean {
@@ -215,8 +217,16 @@ export class PlayView {
         const endScreen = document.getElementById('play-result-container');
         if (endScreen){
 
+            const test: GameOverResult = {
+                winner: this._playService.getPlayers()[1],
+                gameStatus: 'won'
+            };
+
             const endScreenComponent: EndScreenComponent = new EndScreenComponent(
-                this._playService.themeKey, this._playService.gameOverResult);
+                this._playService.themeKey, test);
+
+            /* const endScreenComponent: EndScreenComponent = new EndScreenComponent(
+                this._playService.themeKey, this._playService.gameOverResult); */
 
             const endScreenElement = endScreenComponent.render();
             endScreen.appendChild(endScreenElement);
