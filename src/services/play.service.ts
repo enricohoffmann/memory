@@ -1,6 +1,6 @@
 import { CardComponent } from "../components/card.Component";
 import { GameStateStorage } from "../storage/gameState.storage";
-import { BoardSize, CompareCardsResult, GameState, Player, ThemeKey } from "../types/game.types";
+import { BoardSize, CompareCardsResult, GameOverResult, GameState, GameStatus, Player, ThemeKey, TrophyType } from "../types/game.types";
 
 
 export class PlayService {
@@ -37,6 +37,26 @@ export class PlayService {
         return this._gameState.boardSize;
     }
 
+    get gameStatus(): GameStatus {
+        return this._gameState.status;
+    }
+
+    get gameOverResult(): GameOverResult {
+        const [playerOne, playerTwo] = this._gameState.players;
+        const maxScorePlayer = playerOne.score >= playerTwo.score ? playerOne : playerTwo;
+
+        const gameEndResult: GameOverResult = {
+            winner : maxScorePlayer,
+            gameStatus: playerOne.score === playerTwo.score ? 'draw' : 'won'
+        };
+
+        this._gameState.status = gameEndResult.gameStatus;
+        this._gameStateStor.setGameState(this._gameState);
+
+        return gameEndResult;
+
+    }
+
     getScoreByPlayerId(playerId: string):number {
         const player:Player | undefined = this._gameState.players.find(p => p.id === playerId);
         return player?.score ?? 0;
@@ -60,8 +80,8 @@ export class PlayService {
         const isEqual = this.areTheCardsTheSame(currentCards);
        
         if(isEqual){
-            result.result = 'successfully';
             this.setScoreFromCurrentPlayer();
+            result.result = this.checkIsGameOver() ? 'gameOver' :  'successfully';
         }else {
             result.result = 'unsuccessful';
             result.cardsToTurnBack = currentCards;
@@ -69,6 +89,15 @@ export class PlayService {
         }
         
         return result;
+    }
+
+    private checkIsGameOver(): boolean{
+        let playsersScore: number = 0;
+        this._gameState.players.forEach((player) => {
+            playsersScore += player.score;
+        });
+
+        return this._gameState.cards.length / 2 === playsersScore;
     }
 
     private getCardComponentsFromSelection(): (CardComponent[] | null ) {

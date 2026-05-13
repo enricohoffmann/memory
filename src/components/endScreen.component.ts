@@ -1,4 +1,4 @@
-import { GameStatus, Player, ThemeKey, TrophyType } from "../types/game.types";
+import { GameOverResult, ThemeKey, TrophyType } from "../types/game.types";
 import { ButtonComponent } from "./button.component";
 
 
@@ -6,15 +6,15 @@ export class EndScreenComponent {
 
     private _endScreenElement: HTMLElement;
 
-    constructor(private theme: ThemeKey, private gameStatus: GameStatus, private winner: Player){
+    constructor(private theme: ThemeKey, private gameEndResult: GameOverResult){
         this._endScreenElement = document.createElement('section');
         this._endScreenElement.classList.add('end-screen-section', `end-screen-section--${theme}`);
     }
 
 
     render(): HTMLElement {
-        if(this.gameStatus === 'draw') {this.composeDraw();}
-        if(this.gameStatus === 'won'){
+        if(this.gameEndResult.gameStatus === 'draw') {this.composeDraw();}
+        if(this.gameEndResult.gameStatus === 'won'){
             if(this.theme === 'code-vibes'){
                 this.composeCodeVibeWinner();
             }else {
@@ -82,7 +82,7 @@ export class EndScreenComponent {
 
     private buildWinnerMessageElement(): HTMLElement {
         const winnerMessage = this.createHtmlElement('h1', ['winner-headline', `winner-headline--${this.theme}`]);
-        let playerMessage = `${this.winner.name} Player`;
+        let playerMessage = `${this.gameEndResult.winner.name} Player`;
         winnerMessage.innerText = this.theme === 'code-vibes' ? playerMessage.toLowerCase() : playerMessage;
         return winnerMessage;
     }

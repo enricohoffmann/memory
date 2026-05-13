@@ -85,7 +85,12 @@ export interface AssetFile {
 }
 
 export interface CompareCardsResult {
-    result: 'successfully' | 'unsuccessful' | 'failed';
+    result: 'successfully' | 'unsuccessful' | 'failed' | 'gameOver';
     cardsToTurnBack?: CardComponent[];
+}
+
+export interface GameOverResult {
+    gameStatus: GameStatus;
+    winner: Player;
 }
 

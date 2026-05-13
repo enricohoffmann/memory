@@ -1,11 +1,12 @@
 import { CardComponent } from "../components/card.Component";
 import { PlayService } from "../services/play.service";
-import { Card, CompareCardsResult, GameState, ViewName } from "../types/game.types";
+import { Card, CompareCardsResult, GameOverResult, GameState, ViewName } from "../types/game.types";
 
 import '../styles/views/_play.scss';
 import { ButtonComponent } from "../components/button.component";
 import { PlayerScoreBordComponent } from "../components/playerScoreBoard.component";
 import { GameOverComponent } from "../components/gameOver.component";
+import { EndScreenComponent } from "../components/endScreen.component";
 
 
 export class PlayView {
@@ -32,14 +33,6 @@ export class PlayView {
         wrapper = this.addOverlayToWrapper(wrapper);
         container.appendChild(wrapper);
         this.showCurrentPlayer();
-
-
-        setTimeout(() => {
-
-            this.showGameOver();
-
-        }, 2000);
-
     }
 
     initGameState(): boolean {
@@ -165,6 +158,7 @@ export class PlayView {
     private async processTheCompareResult(result: CompareCardsResult): Promise<void> {
         if (result.result === 'failed') { return; }
         if (result.result === 'unsuccessful') { await this.turnSelectedCardsBack(result.cardsToTurnBack!); }
+        if (result.result === 'gameOver') {this.handleGameOver();}
         this.showCurrentPlayer();
         if (result.result === 'successfully') { this._scoreBoard.showScoreForPlayers(this._playService.getPlayers()); }
         this._playService.clearSelectedCards();
@@ -191,6 +185,18 @@ export class PlayView {
 
     }
 
+    private handleGameOver(): void {
+        setTimeout(() => {
+
+            this.showGameOver();
+
+            setTimeout(() => {
+                this.showPlayEndScreen();
+            }, 1500);
+
+        }, 1000);
+    }
+
     private showGameOver(): void {
         const gameOver = document.getElementById('game-over-container');
         if (gameOver) {
@@ -206,7 +212,19 @@ export class PlayView {
     }
 
     private showPlayEndScreen(): void {
-        
+        const endScreen = document.getElementById('play-result-container');
+        if (endScreen){
+
+            const endScreenComponent: EndScreenComponent = new EndScreenComponent(
+                this._playService.themeKey, this._playService.gameOverResult);
+
+            const endScreenElement = endScreenComponent.render();
+            endScreen.appendChild(endScreenElement);
+
+            requestAnimationFrame(() => {
+                endScreen.classList.add('overlay-container--show');
+            });
+        }
     }
 
 }
