@@ -10,55 +10,73 @@
     overflow: hidden;
 
     &--code-vibes {
-        background-color: rgba(48, 49, 49, 1);
+        background-color: var.$code-vibes-primary-color;
     }
 
     &--da-projects {
-        background-color: rgba(30, 117, 148, 1);
+        background-color: var.$da-project-primary-color;
     }
 
     &--food {
-        background-color: rgba(243, 131, 45, 1);
+        background-color: var.$food-primary-color;
     }
 
     &--games {
-        background-color: rgba(41, 79, 96, 1);
+        background-color: var.$games-primary-color;
     }
 }
 
 .result-message {
     &--code-vibes {
-        
+        @include mixins.setup-font("RedRose", 40px, 400, rgba(255, 255, 255, 1));
     }
 
     &--da-projects {
-       @include mixins.setup-font("FigTree", 40px, 400, rgba(255, 255, 255, 1));
+        @include mixins.setup-font("FigTree", 40px, 400, rgba(255, 255, 255, 1));
     }
 
     &--food {
-        
+        @include mixins.setup-font("KleeOne", 40px, 400, var.$food-font-color);
     }
 
     &--games {
-        
+        @include mixins.setup-font("Orbitron", 28px, 700, rgba(255, 255, 255, 1), 100%, 7%);
     }
 }
 
 .winner-headline {
     &--code-vibes {
-        
+        @include mixins.setup-font("RedRose", 60px, 700);
+
+        &--winner-orange {
+            color: var.$code-vibes-font-color-orange;
+        }
+
+        &--winner-blue {
+            color: var.$code-vibes-font-color-blue;
+        }
     }
 
     &--da-projects {
-       @include mixins.setup-font("FigTree", 80px, 700, rgba(255, 255, 255, 1));
+        @include mixins.setup-font("FigTree", 80px, 700, rgba(255, 255, 255, 1));
     }
 
     &--food {
-        
+        @include mixins.setup-font("KleeOne", 80px, 600, var.$food-font-color);
     }
 
     &--games {
-        
+        @include mixins.setup-font("Orbitron", 64px, 700);
+        letter-spacing: 7%;
+        text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+
+        &--winner-orange {
+            color: $games-font-color-blue;
+        }
+
+        &--winner-blue {
+            color: var.$games-font-color-orange;
+        }
     }
 }
 
@@ -72,7 +90,19 @@
     margin-bottom: 52px;
 
     &--code-vibes {
-        
+        &--winner-orange {
+            background-image: url('/src/assets/icons/coding-vibes-winner-orange.svg');
+        }
+
+        &--winner-blue {
+            background-image: url('/src/assets/icons/coding-vibes-winner-blue.svg');
+        }
+
+        &--draw {
+            background-image: url('/src/assets/icons/coding-vibes-draw.svg');
+            width: 340px;
+            height: 270px;
+        }
     }
 
     &--da-projects {
@@ -86,46 +116,40 @@
     }
 
     &--food {
-        
+        &--winner-orange {
+            background-image: url('/src/assets/icons/food-winner-orange.svg');
+        }
+
+        &--winner-blue {
+            background-image: url('/src/assets/icons/food-winner-blue.svg');
+        }
     }
 
     &--games {
-        
+
+        &--winner-orange,
+        &--winner-blue {
+            background-image: url('src/assets/icons/game-pokal.svg/');
+            box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.25);
+        }
+
+        &--draw {
+            background-image: url('src/assets/icons/game-draw.svg');
+            width: 340px;
+            height: 270px;
+            box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.25);
+        }
+
+
     }
 }
 
 .draw-headline {
-    &--code-vibes {
+    &--code-vibes {}
 
-    }
+    &--da-projects {}
 
-    &--da-projects {
+    &--food {}
 
-    }
-
-    &--food {
-
-    }
-
-    &--games {
-
-    }
-}
-
-.winner-headline {
-    &--codes-vibes {
-
-    }
-
-    &--da-projects {
-
-    }
-
-    &--food {
-
-    }
-
-    &--games {
- 
-    }
+    &--games {}
 }
