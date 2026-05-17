@@ -32,14 +32,19 @@ export class EndScreenComponent {
 
         //einen Main erstellen und alle Elemente reinpacken
 
+        const codeVibeMain: HTMLElement = document.createElement('main');
+        codeVibeMain.classList.add('code-vibes-main');
+
         //result
-        this._endScreenElement.appendChild(this.buildResultMessageElement('winner'));
+        codeVibeMain.appendChild(this.buildResultMessageElement('winner'));
         //Winner
-        this._endScreenElement.appendChild(this.buildWinnerMessageElement());
+        codeVibeMain.appendChild(this.buildWinnerMessageElement());
         //Icon
-        this._endScreenElement.appendChild(this.buildTrophyElement('winner'));
+        codeVibeMain.appendChild(this.buildTrophyElement('winner'));
         //Button
-        this._endScreenElement.appendChild(this.buildBackButtonElement());
+        codeVibeMain.appendChild(this.buildBackButtonElement());
+
+        this._endScreenElement.appendChild(codeVibeMain);
     }
 
     private composeWinner(): void {
@@ -55,7 +60,7 @@ export class EndScreenComponent {
 
     private composeDraw(): void {
         //result
-        this._endScreenElement.appendChild(this.buildResultMessageElement('winner'));
+        this._endScreenElement.appendChild(this.buildResultMessageElement('draw'));
         //draw Message
         this._endScreenElement.appendChild(this.buildDrawMessageElement());
         //Icon
@@ -85,9 +90,9 @@ export class EndScreenComponent {
 
 
     private buildWinnerMessageElement(): HTMLElement {
-        const winnerMessage = this.createHtmlElement('h1', ['winner-headline', `winner-headline--${this.theme}`]);
+        const winnerMessage = this.createHtmlElement('h1', ['winner-headline', `winner-headline--${this.theme}`, `winner-headline--${this.theme}--winner-${this.gameEndResult.winner.color}`]);
         let playerMessage = `${this.gameEndResult.winner.name} Player`;
-        winnerMessage.innerText = this.theme === 'code-vibes' ? playerMessage.toLowerCase() : playerMessage;
+        winnerMessage.innerText = this.theme === 'code-vibes' ? playerMessage.toUpperCase() : playerMessage;
         return winnerMessage;
     }
 

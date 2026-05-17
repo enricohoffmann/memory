@@ -218,7 +218,7 @@ export class PlayView {
         if (endScreen){
 
             const test: GameOverResult = {
-                winner: this._playService.getPlayers()[1],
+                winner: this._playService.getPlayers()[0],
                 gameStatus: 'won'
             };
 

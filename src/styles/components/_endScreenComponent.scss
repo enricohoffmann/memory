@@ -11,6 +11,8 @@
 
     &--code-vibes {
         background-color: var.$code-vibes-primary-color;
+        display: grid;
+        grid-template-rows: auto 1fr;
     }
 
     &--da-projects {
@@ -24,6 +26,23 @@
     &--games {
         background-color: var.$games-primary-color;
     }
+}
+
+.code-vibes-main {
+    grid-row: 2;
+    @include mixins.setup-display-flex(column, center, center, 24px);
+    transform: translateY(-113px);
+}
+
+.code-vibes--top {
+    grid-row: 1;
+    background-image: url('/src/assets/icons/coding-vibes-confetti.svg');
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 1230px;
+    height: 360px;
+    transform: translateY(-32px);
 }
 
 .result-message {
@@ -71,7 +90,7 @@
         text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
 
         &--winner-orange {
-            color: $games-font-color-blue;
+            color: var.$games-font-color-blue;
         }
 
         &--winner-blue {
@@ -145,7 +164,10 @@
 }
 
 .draw-headline {
-    &--code-vibes {}
+    &--code-vibes {
+        @include mixins.setup-font("RedRose", 128px, 700, var.$code-vibes-font-color-green);
+        text-shadow: -7px 0px 8px rgba(77, 213, 188, 0.5);
+    }
 
     &--da-projects {}
 
