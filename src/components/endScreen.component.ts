@@ -6,7 +6,9 @@ export class EndScreenComponent {
 
     private _endScreenElement: HTMLElement;
 
-    constructor(private theme: ThemeKey, private gameEndResult: GameOverResult){
+    constructor(private theme: ThemeKey, 
+        private gameEndResult: GameOverResult, 
+        private backToHome: () => void){
         this._endScreenElement = document.createElement('section');
         this._endScreenElement.classList.add('end-screen-section', `end-screen-section--${theme}`);
     }
@@ -28,56 +30,43 @@ export class EndScreenComponent {
     private composeCodeVibeWinner(): void{
         
         //top
-        this._endScreenElement.appendChild(this.buildTopElement());
+        const codeVibeHeader: HTMLElement = document.createElement('header');
+        codeVibeHeader.classList.add('code-vibes-header');
+        codeVibeHeader.appendChild(this.buildTopElement());
 
-        //einen Main erstellen und alle Elemente reinpacken
+        this._endScreenElement.appendChild(codeVibeHeader);
+        this._endScreenElement.appendChild(this.buildResultMessageElement('winner'));
+        this._endScreenElement.appendChild(this.buildWinnerMessageElement());
+        this._endScreenElement.appendChild(this.buildTrophyElement('winner'));
+        this._endScreenElement.appendChild(this.buildBackButtonElement());
 
-        const codeVibeMain: HTMLElement = document.createElement('main');
-        codeVibeMain.classList.add('code-vibes-main');
-
-        //result
-        codeVibeMain.appendChild(this.buildResultMessageElement('winner'));
-        //Winner
-        codeVibeMain.appendChild(this.buildWinnerMessageElement());
-        //Icon
-        codeVibeMain.appendChild(this.buildTrophyElement('winner'));
-        //Button
-        codeVibeMain.appendChild(this.buildBackButtonElement());
-
-        this._endScreenElement.appendChild(codeVibeMain);
     }
 
     private composeWinner(): void {
-        //result
         this._endScreenElement.appendChild(this.buildResultMessageElement('winner'));
-        //Winner
         this._endScreenElement.appendChild(this.buildWinnerMessageElement());
-        //Icon
         this._endScreenElement.appendChild(this.buildTrophyElement('winner'));
-        //Button
         this._endScreenElement.appendChild(this.buildBackButtonElement());
     }
 
     private composeDraw(): void {
-        //result
         this._endScreenElement.appendChild(this.buildResultMessageElement('draw'));
-        //draw Message
         this._endScreenElement.appendChild(this.buildDrawMessageElement());
-        //Icon
         this._endScreenElement.appendChild(this.buildTrophyElement('draw'));
-        //Button
         this._endScreenElement.appendChild(this.buildBackButtonElement());
     }
 
 
     private buildTopElement(): HTMLElement {
         const topElement = this.createHtmlElement('div', [`${this.theme}--top`]);
-
         return topElement;
     }
 
     private buildResultMessageElement(trophyType: TrophyType): HTMLElement {
         const resultMessage = this.createHtmlElement('p', ['result-message', `result-message--${this.theme}`]);
+        if(this.theme === 'code-vibes' && this.gameEndResult.gameStatus === 'won'){
+            resultMessage.classList.add('result-message-mt');
+        }
         resultMessage.innerText = trophyType === 'winner' ? 'The winner is' : 'It´s a';
         return resultMessage;
     }
@@ -103,12 +92,19 @@ export class EndScreenComponent {
         trophyType === 'draw' ? classList.push(
             `trophy--${this.theme}--draw`) 
             : classList.push(`trophy--${this.theme}--winner-${this.gameEndResult.winner.color}`);
+          
+        const trophyBackground = this.createHtmlElement('div', ['food-end-trophy-bg', `food-end-trophy-bg--${this.gameEndResult.gameStatus}`]);
         const trophyElement = this.createHtmlElement('div', classList);
-        return trophyElement;
+
+        if(this.theme === 'food'){
+            trophyBackground.appendChild(trophyElement);
+        }
+
+        return this.theme === 'food' ? trophyBackground : trophyElement;
     }
 
     private buildBackButtonElement(): HTMLElement {
-        const button: ButtonComponent = new ButtonComponent('win-draw-btn', () => this.goBack());
+        const button: ButtonComponent = new ButtonComponent('win-draw-btn', () => this.backToHome());
         const buttonElement = button.getWinDrawBackButton(this.theme, this.theme === 'code-vibes' ? 'Back to start' : 'Home');
         return buttonElement;
     }
@@ -122,10 +118,5 @@ export class EndScreenComponent {
         return element;
 
     }
-
-    private goBack(){
-
-    }
-
 
 }

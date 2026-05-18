@@ -11,8 +11,6 @@
 
     &--code-vibes {
         background-color: var.$code-vibes-primary-color;
-        display: grid;
-        grid-template-rows: auto 1fr;
     }
 
     &--da-projects {
@@ -20,7 +18,7 @@
     }
 
     &--food {
-        background-color: var.$food-primary-color;
+        background-color: var.$food-secondary-color;
     }
 
     &--games {
@@ -28,21 +26,27 @@
     }
 }
 
-.code-vibes-main {
-    grid-row: 2;
-    @include mixins.setup-display-flex(column, center, center, 24px);
-    transform: translateY(-113px);
+.code-vibes-header {
+    position: fixed;
+    top: -32px;
+    left: 0;
+    width: 100vw;
+    width: 100dvw;
+    @include mixins.setup-display-flex(row, center, center);
 }
 
 .code-vibes--top {
-    grid-row: 1;
+    max-width: var.$max-content-width;
     background-image: url('/src/assets/icons/coding-vibes-confetti.svg');
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
     width: 1230px;
     height: 360px;
-    transform: translateY(-32px);
+}
+
+.result-message-mt {
+    margin-top: 130px;
 }
 
 .result-message {
@@ -55,7 +59,7 @@
     }
 
     &--food {
-        @include mixins.setup-font("KleeOne", 40px, 400, var.$food-font-color);
+        @include mixins.setup-font("KleeOne", 40px, 400, var.$food-primary-color);
     }
 
     &--games {
@@ -90,11 +94,11 @@
         text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
 
         &--winner-orange {
-            color: var.$games-font-color-blue;
+            color: var.$games-font-color-orange;
         }
 
         &--winner-blue {
-            color: var.$games-font-color-orange;
+            color: var.$games-font-color-blue;
         }
     }
 }
@@ -105,8 +109,8 @@
     background-size: contain;
     width: 200px;
     height: 250px;
-    margin-top: 52px;
-    margin-bottom: 52px;
+    margin-top: 34px;
+    margin-bottom: 34px;
 
     &--code-vibes {
         &--winner-orange {
@@ -132,6 +136,13 @@
         &--winner-blue {
             background-image: url('/src/assets/icons/da-project-win-blue.svg');
         }
+
+        &--draw {
+            background-image: url('/src/assets/icons/coding-vibes-draw.svg');
+            width: 340px;
+            height: 270px;
+            margin-top: 0;
+        }
     }
 
     &--food {
@@ -142,25 +153,47 @@
         &--winner-blue {
             background-image: url('/src/assets/icons/food-winner-blue.svg');
         }
+
+        &--draw {
+            background-image: url('/src/assets/icons/food-draw.svg');
+            width: 260px;
+            height: 210px;
+        }
     }
 
     &--games {
 
         &--winner-orange,
         &--winner-blue {
-            background-image: url('src/assets/icons/game-pokal.svg/');
-            box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.25);
+            background-image: url('/src/assets/icons/games-pokal.svg');
+            width: 250px;
+            height: 280px;
         }
 
         &--draw {
-            background-image: url('src/assets/icons/game-draw.svg');
+            background-image: url('/src/assets/icons/games-draw.svg');
             width: 340px;
             height: 270px;
-            box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.25);
         }
 
 
     }
+}
+
+.food-end-trophy-bg {
+    @include mixins.setup-display-flex(row, center, center);
+    margin: 32px 0px;
+    background-color: var.$food-trophy-bg-color;
+    box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.25);
+
+    &--won {
+        padding: 0px 56px;
+    }
+
+    &--draw {
+        padding: 0 24px;
+    }
+
 }
 
 .draw-headline {
@@ -169,9 +202,17 @@
         text-shadow: -7px 0px 8px rgba(77, 213, 188, 0.5);
     }
 
-    &--da-projects {}
+    &--da-projects {
+        @include mixins.setup-font("FigTree", 128px, 700, var.$da-project-font-color);
+        text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
 
-    &--food {}
+    &--food {
+        @include mixins.setup-font("KleeOne", 128px, 700, var.$food-primary-color);
+    }
 
-    &--games {}
+    &--games {
+        @include mixins.setup-font("Orbitron", 128px, 700, var.$games-font-color);
+        text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+    }
 }

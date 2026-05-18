@@ -131,7 +131,7 @@
 
 }
 
-
+.win-draw-btn,
 .theme-btn {
     height: 54px;
     cursor: pointer;
@@ -242,5 +242,17 @@
             box-shadow: 4px 4px 4px 0px rgba(30, 117, 148, 0.2);
 
         }
+    }
+}
+
+
+.win-draw-btn--food {
+    background-color: var.$food-primary-color;
+    padding-inline-start: 16px;
+    padding-inline-end: 16px;
+    box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.20);
+
+    span {
+        color: rgba(255,255,255,1);
     }
 }

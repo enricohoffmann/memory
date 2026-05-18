@@ -34,7 +34,7 @@ export class PlayView {
         container.appendChild(wrapper);
         this.showCurrentPlayer();
 
-        this.showPlayEndScreen();
+        //this.showPlayEndScreen();
     }
 
     initGameState(): boolean {
@@ -177,7 +177,7 @@ export class PlayView {
                 cards[0].turnCardBack();
                 cards[1].turnCardBack();
                 resolve();
-            }, 2000);
+            }, 1000);
         });
 
 
@@ -196,7 +196,7 @@ export class PlayView {
                 this.showPlayEndScreen();
             }, 1500);
 
-        }, 1000);
+        }, 2000);
     }
 
     private showGameOver(): void {
@@ -217,16 +217,16 @@ export class PlayView {
         const endScreen = document.getElementById('play-result-container');
         if (endScreen){
 
-            const test: GameOverResult = {
+            /* const test: GameOverResult = {
                 winner: this._playService.getPlayers()[0],
-                gameStatus: 'won'
-            };
-
-            const endScreenComponent: EndScreenComponent = new EndScreenComponent(
-                this._playService.themeKey, test);
+                gameStatus: 'draw'
+            }; */
 
             /* const endScreenComponent: EndScreenComponent = new EndScreenComponent(
-                this._playService.themeKey, this._playService.gameOverResult); */
+                this._playService.themeKey, test, () => this.navigate('settings')); */
+
+            const endScreenComponent: EndScreenComponent = new EndScreenComponent(
+                this._playService.themeKey, this._playService.gameOverResult, () => this.navigate('settings'));
 
             const endScreenElement = endScreenComponent.render();
             endScreen.appendChild(endScreenElement);
