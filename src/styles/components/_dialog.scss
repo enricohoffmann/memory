@@ -1,0 +1,36 @@
+@use '../abstract/mixins' as mixins;
+@use '../abstract/variables' as var;
+@use '../abstract/functions' as fct;
+
+.dialog-section {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    @include mixins.setup-display-flex(column, center, center);
+    transform: translateY(-100%);
+    transition: transform 500ms ease-out;
+
+    /* &::before {
+        position: absolute;
+        inset: 0;
+        content: "";
+        background-color: rgba(0,0,0,0.40);
+    } */
+
+    &--show {
+        transform: translateY(0);
+    }
+}
+
+.dialog-container {
+    position: relative;
+    z-index: 1;
+    width: 540px;
+    height: 270px;
+    background-color: white;
+}
+
+
+.dialog-headline {
+
+}

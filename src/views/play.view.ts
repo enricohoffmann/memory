@@ -7,6 +7,7 @@ import { ButtonComponent } from "../components/button.component";
 import { PlayerScoreBordComponent } from "../components/playerScoreBoard.component";
 import { GameOverComponent } from "../components/gameOver.component";
 import { EndScreenComponent } from "../components/endScreen.component";
+import { DialogComponent } from "../components/dialog.component";
 
 
 export class PlayView {
@@ -34,7 +35,7 @@ export class PlayView {
         container.appendChild(wrapper);
         this.showCurrentPlayer();
 
-        //this.showPlayEndScreen();
+        //this.handleGameOver();
     }
 
     initGameState(): boolean {
@@ -48,7 +49,7 @@ export class PlayView {
         return wrapper;
     }
 
-    private addOverlayToWrapper(wrapper: HTMLElement): HTMLElement{
+    private addOverlayToWrapper(wrapper: HTMLElement): HTMLElement {
         wrapper.appendChild(this.buildOverlayContainerContainer('exit-dialog'));
         wrapper.appendChild(this.buildOverlayContainerContainer('game-over-container'));
         wrapper.appendChild(this.buildOverlayContainerContainer('play-result-container'));
@@ -160,7 +161,7 @@ export class PlayView {
     private async processTheCompareResult(result: CompareCardsResult): Promise<void> {
         if (result.result === 'failed') { return; }
         if (result.result === 'unsuccessful') { await this.turnSelectedCardsBack(result.cardsToTurnBack!); }
-        if (result.result === 'gameOver') {this.handleGameOver();}
+        if (result.result === 'gameOver') { this.handleGameOver(); }
         this.showCurrentPlayer();
         if (result.result === 'successfully') { this._scoreBoard.showScoreForPlayers(this._playService.getPlayers()); }
         this._playService.clearSelectedCards();
@@ -184,7 +185,29 @@ export class PlayView {
     }
 
     private showDialog() {
+        const exitDialog = document.getElementById('exit-dialog');
+        if (!exitDialog) { return; }
 
+        const dialogContent: DialogComponent = new DialogComponent(
+            this._playService.themeKey,
+            () => this.exitThisGame(),
+            () => this.closeDialog());
+
+        exitDialog.appendChild(dialogContent.renderDialog());
+        exitDialog.classList.add('overlay-container', 'overlay-container--show');
+
+        requestAnimationFrame(() => {
+            dialogContent.showDialog();
+        });
+
+    }
+
+    private closeDialog() {
+
+    }
+
+    private exitThisGame() {
+        this.navigate('settings');
     }
 
     private handleGameOver(): void {
@@ -200,12 +223,15 @@ export class PlayView {
     }
 
     private showGameOver(): void {
+
         const gameOver = document.getElementById('game-over-container');
         if (gameOver) {
 
-            const gameOverSection:GameOverComponent = new GameOverComponent(this._playService.themeKey);
+            const gameOverSection: GameOverComponent = new GameOverComponent(this._playService.themeKey);
             const gameOverElement = gameOverSection.buildGameOverElement(this._playService.getPlayers());
             gameOver.appendChild(gameOverElement);
+
+            gameOver.classList.add('overlay-container--slide');
 
             requestAnimationFrame(() => {
                 gameOver.classList.add('overlay-container--show');
@@ -215,24 +241,17 @@ export class PlayView {
 
     private showPlayEndScreen(): void {
         const endScreen = document.getElementById('play-result-container');
-        if (endScreen){
-
-            /* const test: GameOverResult = {
-                winner: this._playService.getPlayers()[0],
-                gameStatus: 'draw'
-            }; */
-
-            /* const endScreenComponent: EndScreenComponent = new EndScreenComponent(
-                this._playService.themeKey, test, () => this.navigate('settings')); */
-
+        if (endScreen) {
             const endScreenComponent: EndScreenComponent = new EndScreenComponent(
-                this._playService.themeKey, this._playService.gameOverResult, () => this.navigate('settings'));
+                this._playService.themeKey, this._playService.gameOverResult, () => this.exitThisGame());
 
             const endScreenElement = endScreenComponent.render();
             endScreen.appendChild(endScreenElement);
 
+
+
             requestAnimationFrame(() => {
-                endScreen.classList.add('overlay-container--show');
+                endScreen.classList.add('overlay-container--slide', 'overlay-container--show');
             });
         }
     }
