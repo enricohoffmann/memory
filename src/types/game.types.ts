@@ -5,7 +5,7 @@ export type ThemeKey = 'code-vibes' | 'games' | 'da-projects' | 'food';
 export type GameStatus = 'idle' | 'running' | 'over' | 'won' | 'draw';
 export type ViewName = 'home' | 'settings' | 'play' | 'game-over' | 'winner';
 export type Size = 16 | 24 | 36;
-export type ButtonVariant = 'home-btn' | 'setting-btn' | 'exit-btn' | 'win-draw-btn'; 
+export type ButtonVariant = 'homePlay-btn' | 'setting-btn' | 'exit-btn' | 'win-draw-btn' | 'popup-exit' | 'popup-resume'; 
 export type ScoreBoardVariant = 'play' | 'game-over';
 export type TrophyType = 'winner' | 'draw';
 
@@ -94,3 +94,10 @@ export interface GameOverResult {
     winner: Player;
 }
 
+export interface ButtonConfig {
+    variant: ButtonVariant;
+    theme?: ThemeKey;
+    text?: string;
+    hasIcon?: boolean;
+    disabled?: boolean;
+}

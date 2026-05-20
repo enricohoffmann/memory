@@ -3,19 +3,13 @@
 @use '../abstract/functions' as fct;
 
 .dialog-section {
-    position: relative;
+    position: absolute;
+    inset: 0;
     height: 100vh;
     width: 100vw;
     @include mixins.setup-display-flex(column, center, center);
     transform: translateY(-100%);
     transition: transform 500ms ease-out;
-
-    /* &::before {
-        position: absolute;
-        inset: 0;
-        content: "";
-        background-color: rgba(0,0,0,0.40);
-    } */
 
     &--show {
         transform: translateY(0);
@@ -28,9 +22,24 @@
     width: 540px;
     height: 270px;
     background-color: white;
+    @include mixins.setup-display-flex(column, center, center, 32px);
+
+    &--code-vibes {
+        padding-inline: 24px;
+    }
+
 }
 
 
 .dialog-headline {
+    text-align: center;
 
+    &--code-vibes {
+        @include mixins.setup-font("RedRose", 32px, 700, var.$code-vibes-primary-color, 40px);
+    }
+
+}
+
+.dialog-buttons {
+    @include mixins.setup-display-flex(row, center, center, 24px);
 }

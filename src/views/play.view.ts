@@ -1,6 +1,6 @@
 import { CardComponent } from "../components/card.Component";
 import { PlayService } from "../services/play.service";
-import { Card, CompareCardsResult, GameOverResult, GameState, ViewName } from "../types/game.types";
+import { Card, CompareCardsResult, GameState, ViewName } from "../types/game.types";
 
 import '../styles/views/_play.scss';
 import { ButtonComponent } from "../components/button.component";
@@ -185,16 +185,16 @@ export class PlayView {
     }
 
     private showDialog() {
-        const exitDialog = document.getElementById('exit-dialog');
-        if (!exitDialog) { return; }
+        const exitDialogOverlay = document.getElementById('exit-dialog');
+        if (!exitDialogOverlay) { return; }
 
         const dialogContent: DialogComponent = new DialogComponent(
             this._playService.themeKey,
             () => this.exitThisGame(),
-            () => this.closeDialog());
+            () => this.closeDialog(dialogContent, exitDialogOverlay));
 
-        exitDialog.appendChild(dialogContent.renderDialog());
-        exitDialog.classList.add('overlay-container', 'overlay-container--show');
+        exitDialogOverlay.appendChild(dialogContent.renderDialog());
+        exitDialogOverlay.classList.add('overlay-container', 'overlay-container--show');
 
         requestAnimationFrame(() => {
             dialogContent.showDialog();
@@ -202,8 +202,12 @@ export class PlayView {
 
     }
 
-    private closeDialog() {
-
+    private async closeDialog(dialog: DialogComponent, overlay: HTMLElement) {
+        const res = await dialog.hideDialog();
+        if(res){
+            overlay.classList.remove('overlay-container--show');
+        }
+        
     }
 
     private exitThisGame() {

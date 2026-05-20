@@ -1,5 +1,5 @@
 
-import { ViewName } from "../types/game.types";
+import { ButtonConfig, ViewName } from "../types/game.types";
 
 import '../styles/views/_home.scss';
 import { ButtonComponent } from "../components/button.component";
@@ -43,8 +43,10 @@ export class HomeView {
     private insertButton(homeSection: HTMLElement): void {
         const btnContainer: Element | null = homeSection.querySelector('.home-section__home-btn-container');
         if (btnContainer) {
-            const button: ButtonComponent = new ButtonComponent('home-btn', () => this.onButtonClick());
-            button.renderButton(btnContainer as HTMLElement);
+
+            const btnConfig: ButtonConfig = { variant: 'homePlay-btn' };
+            const button: ButtonComponent = new ButtonComponent(btnConfig, () => this.onButtonClick());
+            btnContainer.appendChild(button.renderButton());
         }
     }
 
