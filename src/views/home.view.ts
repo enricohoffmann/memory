@@ -44,7 +44,7 @@ export class HomeView {
         const btnContainer: Element | null = homeSection.querySelector('.home-section__home-btn-container');
         if (btnContainer) {
 
-            const btnConfig: ButtonConfig = { variant: 'homePlay-btn' };
+            const btnConfig: ButtonConfig = { variant: 'homePlay-btn', text: 'Play' };
             const button: ButtonComponent = new ButtonComponent(btnConfig, () => this.onButtonClick());
             btnContainer.appendChild(button.renderButton());
         }

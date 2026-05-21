@@ -35,26 +35,29 @@ export class ButtonComponent {
 
     private getHomePlayButtonTemplate(): string {
         return /* html */ `
-            <div class='home-start-btn__icon home-start-btn__icon--left'></div>
-            <span class='home-start-btn__text'>Play</span>
-            <div class='home-start-btn__arrow'>
-                <div class='home-start-btn__arrow-icon home-start-btn__arrow-icon--default'></div>
-                <div class='home-start-btn__arrow-icon home-start-btn__arrow-icon--hover'></div>
+            <div class='button--homePlay-btn__icon-left'></div>
+            <span class='button--homePlay-btn__text'>${this.config.text}</span>
+            <div class='button__icons'>
+                <div class='button__icons--homePlay-btn button__icons--homePlay-btn--default'></div>
+                <div class='button__icons--homePlay-btn button__icons--homePlay-btn--hover'></div>
             </div>
         `;
     }
 
     private getButtonWithIconTemplate(): string {
         return /* html */ `
-            <div src='/src/assets/icons/setting-game.svg' ></div>
-            <span>Start</span>
+            <div class='button-icons-left button-icons-left--${this.config.theme}'>
+                <div class='button-icon-left-default'></div>
+                <div class='button-icon-left-hover'></div>
+            </div>
+            <span class='button-text button-text--${this.config.theme}'>${this.config.text}</span>
         `;
     }
 
 
     private getButtonTemplate(): string {
         return /*html*/ `
-            <span class='home-start-btn__text'>${this.config.text}</span>
+            <span class='button-text button-text--${this.config.theme}'>${this.config.text}</span>
         `;
     }
 
