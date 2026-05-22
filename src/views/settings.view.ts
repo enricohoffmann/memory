@@ -2,7 +2,7 @@ import { SettingOptionGroupComponent } from "../components/settingOptionGroup.co
 import { BoardSizeService } from "../services/boardSize.service";
 import { PlayerService } from "../services/player.service";
 import { ThemeService } from "../services/theme.service";
-import { BoardSize, GameConfig, GameState, OptionGroupSpecification, Player, Theme, ViewName } from "../types/game.types";
+import { BoardSize, ButtonConfig, GameConfig, GameState, OptionGroupSpecification, Player, Theme, ViewName } from "../types/game.types";
 import themeGroupeIcon from '../assets/icons/theme-group.svg';
 import playerGroupIcon from '../assets/icons/player-group.svg';
 import boardSizeIcon from '../assets/icons/bordSize-group.svg';
@@ -52,7 +52,9 @@ export class SettingsView {
             this.changeBoardSizeSelection(boardSizeId);
         });
 
-        this.playButton = new ButtonComponent('setting-btn', () => this.settingStartButtonEvent());
+        const btnConfig: ButtonConfig = {variant: 'setting-btn', disabled: true, text: 'Start'};
+
+        this.playButton = new ButtonComponent(btnConfig, () => this.settingStartButtonEvent());
 
     }
 
@@ -143,7 +145,7 @@ export class SettingsView {
     private renderSettingsButton(container: HTMLElement): void {
         const selectionContainer: Element | null = container.querySelector('#selection-container');
         if(selectionContainer){
-            this.playButton.renderButton(selectionContainer as HTMLElement);
+            selectionContainer.appendChild(this.playButton.renderButton());
         }
 
     }

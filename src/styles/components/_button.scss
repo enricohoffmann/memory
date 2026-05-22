@@ -8,6 +8,7 @@
     border: unset;
     cursor: pointer;
 
+
     &--homePlay-btn {
         background-color: var.$secondaryYellow;
         padding: 24px;
@@ -33,14 +34,60 @@
 
     }
 
+    &--setting-btn {
+        height: 53px;
+        width: 126px;
+        background-color: var.$secondaryYellow;
+        border: unset;
+        outline: unset;
+        cursor: pointer;
+        margin-left: 16px;
+        transition: transform 100ms ease-in;
+        @include mixins.setup-display-flex(row, center, center, 6px);
+
+        &__text {
+            @include mixins.setup-font("RedRose", 20px, 700);
+        }
+
+        &--disabled {
+            cursor: not-allowed;
+            pointer-events: none;
+            background-color: rgba(219, 219, 214, 1);
+
+            .button--setting-btn__text,
+            .button__icons--setting-btn__icon--default {
+                filter: brightness(3);
+            }
+
+        }
+    }
 
 
-    &__icons {
+    &--exit-btn {
+        height: 54px;
+        cursor: pointer;
+        @include mixins.setup-display-flex(row, center, center);
+        width: max-content;
+        margin-left: auto;
+        margin-right: auto;
+        transition: border 200ms ease-out, box-shadow 200ms ease-out;
+        border-radius: 10px;
+
+        &--code-vibes {
+            height: 62px;
+            background-color: rgba(134, 233, 214, 0.2);
+            border: 1px solid rgba(77, 213, 188, 1);
+            border-radius: 0px;
+        }
+    }
+
+
+    &__icons--homePlay-btn {
         width: 32px;
         height: 20px;
         position: relative;
 
-        &--homePlay-btn {
+        &__icon {
             position: absolute;
             left: 0;
             top: 0;
@@ -66,6 +113,29 @@
     }
 
 
+    &__icons--setting-btn {
+        position: relative;
+        height: 24px;
+        width: 24px;
+
+        &__icon {
+            position: absolute;
+            left: 0;
+            top: 0;
+            inset: 0;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+
+            &--default {
+                background-image: url('/src/assets/icons/setting-game.svg');
+            }
+
+
+        }
+    }
+
+
 
 
     &:hover {
@@ -77,171 +147,28 @@
                 transform: rotate(-20deg);
             }
 
-            .button__icons--homePlay-btn--default {
+            .button__icons--homePlay-btn__icon--default {
                 opacity: 0;
             }
 
-            .button__icons--homePlay-btn--hover {
+            .button__icons--homePlay-btn__icon--hover {
                 opacity: 1;
             }
 
         }
 
+    }
 
+    &.button--setting-btn:hover:not(.button--setting-btn--disabled) {
+        transform: scale(1.11);
 
-
-
+        .button__icons--setting-btn {
+            transform: rotate(-5.3deg);
+        }
     }
 }
 
 
-
-
-
-/* .home-start-btn__icon--left {
-            transform: rotate(-20deg);
-        }
-
-        .home-start-btn__arrow-icon {
-            &--default {
-                opacity: 0;
-            }
-
-            &--hover {
-                opacity: 1;
-            }
-        } */
-
-
-
-
-.home-start-btn {
-    border: unset;
-    cursor: pointer;
-    background-color: rgba(240, 234, 110, 1);
-    padding: 24px;
-    transition: transform 125ms ease-in;
-    @include mixins.setup-display-flex(row, center, center, 20px);
-
-    &__icon {
-
-        background-position: center;
-        background-size: contain;
-        background-repeat: no-repeat;
-        outline: none;
-        border: none;
-        background-color: transparent;
-        width: 44px;
-        transition: transform 100ms ease-in;
-
-        &--left {
-            height: 32px;
-            background-image: url('/src/assets/icons/stadia_controller.svg');
-
-        }
-
-    }
-
-    .home-start-btn__arrow {
-
-        width: 32px;
-        height: 20px;
-        position: relative;
-
-        &-icon {
-            position: absolute;
-            left: 0;
-            top: 0;
-            inset: 0;
-            background-position: center;
-            background-size: contain;
-            background-repeat: no-repeat;
-            outline: none;
-            border: none;
-            background-color: transparent;
-            transition: opacity 100ms ease-in;
-
-            &--default {
-                background-image: url('/src/assets/icons/arrow-sm.svg');
-                opacity: 1;
-            }
-
-            &--hover {
-                background-image: url('/src/assets/icons/arrow-lg.svg');
-                opacity: 0;
-            }
-
-        }
-
-
-    }
-
-
-    &__text {
-        @include mixins.setup-font("RedRose", 40px, 700, rgba(48, 49, 49, 1));
-    }
-
-    &:hover {
-        transform: scale(1.1);
-
-        .home-start-btn__icon--left {
-            transform: rotate(-20deg);
-        }
-
-        .home-start-btn__arrow-icon {
-            &--default {
-                opacity: 0;
-            }
-
-            &--hover {
-                opacity: 1;
-            }
-        }
-    }
-}
-
-.setting-start-button {
-    height: 53px;
-    width: 126px;
-    background-color: var.$secondaryYellow;
-    border: unset;
-    outline: unset;
-    cursor: pointer;
-    margin-left: 16px;
-    transition: scale 100ms ease-in;
-    @include mixins.setup-display-flex(row, center, center, 6px);
-
-    &:hover:not(&--disabled) {
-        scale: 1.11;
-
-        img {
-            rotate: -5.3deg;
-        }
-    }
-
-    img {
-        transition: rotate 100ms ease-in;
-    }
-
-    span {
-        @include mixins.setup-font("RedRose", 20px, 700);
-    }
-
-    &--disabled {
-        cursor: not-allowed;
-        pointer-events: none;
-        background-color: rgba(219, 219, 214, 1);
-
-
-        img,
-        span {
-            filter: brightness(3);
-        }
-
-    }
-
-
-}
 
 .win-draw-btn,
 .theme-btn {

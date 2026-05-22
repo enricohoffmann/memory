@@ -1,6 +1,6 @@
 import { CardComponent } from "../components/card.Component";
 import { PlayService } from "../services/play.service";
-import { Card, CompareCardsResult, GameState, ViewName } from "../types/game.types";
+import { ButtonConfig, Card, CompareCardsResult, GameState, ViewName } from "../types/game.types";
 
 import '../styles/views/_play.scss';
 import { ButtonComponent } from "../components/button.component";
@@ -90,8 +90,11 @@ export class PlayView {
     }
 
     private renderDialogButton(headerSection: HTMLElement) {
-        const button: ButtonComponent = new ButtonComponent('exit-btn', () => this.showDialog());
-        button.renderThemeButton(headerSection, this._playService.themeKey, 'Exit game', true);
+        const btnConfig: ButtonConfig = {
+            variant: 'exit-btn', text: 'Exit game', theme: this._playService.themeKey
+        };
+        const button: ButtonComponent = new ButtonComponent(btnConfig, () => this.showDialog());
+        headerSection.appendChild(button.renderButton());
     }
 
     private showCurrentPlayer() {
