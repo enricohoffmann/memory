@@ -43,22 +43,22 @@ export class ButtonComponent {
         return /* html */ `
             <div class='button--homePlay-btn__icon-left'></div>
             <span class='button--homePlay-btn__text'>${this.config.text}</span>
-            <div class='button__icons--homePlay-btn'>
-                <div class='button__icons--homePlay-btn__icon button__icons--homePlay-btn__icon--default'></div>
-                <div class='button__icons--homePlay-btn__icon button__icons--homePlay-btn__icon--hover'></div>
+            <div class='button--homePlay-btn__icons'>
+                <div class='button--homePlay-btn__icons__icon button--homePlay-btn__icons__icon--default'></div>
+                <div class='button--homePlay-btn__icons__icon button--homePlay-btn__icons__icon--hover'></div>
             </div>
         `;
     }
 
     private getButtonWithIconTemplate(): string {
         return /* html */ `
-            <div class='button__icons--${this.config.variant}'>
+            <div class='button--${this.config.variant}__icons'>
                 <div class='
-                    button__icons--${this.config.variant}__icon 
-                    button__icons--${this.config.variant}__icon--default'></div>
+                    button--${this.config.variant}__icons__icon 
+                    button--${this.config.variant}__icons__icon--default'></div>
                 <div class='
-                    button__icons--${this.config.variant}__icon 
-                    button__icons--${this.config.variant}__icon--hover'></div>
+                    button--${this.config.variant}__icons__icon 
+                    button--${this.config.variant}__icons__icon--hover'></div>
             </div>
             <span class='button--${this.config.variant}__text'>${this.config.text}</span>
         `;
@@ -66,15 +66,15 @@ export class ButtonComponent {
 
     private getButtonWithIconThemeTemplate(): string {
         return /* html */ `
-            <div class='button__icons--${this.config.variant}--${this.config.theme}'>
+            <div class='button--${this.config.variant}__icons'>
                 <div class='
-                    button__icons--${this.config.variant}--${this.config.theme}__icon
-                    button__icons--${this.config.variant}--${this.config.theme}__icon--default'></div>
+                    button--${this.config.variant}__icons__icon
+                    button--${this.config.variant}--${this.config.theme}--default'></div>
                 <div class='
-                    button__icons--${this.config.variant}--${this.config.theme}__icon 
-                    button__icons--${this.config.variant}--${this.config.theme}__icon--hover'></div>
+                    button--${this.config.variant}__icons__icon 
+                    button--${this.config.variant}--${this.config.theme}--hover'></div>
             </div>
-            <span class='button-text button-text--${this.config.theme}'>${this.config.text}</span>
+            <span class='button--${this.config.variant}--${this.config.theme}__text'>${this.config.text}</span>
         `;
     }
 
