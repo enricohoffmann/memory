@@ -9,6 +9,7 @@ export class PlayService {
     private _gameStateStor: GameStateStorage;
     private _cardComponents: CardComponent[] = [];
     private _currentPlayer: Player | null;
+    private _matchedCards: CardComponent[] = [];
     
     constructor(gameState: GameState){
         this._gameState = gameState;
@@ -57,6 +58,10 @@ export class PlayService {
 
     }
 
+    get matchedCards():(CardComponent[]){
+        return this._matchedCards;
+    }
+
     getScoreByPlayerId(playerId: string):number {
         const player:Player | undefined = this._gameState.players.find(p => p.id === playerId);
         return player?.score ?? 0;
@@ -68,7 +73,7 @@ export class PlayService {
 
     addSelectedCard(cardId: number): (CardComponent | null) {
         this._gameState.selectedCards.push(cardId);
-        this._gameStateStor.setGameState(this._gameState);
+        this.saveState();
         const currentCardComponent: CardComponent | undefined = this._cardComponents.find(c => c._cardId === cardId);
         return currentCardComponent ? currentCardComponent : null;
     }
@@ -80,8 +85,10 @@ export class PlayService {
         const isEqual = this.areTheCardsTheSame(currentCards);
        
         if(isEqual){
+            this.setMatchedCards(currentCards);
             this.setScoreFromCurrentPlayer();
             result.result = this.checkIsGameOver() ? 'gameOver' :  'successfully';
+            this.saveState();
         }else {
             result.result = 'unsuccessful';
             result.cardsToTurnBack = currentCards;
@@ -89,6 +96,17 @@ export class PlayService {
         }
         
         return result;
+    }
+
+    private setMatchedCards(cardsSelected: CardComponent[]):void {
+        if(!this._gameState.matchedCards){
+            this._gameState.matchedCards = [];
+        }
+
+        cardsSelected.forEach((card) => {
+            this._gameState.matchedCards.push(card.cardId);
+            this._matchedCards.push(card);
+        });
     }
 
     private checkIsGameOver(): boolean{
@@ -124,9 +142,12 @@ export class PlayService {
     private setScoreFromCurrentPlayer(): void {
         if(this._currentPlayer){
             this._currentPlayer.score += 1;
-            this._gameStateStor.setGameState(this._gameState);  
         }
         
+    }
+
+    private saveState(): void {
+        this._gameStateStor.setGameState(this._gameState);
     }
 
     clearSelectedCards(): void {
@@ -139,7 +160,7 @@ export class PlayService {
         const nextIndex = (currentIndex + 1) % this._gameState.players.length;
         this._currentPlayer = this._gameState.players[nextIndex];
         this._gameState.currentPlayerId = this._currentPlayer.id;
-        this._gameStateStor.setGameState(this._gameState);
+        this.saveState();
         return this._currentPlayer.id;
     }
 

@@ -6,10 +6,26 @@ export class CardComponent {
 
     private _cardElement: HTMLElement
     readonly _cardId: number;
+    private _isMatched: boolean = false;
 
     constructor(private card: Card, private themeKey: ThemeKey, private cardSelected: (card: Card) => void) {
         this._cardElement = document.createElement('section');
         this._cardId = this.card.id;
+    }
+
+    get isMatched(): boolean {
+        return this._isMatched;
+    }
+
+    get cardId(){
+        return this._cardId;
+    }
+
+    setCardMatched(matched: boolean) {
+        this._cardElement.classList.add(`is-matched--${this.themeKey}`);
+        this._isMatched = matched;
+        console.log('match');
+        
     }
 
     buildCard(): HTMLElement {
@@ -43,6 +59,8 @@ export class CardComponent {
     getCardPairId(): number{
         return this.card.pairId;
     }
+
+    
 
     private setCardImage(): void {
         const cardInner = this._cardElement.querySelector(`.card__face--front`);

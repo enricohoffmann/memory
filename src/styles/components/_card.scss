@@ -96,3 +96,18 @@
 .is-flipped .card__inner {
     transform: rotateY(0deg);
 }
+
+.is-matched {
+
+    &--code-vibes{
+
+        .card__face--front{
+            box-shadow: inset 0 0 0 5px var.$code-vibes-font-color-green;
+        }
+
+        box-shadow: 6px 6px 8px 0px rgba(77, 213, 188, 0.3);
+
+    }
+
+    
+}

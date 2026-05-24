@@ -166,7 +166,10 @@ export class PlayView {
         if (result.result === 'unsuccessful') { await this.turnSelectedCardsBack(result.cardsToTurnBack!); }
         if (result.result === 'gameOver') { this.handleGameOver(); }
         this.showCurrentPlayer();
-        if (result.result === 'successfully') { this._scoreBoard.showScoreForPlayers(this._playService.getPlayers()); }
+        if (result.result === 'successfully') { 
+            this._scoreBoard.showScoreForPlayers(this._playService.getPlayers()); 
+            this.showMatchedCards();
+        }
         this._playService.clearSelectedCards();
     }
 
@@ -184,7 +187,14 @@ export class PlayView {
             }, 1000);
         });
 
+    }
 
+    private showMatchedCards(): void {
+        const mCards:CardComponent[] = this._playService.matchedCards;
+
+        mCards.forEach((card) => {
+            card.setCardMatched(true);
+        });
     }
 
     private showDialog() {

@@ -39,6 +39,7 @@ export interface GameState {
     currentPlayerId:string;
     cards:Card[];
     selectedCards:number[];
+    matchedCards:number[];
     themeKey:ThemeKey;
     boardSize:BoardSize;
     status:GameStatus;
