@@ -101,7 +101,7 @@
 
     &--code-vibes{
 
-        .card__face--front{
+        .card__face--front {
             box-shadow: inset 0 0 0 5px var.$code-vibes-font-color-green;
         }
 
@@ -109,5 +109,21 @@
 
     }
 
+    &--games {
+        .card__face--front {
+            box-shadow: inset 0 0 0 3px var.$games-font-color, 5px 5px 8px 0px rgba(237, 27, 118, 0.3);
+        }
+    }
     
+    &--da-projects {
+        .card__face--front {
+            box-shadow: inset 0 0 0 2px var.$da-project-primary-color;
+        }
+    }
+
+    &--food {
+        .card__face--front {
+            box-shadow: inset 0 0 0 4px var.$food-primary-color;
+        }
+    }
 }
