@@ -102,3 +102,9 @@ export interface ButtonConfig {
     hasIcon?: boolean;
     disabled?: boolean;
 }
+
+export interface DialogButtonMessages {
+    theme: ThemeKey;
+    resumeText: string;
+    exitText: string;
+}

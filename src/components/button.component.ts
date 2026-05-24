@@ -27,6 +27,10 @@ export class ButtonComponent {
             this._button.innerHTML = this.getButtonWithIconThemeTemplate();
             this._button.classList.add(`button--${this.config.variant}--${this.config.theme}`);
         }
+        if(this.config.variant === 'popup-resume' || this.config.variant === 'popup-exit'){
+            this._button.classList.add(`button--${this.config.variant}--${this.config.theme}`);
+            this._button.innerHTML = this.getButtonTemplate();
+        }
     }
 
     private registerEvent():void {
@@ -81,7 +85,7 @@ export class ButtonComponent {
 
     private getButtonTemplate(): string {
         return /*html*/ `
-            <span class='button-text button-text--${this.config.theme}'>${this.config.text}</span>
+            <span class='button--${this.config.variant}--${this.config.theme}__text'>${this.config.text}</span>
         `;
     }
 

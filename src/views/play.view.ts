@@ -224,6 +224,7 @@ export class PlayView {
     }
 
     private exitThisGame() {
+        this._playService.quitGameState();
         this.navigate('settings');
     }
 

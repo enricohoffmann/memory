@@ -28,6 +28,26 @@
         padding-inline: 24px;
     }
 
+    &--games {
+        padding: 0;
+        border-radius: 20px;
+        background-color: rgba(240, 246, 249, 1);
+    }
+
+    &--da-projects {
+        width: 456px;
+        border-radius: 20px;
+        gap: 40px;
+        background-color: var.$da-project-dialog-bg;
+    }
+
+    &--food {
+        width: 456px;
+        border-radius: 20px;
+        gap: 40px;
+        background-color: var.$food-secondary-color;
+    }
+
 }
 
 
@@ -36,6 +56,22 @@
 
     &--code-vibes {
         @include mixins.setup-font("RedRose", 32px, 700, var.$code-vibes-primary-color, 40px);
+    }
+
+    &--games {
+        @include mixins.setup-font("Orbitron", 28px, 700, var.$games-primary-color, 40px, 2%);
+    }
+
+    &--da-projects {
+        padding-inline: 40px;
+        @include mixins.setup-font("FigTree", 28px, 700, var.$da-project-font-color-second);
+        line-height: 40px;
+    }
+
+    &--food {
+        padding-inline: 40px;
+        @include mixins.setup-font("kleeOne", 28px, 600, var.$food-font-color);
+        line-height: 40px;
     }
 
 }

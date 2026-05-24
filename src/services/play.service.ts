@@ -98,6 +98,15 @@ export class PlayService {
         return result;
     }
 
+    quitGameState(): void {
+        this._gameState.currentPlayerId = '';
+        this._gameState.cards = [];
+        this._gameState.selectedCards = [];
+        this._gameState.matchedCards = [];
+        this._gameState.status = 'idle';
+        this.saveState();
+    }
+
     private setMatchedCards(cardsSelected: CardComponent[]):void {
         if(!this._gameState.matchedCards){
             this._gameState.matchedCards = [];

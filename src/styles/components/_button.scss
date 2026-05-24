@@ -187,7 +187,7 @@
             box-shadow: 4px 4px 6px 0px rgba(240, 234, 110, 0.2);
 
         }
-        
+
     }
 
     &--da-projects {
@@ -216,7 +216,7 @@
             box-shadow: 3px 3px 5px 0px rgba(47, 46, 46, 0.2);
 
             .button--exit-btn--da-projects__text {
-                color: rgba(255,255,255,1);
+                color: rgba(255, 255, 255, 1);
             }
 
             .button--exit-btn--da-projects--default {
@@ -261,10 +261,10 @@
             box-shadow: 3px 3px 5px 0px rgba(47, 46, 46, 0.2);
 
             .button--exit-btn--food__text {
-                color: rgba(255,255,255,1);
+                color: rgba(255, 255, 255, 1);
             }
 
-            .button--exit-btn--food--default{
+            .button--exit-btn--food--default {
                 opacity: 0;
             }
 
@@ -273,7 +273,7 @@
             }
 
         }
-        
+
     }
 
     &--games {
@@ -314,7 +314,163 @@
     }
 }
 
+.button--popup-resume {
+    height: 57px;
+    cursor: pointer;
+    border: unset;
+    outline: unset;
+    transition: box-shadow 125ms ease-in, background-color 125ms ease-in;
 
+    &--code-vibes {
+        background-color: var.$code-vibes-secondary-color;
+        padding: 16px 24px;
+
+        &__text {
+            @include mixins.setup-font("RedRose", 20px, 700, rgba(255, 255, 255, 1));
+        }
+
+        &:hover {
+            box-shadow: inset 0 0 0 3px var.$code-vibes-button-border-second;
+            background-color: rgba(102, 207, 188, 0.7);
+        }
+    }
+
+    &--games {
+        height: 44px;
+        border-radius: 10px;
+        padding: 12px 20px;
+        background-color: var.$games-button-border;
+
+        &__text {
+            @include mixins.setup-font("Orbitron", 16px, 700, rgba(255, 255, 255, 1), 100%, 4%);
+        }
+
+        &:hover {
+            background-color: rgba(242, 199, 218, 0.08);
+            box-shadow: inset 0 0 0 2px var.$games-button-border, 3px 3px 5px rgba(47, 46, 46, 0.2);
+
+            .button--popup-resume--games__text {
+                color: var.$games-button-border;
+            }
+        }
+
+    }
+
+    &--da-projects {
+        height: 43px;
+        border-radius: 10px;
+        padding: 12px 20px;
+        background-color: var.$da-project-button-default;
+        box-shadow: 3px 3px 5px 0px rgba(47, 46, 46, 0.2);
+
+        &__text {
+            @include mixins.setup-font("FigTree", 16px, 700, var.$da-project-button-hover);
+        }
+
+        &:hover {
+            box-shadow: none;
+            background-color: var.$da-project-button-hover;
+
+            .button--popup-resume--da-projects__text {
+                color: rgba(255,255,255,1);
+            }
+        }
+    }
+
+    &--food {
+        height: 45px;
+        border-radius: 10px;
+        padding: 12px 20px;
+        background-color: var.$food-button-color-second;
+        box-shadow: inset 0 0 0 3px var.$food-primary-color;
+
+        &__text {
+            @include mixins.setup-font("DeliusUnicase", 16px, 700, rgba(255,255,255,1));
+        }
+
+        &:hover {
+            background-color: var.$food-primary-color;
+            box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.2);
+        }
+    }
+}
+
+.button--popup-exit {
+    height: 57px;
+    cursor: pointer;
+    border: unset;
+    outline: unset;
+    transition: box-shadow 125ms ease-in, background-color 125ms ease-in, color 125ms ease-in;
+
+    &--code-vibes {
+        background-color: rgba(134, 233, 214, 0.14);
+        box-shadow: inset 0 0 0 2px var.$code-vibes-button-border;
+        padding: 16px 24px;
+
+        &__text {
+            @include mixins.setup-font("RedRose", 20px, 700, var.$code-vibes-font-color-green);
+        }
+
+        &:hover {
+            box-shadow: inset 0 0 0 3px var.$code-vibes-button-border, 4px 4px 6px 0px rgba(77, 213, 188, 0.2);
+            background-color: rgba(134, 233, 214, 0.26);
+        }
+    }
+
+    &--games {
+        height: 44px;
+        border-radius: 10px;
+        padding: 12px 20px;
+        background-color: rgba(237, 27, 118, 0.08);
+        box-shadow: inset 0 0 0 2px var.$games-button-border;
+
+        &__text {
+            @include mixins.setup-font("Orbitron", 16px, 700, var.$games-button-border, 100%, 4%);
+        }
+
+        &:hover {
+            box-shadow: inset 0 0 0 4px var.$games-button-border, 3px 3px 5px 0px rgba(47, 46, 46, 0.2);
+            background-color: rgba(237, 27, 118, 0.14);
+        }
+    }
+
+    &--da-projects {
+        height: 43px;
+        border-radius: 10px;
+        padding: 12px 20px;
+        background-color: var.$da-project-button-default-second;
+        box-shadow: 3px 3px 5px 0px rgba(47, 46, 46, 0.2);
+
+        &__text {
+            @include mixins.setup-font("FigTree", 16px, 700, rgba(255,255,255,1));
+        }
+
+        &:hover {
+            box-shadow: none;
+            background-color: var.$da-project-button-hover-second;
+        }
+    }
+
+    &--food {
+        height: 45px;
+        border-radius: 10px;
+        padding: 12px 20px;
+        background-color: var.$food-button-color;
+        box-shadow: inset 0 0 0 3px var.$food-primary-color;
+
+        &__text {
+            @include mixins.setup-font("DeliusUnicase", 16px, 700, var.$food-primary-color);
+        }
+
+        &:hover {
+            background-color: var.$food-primary-color;
+            .button--popup-exit--food__text {
+                color: rgba(255,255,255,1);
+            }
+        }
+    }
+
+}
 
 .win-draw-btn,
 .theme-btn {
