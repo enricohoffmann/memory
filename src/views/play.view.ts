@@ -35,7 +35,7 @@ export class PlayView {
         container.appendChild(wrapper);
         this.showCurrentPlayer();
 
-        this.handleGameOver();
+        //this.handleGameOver();
     }
 
     initGameState(): boolean {
@@ -225,7 +225,7 @@ export class PlayView {
 
     private exitThisGame() {
         this._playService.quitGameState();
-        this.navigate('settings');
+        this.navigate('settings', this._playService.gameState);
     }
 
     private handleGameOver(): void {

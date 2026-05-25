@@ -21,7 +21,7 @@ export class RadialButton {
         this._button.setAttribute('data-button-id', this._buttonParams.buttonId);
         this._button.innerHTML = this.getButtonHtml();
         if(this._buttonParams.isInitialActive){
-            this.toggleActive(true);
+            this.setActive(true);
         }
     }
 
@@ -50,32 +50,23 @@ export class RadialButton {
                 this._buttonParams.onClicked(this._buttonParams.buttonId);
             }
 
-            this.changeButtonActive();
+            this.setActive(true);
         });
     }
 
-    changeButtonActive(setInActive:boolean = false):void {
+    get buttonId(): string {
+        return this._buttonParams.buttonId;
+    }
 
-        if(setInActive) {
-            this.toggleActive(false);
-            this._isActive = false;
-            return;
-        }
+    setActive(isActive: boolean):void {
 
-        if(!this._isActive){
-            this._isActive = true;
-            this.toggleActive(true);
-        }
+        this._isActive = isActive;
+
+        this._button.classList.toggle('radial-button--active', isActive);
         
     }
 
-    private toggleActive(setActive:boolean):void {
-        setActive 
-        ? this._button.classList.add('radial-button--active') 
-        : this._button.classList.remove('radial-button--active');
-    }
-
-    getRadialButton(): HTMLButtonElement {
+    get radialButton(): HTMLButtonElement {
         return this._button;
     }
 

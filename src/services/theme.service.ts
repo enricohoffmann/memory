@@ -44,6 +44,10 @@ export class ThemeService {
         return theme ? theme : null;
     }
 
+    getThemeIdByThemeKey(themeKey: ThemeKey): string {
+        const theme = this.themes.find(t => t.key === themeKey);
+        return theme ? theme.id : '';
+    }
 
     private loadAssetFileNames():AssetFile[] {
         let assetFiles = import.meta.glob<{ default: string }>('../assets/icons/*/*.svg', {

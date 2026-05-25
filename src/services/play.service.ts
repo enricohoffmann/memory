@@ -42,6 +42,10 @@ export class PlayService {
         return this._gameState.status;
     }
 
+    get gameState(): GameState {
+        return this._gameState;
+    }
+
     get gameOverResult(): GameOverResult {
         const [playerOne, playerTwo] = this._gameState.players;
         const maxScorePlayer = playerOne.score >= playerTwo.score ? playerOne : playerTwo;

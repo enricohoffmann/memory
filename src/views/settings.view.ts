@@ -7,10 +7,9 @@ import themeGroupeIcon from '../assets/icons/theme-group.svg';
 import playerGroupIcon from '../assets/icons/player-group.svg';
 import boardSizeIcon from '../assets/icons/bordSize-group.svg';
 import { GameSetupService } from "../services/gameSetup.service";
-
-import '../styles/views/_settings.scss';
 import { ButtonComponent } from "../components/button.component";
 
+import '../styles/views/_settings.scss';
 
 export class SettingsView {
 
@@ -32,8 +31,6 @@ export class SettingsView {
     private playersComponent: SettingOptionGroupComponent;
     private boardSizeComponent: SettingOptionGroupComponent;
     private playButton: ButtonComponent;
-
-
 
     constructor(private navigate: (view: ViewName, gameState?: GameState) => void) {
         this.themeService = new ThemeService();
@@ -58,8 +55,7 @@ export class SettingsView {
 
     }
 
-    //Wenn ich zu dieser Seite zurückkomme muss ich die alten Einstllungen wieder anzeigen
-    onInit(gameState?: GameState):void {
+    onInit():void {
         this.loadThemes();
         this.loadPlayers();
         this.loadBoardSizes();
@@ -67,36 +63,53 @@ export class SettingsView {
         this.selectedThemeId = this.themes[0].id;
     }
 
-    render(container: HTMLElement):void {
+    render(container: HTMLElement, gameState?: GameState):void {
         const sectionContainer = this.buildSettingsSection();
         this.renderSettingsButton(sectionContainer);
         container.appendChild(sectionContainer);
         this.renderOptionGroupsIntoColumnOne();
         this.changeThemeSelection(this.selectedThemeId!);
+
+        if(gameState){this.loadSettingsByGameState(gameState);}
     }
 
-    private loadThemes() {
+    private loadThemes(): void {
         this.themeService.init();
         this.themes = this.themeService.getThemes();
     }
 
-    private loadPlayers() {
+    private loadPlayers(): void {
         this.players = this.playerService.getPlayers();
     }
 
-    private loadBoardSizes() {
+    private loadBoardSizes(): void {
         this.boardSizes = this.boardSizeService.getBoardSizes();
+    }
+
+    private loadSettingsByGameState(gameState: GameState):void {
+        const themeId:string = this.themeService.getThemeIdByThemeKey(gameState.themeKey);
+        this.restorThemeSelection(themeId);
+        this.playersComponent.changeSelectionFromExtern(gameState.startPlayerId);
+        this.changePlayerSelection(gameState.startPlayerId);
+        this.boardSizeComponent.changeSelectionFromExtern(gameState.boardSize.id);
+        this.changeBoardSizeSelection(gameState.boardSize.id);
+    }
+
+    private restorThemeSelection(themeId: string): void {
+        this.selectedThemeId = themeId;
+        this.themesComponent.changeSelectionFromExtern(themeId);
+        this.changeThemeSelection(themeId);
     }
 
     private createOptionGroupSpecifications(): void {
         const themeOptionGroupSpecification: OptionGroupSpecification<Theme> =
-            { title: 'Game themes', firstElementIsActive: true, nodeName: 'article', iconPath: themeGroupeIcon, groupComponent: this.themesComponent, groupArray: this.themes };
+            { optionName: 'theme', title: 'Game themes', firstElementIsActive: true, nodeName: 'article', iconPath: themeGroupeIcon, groupComponent: this.themesComponent, groupArray: this.themes };
         this.optionGroupSpecifications.push(themeOptionGroupSpecification);
         const playerOptionGroupSpecification: OptionGroupSpecification<Player> =
-            { title: 'Choose player', firstElementIsActive: false, nodeName: 'article', iconPath: playerGroupIcon, groupComponent: this.playersComponent, groupArray: this.players };
+            { optionName: 'player', title: 'Choose player', firstElementIsActive: false, nodeName: 'article', iconPath: playerGroupIcon, groupComponent: this.playersComponent, groupArray: this.players };
         this.optionGroupSpecifications.push(playerOptionGroupSpecification);
         const boardSizeOptionGroupSpecification: OptionGroupSpecification<BoardSize> =
-            { title: 'BoardSize', firstElementIsActive: false, nodeName: 'article', iconPath: boardSizeIcon, groupComponent: this.boardSizeComponent, groupArray: this.boardSizes };
+            { optionName: 'board', title: 'BoardSize', firstElementIsActive: false, nodeName: 'article', iconPath: boardSizeIcon, groupComponent: this.boardSizeComponent, groupArray: this.boardSizes };
         this.optionGroupSpecifications.push(boardSizeOptionGroupSpecification);
     }
 
@@ -150,7 +163,7 @@ export class SettingsView {
 
     }
 
-    private renderOptionGroupsIntoColumnOne() {
+    private renderOptionGroupsIntoColumnOne(): void {
         const columnOne = document.getElementById('setting-sub-col-one');
         if (!columnOne) { return; }
         this.optionGroupSpecifications.forEach((specification) => {
@@ -187,17 +200,18 @@ export class SettingsView {
 
     private buildOptionGroupBySpecification(specification: OptionGroupSpecification<Theme | Player | BoardSize>): HTMLElement {
         const container = specification.groupComponent.buildContainer(specification);
+        
         container.classList.add('settings-group');
         return container;
     }
 
-    private showThemePreviewImage() {
+    private showThemePreviewImage(): void {
         const imageElement = document.getElementById('theme-preview-image') as HTMLImageElement;
         if (!imageElement) { return; }
         imageElement.src = this.themeService.getThemeImageById(this.selectedThemeId || '');
     }
 
-    private changeSettingsSelectionContent(selectionName: string, content: string) {
+    private changeSettingsSelectionContent(selectionName: string, content: string): void {
         const selectionElemets = document.querySelectorAll('#selection-container p');
         if (!selectionElemets) { return; }
 

@@ -10,19 +10,19 @@ export class NavigationManager {
         this.app.innerHTML = '';
 
         if(view === 'home'){this.callHome();}
-        if(view === 'settings'){this.callSettings();}
+        if(view === 'settings'){this.callSettings(gameState);}
         if(view === 'play' && gameState) {this.callPlay(gameState);}
     }
 
-    private callHome(){
+    private callHome(): void{
         const home:HomeView = new HomeView((view) => this.navigateTo(view));
         home.render(this.app);
     }
 
-    private callSettings(){
+    private callSettings(gameState?: GameState){
         const settings:SettingsView = new SettingsView((view, gameState) => this.navigateTo(view, gameState));
         settings.onInit();
-        settings.render(this.app);
+        settings.render(this.app, gameState);
     }
 
     private callPlay(gameState: GameState){

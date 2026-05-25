@@ -6,7 +6,7 @@ export class SettingOptionGroupComponent {
 
     private _optionGroupButtons:RadialButton[] = [];
 
-    buildContainer<T extends SettingOption>(specification: OptionGroupSpecification<Theme | Player | BoardSize>): HTMLElement {
+    buildContainer(specification: OptionGroupSpecification<Theme | Player | BoardSize>): HTMLElement {
         const container: HTMLElement = document.createElement(specification.nodeName);
         const headerContainer: HTMLElement = this.buildOptionGroupHeader(specification);
         container.appendChild(headerContainer);
@@ -14,6 +14,11 @@ export class SettingOptionGroupComponent {
         container.appendChild(optionGroup);
 
         return container;
+    }
+
+
+    changeSelectionFromExtern(id: string): void {
+        this.handleNewOptionSelected(id);
     }
 
     private buildOptionGroupHeader(option: OptionGroupSpecification<Theme | Player | BoardSize>): HTMLElement {
@@ -67,16 +72,14 @@ export class SettingOptionGroupComponent {
     private createButton(buttonParams: SettingButtonParamter): HTMLElement {
             const button: RadialButton = new RadialButton(buttonParams);
             this._optionGroupButtons.push(button);
-            return button.getRadialButton();
+            return button.radialButton;
         }
 
     private handleNewOptionSelected(optionId: string){
 
         this._optionGroupButtons.forEach((optionGroupButton)=>{
             const btnId = optionGroupButton._buttonParams.buttonId;
-            if(btnId !== optionId){
-                optionGroupButton.changeButtonActive(true);
-            }
+            optionGroupButton.setActive(btnId === optionId);
         });
         
     }

@@ -72,6 +72,7 @@ export interface SettingButtonParamter {
 }
 
 export interface OptionGroupSpecification<T> {
+    optionName: string;
     title: string;
     firstElementIsActive:boolean;
     nodeName: string;
