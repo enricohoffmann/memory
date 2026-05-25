@@ -142,7 +142,7 @@
     }
 }
 
-
+.button--win-draw-btn,
 .button--exit-btn {
     height: 54px;
     cursor: pointer;
@@ -215,7 +215,8 @@
             background-color: var.$da-project-button-hover;
             box-shadow: 3px 3px 5px 0px rgba(47, 46, 46, 0.2);
 
-            .button--exit-btn--da-projects__text {
+            .button--exit-btn--da-projects__text,
+            .button--win-draw-btn--da-projects__text {
                 color: rgba(255, 255, 255, 1);
             }
 
@@ -260,7 +261,8 @@
             background-color: var.$food-primary-color;
             box-shadow: 3px 3px 5px 0px rgba(47, 46, 46, 0.2);
 
-            .button--exit-btn--food__text {
+            .button--exit-btn--food__text,
+            .button--win-draw-btn--food__text {
                 color: rgba(255, 255, 255, 1);
             }
 
@@ -313,6 +315,8 @@
         }
     }
 }
+
+
 
 .button--popup-resume {
     height: 57px;

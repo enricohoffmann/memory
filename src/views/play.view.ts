@@ -35,7 +35,7 @@ export class PlayView {
         container.appendChild(wrapper);
         this.showCurrentPlayer();
 
-        //this.handleGameOver();
+        this.handleGameOver();
     }
 
     initGameState(): boolean {
@@ -91,7 +91,7 @@ export class PlayView {
 
     private renderDialogButton(headerSection: HTMLElement) {
         const btnConfig: ButtonConfig = {
-            variant: 'exit-btn', text: 'Exit game', theme: this._playService.themeKey
+            variant: 'exit-btn', text: 'Exit game', theme: this._playService.themeKey, hasIcon: true
         };
         const button: ButtonComponent = new ButtonComponent(btnConfig, () => this.showDialog());
         headerSection.appendChild(button.renderButton());
@@ -265,8 +265,6 @@ export class PlayView {
 
             const endScreenElement = endScreenComponent.render();
             endScreen.appendChild(endScreenElement);
-
-
 
             requestAnimationFrame(() => {
                 endScreen.classList.add('overlay-container--slide', 'overlay-container--show');

@@ -23,7 +23,7 @@ export class ButtonComponent {
     private applyVariant(){
         if(this.config.variant === 'homePlay-btn'){this._button.innerHTML = this.getHomePlayButtonTemplate();}
         if(this.config.variant === 'setting-btn'){this._button.innerHTML = this.getButtonWithIconTemplate();}
-        if(this.config.variant === 'exit-btn'){
+        if(this.config.variant === 'exit-btn' || this.config.variant === 'win-draw-btn'){
             this._button.innerHTML = this.getButtonWithIconThemeTemplate();
             this._button.classList.add(`button--${this.config.variant}--${this.config.theme}`);
         }
@@ -70,14 +70,16 @@ export class ButtonComponent {
 
     private getButtonWithIconThemeTemplate(): string {
         return /* html */ `
-            <div class='button--${this.config.variant}__icons'>
+
+            ${this.config.hasIcon ? `<div class='button--${this.config.variant}__icons'>
                 <div class='
                     button--${this.config.variant}__icons__icon
                     button--${this.config.variant}--${this.config.theme}--default'></div>
                 <div class='
-                    button--${this.config.variant}__icons__icon 
+                    button--${this.config.variant}__icons__icon
                     button--${this.config.variant}--${this.config.theme}--hover'></div>
-            </div>
+            </div>` : ''}
+            
             <span class='button--${this.config.variant}--${this.config.theme}__text'>${this.config.text}</span>
         `;
     }

@@ -1,4 +1,4 @@
-import { GameOverResult, ThemeKey, TrophyType } from "../types/game.types";
+import { ButtonConfig, GameOverResult, ThemeKey, TrophyType } from "../types/game.types";
 import { ButtonComponent } from "./button.component";
 import '../styles/components/_endScreenComponent.scss';
 
@@ -104,9 +104,10 @@ export class EndScreenComponent {
     }
 
     private buildBackButtonElement(): HTMLElement {
-        const button: ButtonComponent = new ButtonComponent('win-draw-btn', () => this.backToHome());
-        const buttonElement = button.getWinDrawBackButton(this.theme, this.theme === 'code-vibes' ? 'Back to start' : 'Home');
-        return buttonElement;
+
+        const btnConfig: ButtonConfig = {variant: 'win-draw-btn', theme: this.theme, text: this.theme === 'code-vibes' ? 'Back to start' : 'Home', hasIcon: false};
+        const button: ButtonComponent = new ButtonComponent(btnConfig, () => this.backToHome());
+        return button.renderButton();
     }
 
     private createHtmlElement(nodeType: string, classNames: string[]): HTMLElement {
