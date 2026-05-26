@@ -19,6 +19,10 @@ export class GameStateStorage {
         return this.gameState;
     }
 
+    clearGameState(): void {
+        if(this.gameState){ this.clearGameState();}
+    }
+
     private loadStateFromLocalStorage(): void {
         try {
             const state = localStorage.getItem(this.STORAGE_KEY);
@@ -36,5 +40,11 @@ export class GameStateStorage {
         } catch {
             
         }
+    }
+
+    private clearStateInLocalStorage(): void {
+        try {
+            localStorage.clear();
+        } catch {}
     }
 }

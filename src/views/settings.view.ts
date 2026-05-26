@@ -264,6 +264,7 @@ export class SettingsView {
     private settingStartButtonEvent() {
         const gameState: GameState | null = this.createNewGame();
         if (gameState) {
+            gameState.status = 'running';
             this.navivigateToPlay(gameState);
         }
     }

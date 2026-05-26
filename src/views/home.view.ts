@@ -3,6 +3,7 @@ import { ButtonConfig, ViewName } from "../types/game.types";
 
 import '../styles/views/_home.scss';
 import { ButtonComponent } from "../components/button.component";
+import { GameStateStorage } from "../storage/gameState.storage";
 
 export class HomeView {
 
@@ -51,6 +52,8 @@ export class HomeView {
     }
 
     private onButtonClick(): void {
+        const gameStor = new GameStateStorage();
+        gameStor.clearGameState();
         this.navigate('settings')
     }
 

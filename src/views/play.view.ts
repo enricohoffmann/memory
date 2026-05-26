@@ -1,6 +1,6 @@
 import { CardComponent } from "../components/card.Component";
 import { PlayService } from "../services/play.service";
-import { ButtonConfig, Card, CompareCardsResult, GameState, ViewName } from "../types/game.types";
+import { ButtonConfig, Card, CompareCardsResult, GameState, Player, ViewName } from "../types/game.types";
 
 import '../styles/views/_play.scss';
 import { ButtonComponent } from "../components/button.component";
@@ -33,14 +33,29 @@ export class PlayView {
         playSection.appendChild(mainSection);
         wrapper = this.addOverlayToWrapper(wrapper);
         container.appendChild(wrapper);
-        this.showCurrentPlayer();
+        this.restoreGameFromGameState();
 
-        //this.handleGameOver();
     }
 
     initGameState(): boolean {
         return true;
     }
+
+    private restoreGameFromGameState(): void {
+        this.showCurrentPlayer();
+        this._scoreBoard.showScoreForPlayers(this._playService.getPlayers()); 
+        if(this._playService.canRestoreMatchedCards()) {
+            this.restoreMatchedCardsView();
+        }
+    }
+
+    private restoreMatchedCardsView(){
+        this._playService.matchedCards.forEach((card) => {
+            card.flipCard();
+        });
+        this.showMatchedCards();
+    }
+
 
     private buildWrapper(): HTMLElement {
         const wrapper: HTMLElement = document.createElement('div');
@@ -174,7 +189,7 @@ export class PlayView {
     }
 
     private flipSelectedCard(card: CardComponent): void {
-        card.fipCard();
+        card.flipCard();
     }
 
     private turnSelectedCardsBack(cards: CardComponent[]): Promise<void> {

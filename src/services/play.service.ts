@@ -66,6 +66,16 @@ export class PlayService {
         return this._matchedCards;
     }
 
+    canRestoreMatchedCards(): boolean {
+        const cards = this._cardComponents.filter(c => c.cardId in this.gameState.matchedCards);
+        if(cards){
+            this._matchedCards = cards;
+            return true;
+        }
+
+        return false;
+    }
+
     getScoreByPlayerId(playerId: string):number {
         const player:Player | undefined = this._gameState.players.find(p => p.id === playerId);
         return player?.score ?? 0;
@@ -92,10 +102,12 @@ export class PlayService {
             this.setMatchedCards(currentCards);
             this.setScoreFromCurrentPlayer();
             result.result = this.checkIsGameOver() ? 'gameOver' :  'successfully';
+            this.resetSelectedCards();
             this.saveState();
         }else {
             result.result = 'unsuccessful';
             result.cardsToTurnBack = currentCards;
+            this.resetSelectedCards();
             this.setNextPlayer();
         }
         
@@ -109,6 +121,10 @@ export class PlayService {
         this._gameState.matchedCards = [];
         this._gameState.status = 'idle';
         this.saveState();
+    }
+
+    private resetSelectedCards(): void {
+        this._gameState.selectedCards = [];
     }
 
     private setMatchedCards(cardsSelected: CardComponent[]):void {

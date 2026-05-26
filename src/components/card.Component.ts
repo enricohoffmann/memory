@@ -24,8 +24,6 @@ export class CardComponent {
     setCardMatched(matched: boolean) {
         this._cardElement.classList.add(`is-matched--${this.themeKey}`);
         this._isMatched = matched;
-        console.log('match');
-        
     }
 
     buildCard(): HTMLElement {
@@ -50,7 +48,7 @@ export class CardComponent {
         this._cardElement.classList.toggle('is-flipped');
     }
 
-    fipCard():void {
+    flipCard():void {
         if(this.card.isFlipped) {return;}
         this.card.isFlipped = true;
         this._cardElement.classList.toggle('is-flipped');
