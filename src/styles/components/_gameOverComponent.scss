@@ -10,10 +10,10 @@
     overflow: hidden;
 
     &--code-vibes {
-        background-color: rgba(48, 49, 49, 1);
+        background-color: var.$designBlack;
 
         &__headline {
-            @include mixins.setup-font("RedRose", 188px, 700, rgba(77, 213, 188, 1));
+            @include mixins.setup-font("RedRose", 188px, 700, var.$code-vibes-font-color-green);
             text-shadow: -7px 0px 8px rgba(77, 213, 188, 0.5);
         }
 
@@ -24,10 +24,10 @@
     }
 
     &--da-projects {
-        background-color: rgba(30, 117, 148, 1);
+        background-color: var.$da-project-primary-color;
 
         &__headline {
-            @include mixins.setup-font("FigTree", 130px, 800, rgba(253, 91, 79, 1));
+            @include mixins.setup-font("FigTree", 130px, 800, var.$da-project-font-color);
             text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         }
     
@@ -38,7 +38,7 @@
     }
 
     &--food {
-        background-color: rgba(243, 131, 45, 1);
+        background-color: var.$food-primary-color;
 
         &__headline {
             @include mixins.setup-font("KleeOne", 130px, 600, rgba(255, 255, 255, 1));
@@ -52,10 +52,10 @@
     }
 
     &--games {
-        background-color: rgba(41, 79, 96, 1);
+        background-color: var.$games-primary-color;
 
         &__headline {
-            @include mixins.setup-font("Orbitron", 124px, 900, rgba(237, 27, 118, 1));
+            @include mixins.setup-font("Orbitron", 124px, 900, var.$games-font-color);
             text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         }
 

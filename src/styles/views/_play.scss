@@ -23,7 +23,7 @@
     }
 
     &--da-projects {
-        background-color: rgba(191, 229, 242, 1);
+        background-color: var.$da-project-button-default;
         --card-width: 120px;
         --card-height: 100px;
     }

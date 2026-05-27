@@ -40,11 +40,11 @@
         }
 
         .score-board__player-text--one {
-            color: rgba(43, 177, 255, 1);
+            color: var.$code-vibes-font-color-blue;
         }
 
         .score-board__player-text--two {
-            color: rgba(245, 142, 57, 1);
+            color: var.$code-vibes-font-color-orange;
         }
 
         .score-board__icon {
@@ -65,11 +65,11 @@
         }
 
         .score-board__player-score--one {
-            color: rgba(43, 177, 255, 1);
+            color: var.$code-vibes-font-color-blue;
         }
 
         .score-board__player-score--two {
-            color: rgba(245, 142, 57, 1);
+            color: var.$code-vibes-font-color-orange;
         }
 
     }

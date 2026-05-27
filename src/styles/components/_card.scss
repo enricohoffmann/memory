@@ -29,27 +29,27 @@
             &-code-vibes {
                 background:
                     var(--card-image) center / 50% no-repeat,
-                    rgba(232, 243, 240, 1);
+                    var.$code-vibes-card-bg;
             }
 
             &-da-projects {
                 border-radius: 13px;
                 background:
                     var(--card-image) center / 50% no-repeat,
-                    rgba(234, 242, 244, 1);
+                    var.$da-project-card-bg;
             }
 
             &-food {
                 background:
                     var(--card-image) center / 50% no-repeat,
-                    rgba(244, 236, 228, 1);
+                    var.$food-card-bg;
             }
 
             &-games {
                 border-radius: 12px;
                 background:
                     var(--card-image) center / 50% no-repeat,
-                    rgba(246, 241, 243, 1);
+                    var.$games-card-bg;
                 box-shadow: 6px 6px 12px 0px rgba(0,0,0,0.25);
             }
 
@@ -68,17 +68,17 @@
             &-da-projects {
                 border-radius: 13px;
                 background: url('/src/assets/icons/da-project-card-back.svg') center / 50% no-repeat,
-                    rgba(30, 117, 148, 1);
+                    var.$da-project-primary-color;
             }
 
             &-food {
                 background: url('/src/assets/icons/food-card-back.svg') center / 50% no-repeat,
-                    rgba(243, 131, 45, 1);
+                    var.$food-primary-color;
             }
 
             &-games {
                 border-radius: 12px;
-                background: linear-gradient(-25deg, rgba(10, 40, 53, 1) 0%, rgba(237, 27, 118, 1) 100%);
+                background: linear-gradient(-25deg, rgba(10, 40, 53, 1) 0%, var.$games-font-color 100%);
                 box-shadow: 6px 6px 12px 0px rgba(0,0,0,0.25);
             }
 

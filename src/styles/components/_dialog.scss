@@ -31,7 +31,7 @@
     &--games {
         padding: 0;
         border-radius: 20px;
-        background-color: rgba(240, 246, 249, 1);
+        background-color: var.$games-dialog-bg;
     }
 
     &--da-projects {
