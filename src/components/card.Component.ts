@@ -21,6 +21,10 @@ export class CardComponent {
         return this._cardId;
     }
 
+    resetFlipState(): void {
+        this.card.isFlipped = false;
+    }
+
     setCardMatched(matched: boolean) {
         this._cardElement.classList.add(`is-matched--${this.themeKey}`);
         this._isMatched = matched;
@@ -57,8 +61,6 @@ export class CardComponent {
     getCardPairId(): number{
         return this.card.pairId;
     }
-
-    
 
     private setCardImage(): void {
         const cardInner = this._cardElement.querySelector(`.card__face--front`);

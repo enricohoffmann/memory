@@ -44,15 +44,19 @@ export class PlayView {
     private restoreGameFromGameState(): void {
         this.showCurrentPlayer();
         this._scoreBoard.showScoreForPlayers(this._playService.getPlayers()); 
+        this._playService.resetCardsForRestore();
         if(this._playService.canRestoreMatchedCards()) {
             this.restoreMatchedCardsView();
         }
     }
 
     private restoreMatchedCardsView(){
-        this._playService.matchedCards.forEach((card) => {
+        const matchedCards = this._playService.restoreMatchedCardsArray();
+
+        matchedCards.forEach((card) => {
             card.flipCard();
         });
+
         this.showMatchedCards();
     }
 
@@ -158,15 +162,15 @@ export class PlayView {
     }
 
     private cardSelected(card: Card) {
-
+        
         if (card.isFlipped) { return; }
         if (this._playService.twoCardsAlreadySelected) {
             return;
         }
 
         const currentCard: CardComponent | null = this._playService.addSelectedCard(card.id);
+        
         if (!currentCard) { return; }
-
         this.flipSelectedCard(currentCard);
 
         if (this._playService.twoCardsAlreadySelected) {
@@ -186,6 +190,7 @@ export class PlayView {
             this.showMatchedCards();
         }
         this._playService.clearSelectedCards();
+        
     }
 
     private flipSelectedCard(card: CardComponent): void {
