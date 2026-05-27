@@ -69,6 +69,8 @@ export interface SettingButtonParamter {
     buttonText:string;
     isInitialActive:boolean;
     onClicked?: (buttonId: string) => void;
+    onHovered?: (buttonId: string) => void;
+    onLeave?: () => void;
 }
 
 export interface OptionGroupSpecification<T> {

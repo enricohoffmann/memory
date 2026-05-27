@@ -2,7 +2,10 @@ import { BoardSize, OptionGroupSpecification, Player, SettingButtonParamter, Set
 import { RadialButton } from "./radialButton.component";
 
 export class SettingOptionGroupComponent {
-    constructor(private onOptionSelected: (optionId: string) => void) { }
+    constructor(
+        private onOptionSelected: (optionId: string) => void, 
+        private onOptionHovered?: (optionId: string) => void, 
+        private onOptionLeave?: () => void ) { }
 
     private _optionGroupButtons:RadialButton[] = [];
 
@@ -65,6 +68,12 @@ export class SettingOptionGroupComponent {
             onClicked: (settingOptionId:string ) => {
                 this.onOptionSelected(settingOptionId)
                 this.handleNewOptionSelected(settingOptionId);
+            },
+            onHovered: (settingOptionId: string) => {
+                this.handleOptionHover(settingOptionId)
+            },
+            onLeave: () => {
+                this.handleOptionLeave();
             }
         };
     }
@@ -75,13 +84,25 @@ export class SettingOptionGroupComponent {
             return button.radialButton;
         }
 
-    private handleNewOptionSelected(optionId: string){
+    private handleNewOptionSelected(optionId: string): void{
 
         this._optionGroupButtons.forEach((optionGroupButton)=>{
             const btnId = optionGroupButton._buttonParams.buttonId;
             optionGroupButton.setActive(btnId === optionId);
         });
         
+    }
+
+    private handleOptionHover(optionId: string): void {
+        if(this.onOptionHovered){
+            this.onOptionHovered(optionId);
+        }   
+    }
+
+    private handleOptionLeave(): void {
+        if(this.onOptionLeave){
+            this.onOptionLeave();
+        }
     }
 
 }

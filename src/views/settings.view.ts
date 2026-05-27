@@ -32,14 +32,18 @@ export class SettingsView {
     private boardSizeComponent: SettingOptionGroupComponent;
     private playButton: ButtonComponent;
 
+    private previewHoverTimeout: number | null = null;
+
     constructor(private navigate: (view: ViewName, gameState?: GameState) => void) {
         this.themeService = new ThemeService();
         this.playerService = new PlayerService();
         this.boardSizeService = new BoardSizeService();
 
-        this.themesComponent = new SettingOptionGroupComponent((themeId) => {
-            this.changeThemeSelection(themeId);
-        });
+        this.themesComponent = new SettingOptionGroupComponent(
+            (themeId) => { this.changeThemeSelection(themeId); },
+            (themeId) => { this.hoverTheme(themeId); },
+            () => { this.leaveThemeHover(); }
+        );
 
         this.playersComponent = new SettingOptionGroupComponent((playerId) => {
             this.changePlayerSelection(playerId);
@@ -49,13 +53,13 @@ export class SettingsView {
             this.changeBoardSizeSelection(boardSizeId);
         });
 
-        const btnConfig: ButtonConfig = {variant: 'setting-btn', disabled: true, text: 'Start'};
+        const btnConfig: ButtonConfig = { variant: 'setting-btn', disabled: true, text: 'Start' };
 
         this.playButton = new ButtonComponent(btnConfig, () => this.settingStartButtonEvent());
 
     }
 
-    onInit():void {
+    onInit(): void {
         this.loadThemes();
         this.loadPlayers();
         this.loadBoardSizes();
@@ -63,14 +67,14 @@ export class SettingsView {
         this.selectedThemeId = this.themes[0].id;
     }
 
-    render(container: HTMLElement, gameState?: GameState):void {
+    render(container: HTMLElement, gameState?: GameState): void {
         const sectionContainer = this.buildSettingsSection();
         this.renderSettingsButton(sectionContainer);
         container.appendChild(sectionContainer);
         this.renderOptionGroupsIntoColumnOne();
         this.changeThemeSelection(this.selectedThemeId!);
 
-        if(gameState){this.loadSettingsByGameState(gameState);}
+        if (gameState) { this.loadSettingsByGameState(gameState); }
     }
 
     private loadThemes(): void {
@@ -86,8 +90,8 @@ export class SettingsView {
         this.boardSizes = this.boardSizeService.getBoardSizes();
     }
 
-    private loadSettingsByGameState(gameState: GameState):void {
-        const themeId:string = this.themeService.getThemeIdByThemeKey(gameState.themeKey);
+    private loadSettingsByGameState(gameState: GameState): void {
+        const themeId: string = this.themeService.getThemeIdByThemeKey(gameState.themeKey);
         this.restorThemeSelection(themeId);
         this.playersComponent.changeSelectionFromExtern(gameState.startPlayerId);
         this.changePlayerSelection(gameState.startPlayerId);
@@ -157,7 +161,7 @@ export class SettingsView {
 
     private renderSettingsButton(container: HTMLElement): void {
         const selectionContainer: Element | null = container.querySelector('#selection-container');
-        if(selectionContainer){
+        if (selectionContainer) {
             selectionContainer.appendChild(this.playButton.renderButton());
         }
 
@@ -173,6 +177,22 @@ export class SettingsView {
 
     }
 
+    private hoverTheme(themeId: string): void {
+        if (this.previewHoverTimeout){clearTimeout(this.previewHoverTimeout);}
+
+        this.previewHoverTimeout = window.setTimeout(() => {
+            this.showThemePreviewImage(themeId);
+        }, 120);
+    }
+
+    private leaveThemeHover(): void {
+        if (this.previewHoverTimeout){clearTimeout(this.previewHoverTimeout);}
+        if(this.selectedThemeId){
+            this.showThemePreviewImage(this.selectedThemeId);
+        }
+    }
+
+
     private changePlayerSelection(playerId: string): void {
         this.selectedStartPlayerId = playerId;
         const player = this.playerService.getPlayerById(playerId);
@@ -183,7 +203,7 @@ export class SettingsView {
 
     private changeThemeSelection(themeId: string): void {
         this.selectedThemeId = themeId;
-        this.showThemePreviewImage();
+        this.showThemePreviewImage(themeId);
         const theme = this.themeService.getThemeById(themeId);
         if (theme === null) { return; }
         this.changeSettingsSelectionContent('theme', `${theme.selectionText}`);
@@ -200,15 +220,15 @@ export class SettingsView {
 
     private buildOptionGroupBySpecification(specification: OptionGroupSpecification<Theme | Player | BoardSize>): HTMLElement {
         const container = specification.groupComponent.buildContainer(specification);
-        
+
         container.classList.add('settings-group');
         return container;
     }
 
-    private showThemePreviewImage(): void {
+    private showThemePreviewImage(themeId: string): void {
         const imageElement = document.getElementById('theme-preview-image') as HTMLImageElement;
         if (!imageElement) { return; }
-        imageElement.src = this.themeService.getThemeImageById(this.selectedThemeId || '');
+        imageElement.src = this.themeService.getThemeImageById(themeId);
     }
 
     private changeSettingsSelectionContent(selectionName: string, content: string): void {

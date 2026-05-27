@@ -12,6 +12,7 @@ export class RadialButton {
         this._button = document.createElement('button');
         this.buildRadialHtmlButton();
         this.registerEventListener();
+        
     }
 
     private buildRadialHtmlButton(): void {
@@ -49,10 +50,22 @@ export class RadialButton {
             if (this._buttonParams.onClicked) {
                 this._buttonParams.onClicked(this._buttonParams.buttonId);
             }
-
             this.setActive(true);
         });
+
+        this._button.addEventListener('mouseenter', () => {
+            if(this._buttonParams.onHovered){
+                this._buttonParams.onHovered(this._buttonParams.buttonId);
+            }
+        });
+
+        this._button.addEventListener('mouseleave', () => {
+            if(this._buttonParams.onLeave){
+                this._buttonParams.onLeave();
+            }
+        });;
     }
+
 
     get buttonId(): string {
         return this._buttonParams.buttonId;
@@ -61,7 +74,6 @@ export class RadialButton {
     setActive(isActive: boolean):void {
 
         this._isActive = isActive;
-
         this._button.classList.toggle('radial-button--active', isActive);
         
     }
