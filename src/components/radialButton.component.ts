@@ -1,13 +1,24 @@
 import '../styles/components/_radialButton.scss';
-import { SettingButtonParamter } from '../types/game.types';
+import { SettingButtonParameter } from '../types/game.types';
 
+/**
+ * Builds and manages an interactive radial selection button.
+ *
+ * The component renders the button markup, wires the optional interaction callbacks,
+ * and tracks whether the button is currently marked as active.
+ */
 export class RadialButton {
 
-    _buttonParams: SettingButtonParamter;
+    _buttonParams: SettingButtonParameter;
     private _button: HTMLButtonElement;
     private _isActive:boolean = false;
 
-    constructor(buttonParams: SettingButtonParamter) {
+    /**
+     * Creates a new radial button instance.
+     *
+     * @param buttonParams Defines the button id, label, initial state, and optional event callbacks.
+     */
+    constructor(buttonParams: SettingButtonParameter) {
         this._buttonParams = buttonParams;
         this._button = document.createElement('button');
         this.buildRadialHtmlButton();
@@ -15,6 +26,9 @@ export class RadialButton {
         
     }
 
+    /**
+     * Configures the button element and applies the initial active state when required.
+     */
     private buildRadialHtmlButton(): void {
         this._button.type = 'button';
         this._button.classList.add('radial-button');
@@ -26,6 +40,11 @@ export class RadialButton {
         }
     }
 
+    /**
+     * Creates the HTML structure for the radial button.
+     *
+     * @returns The HTML template string for the button.
+     */
     private getButtonHtml(): string {
         const html: string = /* html */ `
 
@@ -45,6 +64,9 @@ export class RadialButton {
         return html;
     }
 
+    /**
+     * Registers the click and hover handlers for the button element.
+     */
     private registerEventListener(): void {
         this._button.addEventListener('click', () => {
             if (this._buttonParams.onClicked) {
@@ -67,10 +89,18 @@ export class RadialButton {
     }
 
 
+    /**
+     * Returns the unique identifier of the radial button.
+     */
     get buttonId(): string {
         return this._buttonParams.buttonId;
     }
 
+    /**
+     * Updates the active visual state of the button.
+     *
+     * @param isActive Determines whether the button should be marked as active.
+     */
     setActive(isActive: boolean):void {
 
         this._isActive = isActive;
@@ -78,6 +108,9 @@ export class RadialButton {
         
     }
 
+    /**
+     * Returns the rendered button element.
+     */
     get radialButton(): HTMLButtonElement {
         return this._button;
     }

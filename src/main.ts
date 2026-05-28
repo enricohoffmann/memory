@@ -6,7 +6,16 @@ import { GameState } from "./types/game.types";
 const app = document.getElementById('app');
 const gameStorage:GameStateStorage = new GameStateStorage();
 
-if(app){
+/**
+ * Bootstraps the application and routes to the initial view.
+ *
+ * The app resumes an existing running game when present, otherwise
+ * it starts from the home view.
+ */
+function bootstrapApp(): void {
+    if(!app){
+        return;
+    }
     const navigation = new NavigationManager(app);
     const gameState: GameState | null = gameStorage.getGameState();
 
@@ -15,8 +24,9 @@ if(app){
     } else {
         navigation.navigateTo('home');
     }
-
 }
+
+bootstrapApp();
 
 
 

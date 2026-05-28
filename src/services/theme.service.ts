@@ -1,5 +1,11 @@
 import { AssetFile, Theme, ThemeKey } from "../types/game.types";
 
+/**
+ * Manages available themes and resolves their preview and card face assets.
+ *
+ * The service initializes the theme list once, loads matching asset file paths,
+ * and provides lookup helpers by theme id and key.
+ */
 export class ThemeService {
 
     private themes: Theme[] = [];
@@ -9,9 +15,15 @@ export class ThemeService {
     });
 
 
+    /**
+     * Creates a new theme service instance.
+     */
     constructor() {}
 
-    init(){
+    /**
+     * Initializes the theme list and assigns icon face paths once.
+     */
+    init(): void{
         if(this.themes.length === 0){
             this.initThemeArray();
             const assetFiles:AssetFile[] = this.loadAssetFileNames();
@@ -19,7 +31,10 @@ export class ThemeService {
         }
     }
 
-    private initThemeArray(){
+    /**
+     * Creates the default list of selectable themes.
+     */
+    private initThemeArray(): void{
 
         this.themes.push({id:'theme-01', key: 'code-vibes', name: 'Coding vibes theme', facePaths: [], selectionText: 'Coding Theme'});
         this.themes.push({id:'theme-02', key: 'da-projects', name: 'DA Projects theme', facePaths: [], selectionText: 'DA Projects Theme'});
@@ -28,10 +43,21 @@ export class ThemeService {
     }
 
 
+    /**
+     * Returns all initialized themes.
+     *
+     * @returns The current theme collection.
+     */
     getThemes(): Theme[]{
         return this.themes;
     }
 
+    /**
+     * Returns the preview image URL for the theme with the provided id.
+     *
+     * @param themeId The id of the requested theme.
+     * @returns The preview image URL, or an empty string if the theme is unknown.
+     */
     getThemeImageById(themeId: string): string {
         const theme = this.themes.find(t => t.id === themeId);
         if(!theme) {return '';}
@@ -39,16 +65,33 @@ export class ThemeService {
         return String(this.previewFiles[imageKey]);
     }
 
+    /**
+     * Returns the theme that matches the provided id.
+     *
+     * @param themeId The id of the requested theme.
+     * @returns The matching theme, or `null` if no theme is found.
+     */
     getThemeById(themeId: string): (Theme | null) {
         const theme = this.themes.find(t => t.id === themeId);
         return theme ? theme : null;
     }
 
+    /**
+     * Returns the theme id for the provided theme key.
+     *
+     * @param themeKey The key of the requested theme.
+     * @returns The matching theme id, or an empty string when not found.
+     */
     getThemeIdByThemeKey(themeKey: ThemeKey): string {
         const theme = this.themes.find(t => t.key === themeKey);
         return theme ? theme.id : '';
     }
 
+    /**
+     * Loads all icon asset files and returns their source keys and resolved URLs.
+     *
+     * @returns The list of discovered asset files.
+     */
     private loadAssetFileNames():AssetFile[] {
         let assetFiles = import.meta.glob<{ default: string }>('../assets/icons/*/*.svg', {
             eager: true,
@@ -71,6 +114,11 @@ export class ThemeService {
 
     }
 
+    /**
+     * Assigns each theme its face image URLs based on matching asset file paths.
+     *
+     * @param assetFiles The loaded icon asset files.
+     */
     private sortAssetFileNamesIntoThemes(assetFiles:AssetFile[]):void {
         this.themes.forEach((theme) => {
             const themeFileNames = assetFiles.filter(n => n.key.startsWith(`../assets/icons/${theme.key}/`));

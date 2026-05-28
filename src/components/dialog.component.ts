@@ -3,38 +3,65 @@ import { ButtonConfig, ButtonVariant, DialogButtonMessages, ThemeKey } from '../
 import { ButtonComponent } from './button.component';
 
 
+/**
+ * Builds and controls the confirmation dialog that is shown when the player wants to leave the game.
+ *
+ * The component renders theme-specific dialog content, creates the action buttons,
+ * and manages the dialog visibility and click interactions.
+ */
 export class DialogComponent {
 
     private _dialogElement: HTMLElement;
-    private _buttonMessages: DialogButtonMessages[] = [];
+    private readonly _buttonMessagesByTheme: Record<ThemeKey, DialogButtonMessages> = {
+        'code-vibes': {theme: 'code-vibes', resumeText: 'Back to game', exitText: 'Exit game'},
+        'games': {theme: 'games', resumeText: 'No, back to game', exitText: 'Yes, quit game'},
+        'da-projects': {theme: 'da-projects', resumeText: 'Back to game', exitText: 'Exit game'},
+        'food': {theme: 'food', resumeText: 'No, back to game', exitText: 'Exit game'}
+    };
 
+    /**
+     * Creates a new dialog component instance.
+     *
+     * @param theme The active theme used to style the dialog and its buttons.
+     * @param exitGame Callback executed when the user confirms leaving the game.
+     * @param resumeGame Callback executed when the user dismisses the dialog and continues the game.
+     */
     constructor(
         private theme: ThemeKey,
         private exitGame: () => void,
         private resumeGame: () => void
     ) {
         this._dialogElement = document.createElement('section');
-        this.createButtonMessages();
     }
 
+    /**
+     * Builds the dialog markup and appends the theme-specific action buttons.
+     *
+     * @returns The rendered dialog root element.
+     */
     renderDialog(): HTMLElement {
         this.buildDialog();
-        this.createButtonMessages();
         const resumeBtnConfig = this.createButtonConfig('popup-resume');
-        if(resumeBtnConfig === null) {return this._dialogElement;}
         this.buildResumeButton(resumeBtnConfig);
         const exitBtnConfig = this.createButtonConfig('popup-exit');
-        if(exitBtnConfig === null) {return this._dialogElement;}
         this.buildExitButton(exitBtnConfig);
         return this._dialogElement;
     }
 
+    /**
+     * Makes the dialog visible and registers its click handlers.
+     */
     showDialog(): void {
         this._dialogElement.classList.add('dialog-section--show');
         this.registerDialogClickEvent();
         this.registerDialogContainerClickEvent();
     }
 
+    /**
+     * Hides the dialog and resolves after the closing animation has finished.
+     *
+     * @returns A promise that resolves to `true` after the dialog has been hidden.
+     */
     async hideDialog(): Promise<boolean> {
 
         return new Promise((resolve) => {
@@ -48,20 +75,14 @@ export class DialogComponent {
         });
     }
 
-    private createButtonMessages(): void {
-        const codeVibeMsg: DialogButtonMessages = {theme: 'code-vibes', resumeText: 'Back to game', exitText: 'Exit game'};
-        this._buttonMessages.push(codeVibeMsg);
-        const gameMsg: DialogButtonMessages = {theme: 'games', resumeText: 'No, back to game', exitText: 'Yes, quit game'};
-        this._buttonMessages.push(gameMsg);
-        const daProjectMsg: DialogButtonMessages = {theme: 'da-projects', resumeText: 'Back to game', exitText: 'Exit game'};
-        this._buttonMessages.push(daProjectMsg);
-        const foodMsg: DialogButtonMessages = {theme: 'food', resumeText: 'No, back to game', exitText: 'Exit game'};
-        this._buttonMessages.push(foodMsg);
-    }
-
-    private createButtonConfig(btnVariant: ButtonVariant): ButtonConfig | null {
-        const btnMsg: DialogButtonMessages | null | undefined = this._buttonMessages.find(m => m.theme === this.theme);
-        if(btnMsg === null || btnMsg === undefined) {return null;}
+    /**
+     * Creates the button configuration for a dialog action based on the active theme.
+     *
+     * @param btnVariant The dialog button variant to configure.
+     * @returns A button configuration object for the active dialog theme.
+     */
+    private createButtonConfig(btnVariant: ButtonVariant): ButtonConfig {
+        const btnMsg: DialogButtonMessages = this._buttonMessagesByTheme[this.theme];
         const config: ButtonConfig = {
             variant: btnVariant,
             theme: this.theme,
@@ -70,6 +91,9 @@ export class DialogComponent {
         return config;
     }
 
+    /**
+     * Builds the dialog shell and its static content.
+     */
     private buildDialog() {
         this._dialogElement.classList.add('dialog-section');
         this._dialogElement.innerHTML = /*html*/ `
@@ -81,16 +105,27 @@ export class DialogComponent {
         `;
     }
 
+    /**
+     * Registers the click handler that closes the dialog when the backdrop is clicked.
+     */
     private registerDialogClickEvent(): void {
         this._dialogElement.addEventListener('click', () => this.resumeGame());
     }
 
+    /**
+     * Prevents clicks inside the dialog container from bubbling to the backdrop handler.
+     */
     private registerDialogContainerClickEvent():void {
         const dialogContainer: HTMLElement = this._dialogElement.querySelector('.dialog-container') as HTMLElement;
         if(!dialogContainer){return;}
         dialogContainer.addEventListener('click', (event) => event.stopPropagation());
     }
 
+    /**
+     * Creates and appends the resume button to the dialog.
+     *
+     * @param btnConfig The configuration used to build the resume button.
+     */
     private buildResumeButton(btnConfig: ButtonConfig) {
         const button: ButtonComponent = new ButtonComponent(btnConfig, () => this.resumeGame());
         const buttonContainer:HTMLElement = this._dialogElement.querySelector('#dialog-buttons') as HTMLElement;
@@ -99,6 +134,11 @@ export class DialogComponent {
         }
     }
 
+    /**
+     * Creates and appends the exit button to the dialog.
+     *
+     * @param btnConfig The configuration used to build the exit button.
+     */
     private buildExitButton(btnConfig: ButtonConfig) {
         const button: ButtonComponent = new ButtonComponent(btnConfig, () => this.exitGame());
         const buttonContainer:HTMLElement = this._dialogElement.querySelector('#dialog-buttons') as HTMLElement;

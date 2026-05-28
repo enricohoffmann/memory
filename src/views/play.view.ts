@@ -1,28 +1,43 @@
 import { CardComponent } from "../components/card.Component";
 import { PlayService } from "../services/play.service";
-import { ButtonConfig, Card, CompareCardsResult, GameState, Player, ViewName } from "../types/game.types";
-
-import '../styles/views/_play.scss';
+import { ButtonConfig, Card, CompareCardsResult, GameState, ViewName } from "../types/game.types";
 import { ButtonComponent } from "../components/button.component";
-import { PlayerScoreBordComponent } from "../components/playerScoreBoard.component";
+import { PlayerScoreBoardComponent } from "../components/playerScoreBoard.component";
 import { GameOverComponent } from "../components/gameOver.component";
 import { EndScreenComponent } from "../components/endScreen.component";
 import { DialogComponent } from "../components/dialog.component";
+import '../styles/views/_play.scss';
 
-
+/**
+ * Renders and controls the full gameplay view.
+ *
+ * The view builds the board, connects UI interactions to the play service,
+ * updates score and turn indicators, and handles dialog and game-over overlays.
+ */
 export class PlayView {
 
     private _playService: PlayService;
-    private _scoreBoard: PlayerScoreBordComponent;
+    private _scoreBoard: PlayerScoreBoardComponent;
 
+    /**
+     * Creates a new play view instance.
+     *
+     * @param gameState The game state used to render and continue gameplay.
+     * @param navigate Callback used to navigate to other views.
+     */
     constructor(
         private gameState: GameState,
         private navigate: (view: ViewName, gameState?: GameState) => void
     ) {
         this._playService = new PlayService(gameState);
-        this._scoreBoard = new PlayerScoreBordComponent(this._playService.themeKey, 'play');
+        this._scoreBoard = new PlayerScoreBoardComponent(this._playService.themeKey, 'play');
     }
 
+    /**
+     * Renders the complete play view into the provided container.
+     *
+     * @param container The target element that should host the play view.
+     */
     render(container: HTMLElement): void {
         let wrapper = this.buildWrapper();
         const playSection = this.buildPlaySection();
@@ -37,6 +52,11 @@ export class PlayView {
 
     }
 
+    /**
+     * Initializes game state prerequisites before rendering.
+     *
+     * @returns `true` when initialization can proceed.
+     */
     initGameState(): boolean {
         return true;
     }
@@ -161,6 +181,11 @@ export class PlayView {
         return overlayContainer;
     }
 
+    /**
+     * Handles a card selection from the board.
+     *
+     * @param card The selected card model.
+     */
     private cardSelected(card: Card) {
         
         if (card.isFlipped) { return; }
@@ -180,6 +205,11 @@ export class PlayView {
 
     }
 
+    /**
+     * Processes the compare result and updates UI state accordingly.
+     *
+     * @param result The result returned from the card comparison flow.
+     */
     private async processTheCompareResult(result: CompareCardsResult): Promise<void> {
         if (result.result === 'failed') { return; }
         if (result.result === 'unsuccessful') { await this.turnSelectedCardsBack(result.cardsToTurnBack!); }
@@ -217,6 +247,9 @@ export class PlayView {
         });
     }
 
+    /**
+     * Shows the exit confirmation dialog overlay.
+     */
     private showDialog() {
         const exitDialogOverlay = document.getElementById('exit-dialog');
         if (!exitDialogOverlay) { return; }
@@ -235,6 +268,12 @@ export class PlayView {
 
     }
 
+    /**
+     * Hides the dialog and closes the overlay when the hide animation has finished.
+     *
+     * @param dialog The dialog instance to hide.
+     * @param overlay The overlay element that hosts the dialog.
+     */
     private async closeDialog(dialog: DialogComponent, overlay: HTMLElement) {
         const res = await dialog.hideDialog();
         if(res){
@@ -243,11 +282,17 @@ export class PlayView {
         
     }
 
+    /**
+     * Quits the current game and navigates back to settings.
+     */
     private exitThisGame() {
         this._playService.quitGameState();
         this.navigate('settings', this._playService.gameState);
     }
 
+    /**
+     * Triggers the staged game-over presentation flow.
+     */
     private handleGameOver(): void {
         setTimeout(() => {
 

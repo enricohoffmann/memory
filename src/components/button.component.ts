@@ -2,16 +2,33 @@ import { ButtonConfig, ButtonVariant, ThemeKey } from "../types/game.types";
 import '../styles/components/_button.scss';
 
 
+/**
+ * Builds and manages a styled button element based on the provided button configuration.
+ *
+ * The component is responsible for creating the DOM node, applying the matching visual
+ * variant, registering the click handler, and exposing the final button element for rendering.
+ */
 export class ButtonComponent {
 
     private _button: HTMLButtonElement;
 
+    /**
+     * Creates a new button component instance.
+     *
+     * @param config Defines the button variant, theme, label, icon usage, and disabled state.
+     * @param buttonClick Callback that is executed when the button is clicked.
+     */
     constructor(private config: ButtonConfig, private buttonClick: () => void){
         this._button = document.createElement('button');
         this._button.type = 'button';
         this._button.classList.add('button', `button--${config.variant}`);
     }
 
+    /**
+     * Applies the configured variant, registers the click handler, and returns the button element.
+     *
+     * @returns The fully configured HTML button element.
+     */
     renderButton(): HTMLButtonElement {
         this.applyVariant();
         this.registerEvent();
@@ -20,6 +37,9 @@ export class ButtonComponent {
     }
 
     
+    /**
+     * Injects the markup and theme-specific classes required for the configured button variant.
+     */
     private applyVariant(){
         if(this.config.variant === 'homePlay-btn'){this._button.innerHTML = this.getHomePlayButtonTemplate();}
         if(this.config.variant === 'setting-btn'){this._button.innerHTML = this.getButtonWithIconTemplate();}
@@ -33,16 +53,27 @@ export class ButtonComponent {
         }
     }
 
+    /**
+     * Binds the configured click callback to the button element.
+     */
     private registerEvent():void {
         this._button.addEventListener('click', () => this.buttonClick())
     }
 
+    /**
+     * Removes the disabled modifier class from the button.
+     */
     enableButton(): void {
         this._button.classList.remove(`button--${this.config.variant}--disabled`);
     }
 
 
 
+    /**
+     * Creates the markup for the home play button variant.
+     *
+     * @returns The HTML template string for the home play button.
+     */
     private getHomePlayButtonTemplate(): string {
         return /* html */ `
             <div class='button--homePlay-btn__icon-left'></div>
@@ -54,6 +85,11 @@ export class ButtonComponent {
         `;
     }
 
+    /**
+     * Creates the markup for button variants that show an icon group next to the label.
+     *
+     * @returns The HTML template string for an icon-based button.
+     */
     private getButtonWithIconTemplate(): string {
         return /* html */ `
             <div class='button--${this.config.variant}__icons'>
@@ -68,6 +104,11 @@ export class ButtonComponent {
         `;
     }
 
+    /**
+     * Creates the markup for themed button variants that can optionally render an icon.
+     *
+     * @returns The HTML template string for a themed button.
+     */
     private getButtonWithIconThemeTemplate(): string {
         return /* html */ `
 
@@ -85,6 +126,11 @@ export class ButtonComponent {
     }
 
 
+    /**
+     * Creates the markup for simple text-only popup button variants.
+     *
+     * @returns The HTML template string for a popup button.
+     */
     private getButtonTemplate(): string {
         return /*html*/ `
             <span class='button--${this.config.variant}--${this.config.theme}__text'>${this.config.text}</span>

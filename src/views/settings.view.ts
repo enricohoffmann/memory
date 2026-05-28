@@ -5,12 +5,18 @@ import { ThemeService } from "../services/theme.service";
 import { BoardSize, ButtonConfig, GameConfig, GameState, OptionGroupSpecification, Player, Theme, ViewName } from "../types/game.types";
 import themeGroupeIcon from '../assets/icons/theme-group.svg';
 import playerGroupIcon from '../assets/icons/player-group.svg';
-import boardSizeIcon from '../assets/icons/bordSize-group.svg';
+import boardSizeIcon from '../assets/icons/boardSize-group.svg';
 import { GameSetupService } from "../services/gameSetup.service";
 import { ButtonComponent } from "../components/button.component";
 
 import '../styles/views/_settings.scss';
 
+/**
+ * Renders the settings view and coordinates all game setup selections.
+ *
+ * The view loads selectable options, updates the summary and preview UI,
+ * validates completion state, and starts a new game when setup is complete.
+ */
 export class SettingsView {
 
     private themes: Theme[] = [];
@@ -34,6 +40,11 @@ export class SettingsView {
 
     private previewHoverTimeout: number | null = null;
 
+    /**
+     * Creates a new settings view instance.
+     *
+     * @param navigate Callback used to navigate to another view.
+     */
     constructor(private navigate: (view: ViewName, gameState?: GameState) => void) {
         this.themeService = new ThemeService();
         this.playerService = new PlayerService();
@@ -59,6 +70,9 @@ export class SettingsView {
 
     }
 
+    /**
+     * Initializes lookup data and default selection state for the settings view.
+     */
     onInit(): void {
         this.loadThemes();
         this.loadPlayers();
@@ -67,6 +81,12 @@ export class SettingsView {
         this.selectedThemeId = this.themes[0].id;
     }
 
+    /**
+     * Renders the settings view into the provided container.
+     *
+     * @param container The target element that should host the view.
+     * @param gameState Optional game state used to restore previous selections.
+     */
     render(container: HTMLElement, gameState?: GameState): void {
         const sectionContainer = this.buildSettingsSection();
         this.renderSettingsButton(sectionContainer);
@@ -90,16 +110,26 @@ export class SettingsView {
         this.boardSizes = this.boardSizeService.getBoardSizes();
     }
 
+    /**
+     * Restores selections from an existing game state.
+     *
+     * @param gameState The saved game state used to re-apply selections.
+     */
     private loadSettingsByGameState(gameState: GameState): void {
         const themeId: string = this.themeService.getThemeIdByThemeKey(gameState.themeKey);
-        this.restorThemeSelection(themeId);
+        this.restoreThemeSelection(themeId);
         this.playersComponent.changeSelectionFromExtern(gameState.startPlayerId);
         this.changePlayerSelection(gameState.startPlayerId);
         this.boardSizeComponent.changeSelectionFromExtern(gameState.boardSize.id);
         this.changeBoardSizeSelection(gameState.boardSize.id);
     }
 
-    private restorThemeSelection(themeId: string): void {
+    /**
+     * Restores and applies a previously selected theme id.
+     *
+     * @param themeId The theme id to restore.
+     */
+    private restoreThemeSelection(themeId: string): void {
         this.selectedThemeId = themeId;
         this.themesComponent.changeSelectionFromExtern(themeId);
         this.changeThemeSelection(themeId);
@@ -177,6 +207,11 @@ export class SettingsView {
 
     }
 
+    /**
+     * Handles theme hover and debounces preview image updates.
+     *
+     * @param themeId The hovered theme id.
+     */
     private hoverTheme(themeId: string): void {
         if (this.previewHoverTimeout){clearTimeout(this.previewHoverTimeout);}
 
@@ -185,6 +220,9 @@ export class SettingsView {
         }, 120);
     }
 
+    /**
+     * Restores the preview image to the currently selected theme after hover leaves.
+     */
     private leaveThemeHover(): void {
         if (this.previewHoverTimeout){clearTimeout(this.previewHoverTimeout);}
         if(this.selectedThemeId){
@@ -193,6 +231,11 @@ export class SettingsView {
     }
 
 
+    /**
+     * Applies a new player selection and updates the settings summary.
+     *
+     * @param playerId The selected player id.
+     */
     private changePlayerSelection(playerId: string): void {
         this.selectedStartPlayerId = playerId;
         const player = this.playerService.getPlayerById(playerId);
@@ -201,6 +244,11 @@ export class SettingsView {
         this.checkIfAllSelectionCompleted();
     }
 
+    /**
+     * Applies a new theme selection, updates preview image, and updates summary text.
+     *
+     * @param themeId The selected theme id.
+     */
     private changeThemeSelection(themeId: string): void {
         this.selectedThemeId = themeId;
         this.showThemePreviewImage(themeId);
@@ -210,6 +258,11 @@ export class SettingsView {
         this.checkIfAllSelectionCompleted();
     }
 
+    /**
+     * Applies a new board size selection and updates the settings summary.
+     *
+     * @param boardSizeId The selected board size id.
+     */
     private changeBoardSizeSelection(boardSizeId: string): void {
         this.selectedBoardSizeId = boardSizeId;
         const boardSize = this.boardSizeService.getBoardSizeById(boardSizeId);
@@ -281,14 +334,22 @@ export class SettingsView {
     }
 
 
+    /**
+     * Triggers game setup and navigates to play when setup succeeds.
+     */
     private settingStartButtonEvent() {
         const gameState: GameState | null = this.createNewGame();
         if (gameState) {
             gameState.status = 'running';
-            this.navivigateToPlay(gameState);
+            this.navigateToPlay(gameState);
         }
     }
 
+    /**
+     * Creates a new game state from the current settings selection.
+     *
+     * @returns The created game state, or `null` when setup validation fails.
+     */
     private createNewGame(): (GameState | null) {
         const theme = this.themeService.getThemeById(this.selectedThemeId!);
         const boardSize = this.boardSizeService.getBoardSizeById(this.selectedBoardSizeId!);
@@ -310,7 +371,12 @@ export class SettingsView {
 
     }
 
-    private navivigateToPlay(gameState: GameState): void {
+    /**
+     * Navigates to the play view with the prepared game state.
+     *
+     * @param gameState The game state used to start gameplay.
+     */
+    private navigateToPlay(gameState: GameState): void {
         this.navigate('play', gameState);
     }
 
