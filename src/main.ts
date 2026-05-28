@@ -1,5 +1,5 @@
 import { NavigationManager } from "./manager/navigation.manager";
-import { GameStateStorage } from "./storage/gameState.storage";
+import { GameStateStorage } from "./storage/game-state.storage";
 import './styles/main.scss';
 import { GameState } from "./types/game.types";
 
@@ -13,17 +13,17 @@ const gameStorage:GameStateStorage = new GameStateStorage();
  * it starts from the home view.
  */
 function bootstrapApp(): void {
-    if(!app){
-        return;
-    }
-    const navigation = new NavigationManager(app);
-    const gameState: GameState | null = gameStorage.getGameState();
+  if(!app){
+    return;
+  }
+  const navigation = new NavigationManager(app);
+  const gameState: GameState | null = gameStorage.getGameState();
 
-    if(gameState && gameState.status === 'running'){
-        navigation.navigateTo('play', gameState);
-    } else {
-        navigation.navigateTo('home');
-    }
+  if(gameState && gameState.status === 'running'){
+    navigation.navigateTo('play', gameState);
+  } else {
+    navigation.navigateTo('home');
+  }
 }
 
 bootstrapApp();

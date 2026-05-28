@@ -36,7 +36,7 @@ export class CardComponent {
     /**
      * Returns the unique identifier of the card.
      */
-    get cardId(){
+    get cardId(): number {
         return this._cardId;
     }
 
@@ -52,8 +52,12 @@ export class CardComponent {
      *
      * @param matched Whether the card should be treated as matched.
      */
-    setCardMatched(matched: boolean) {
-        this._cardElement.classList.add(`is-matched--${this.themeKey}`);
+    setCardMatched(matched: boolean): void {
+        if (matched) {
+            this._cardElement.classList.add(`is-matched--${this.themeKey}`);
+        } else {
+            this._cardElement.classList.remove(`is-matched--${this.themeKey}`);
+        }
         this._isMatched = matched;
     }
 
@@ -64,25 +68,16 @@ export class CardComponent {
      */
     buildCard(): HTMLElement {
 
-        this._cardElement.innerHTML = /* html */ `
-            <button class='card' id='card-${this._cardId}'>
-                <div class='card__inner'>
-                    <div class='card__face card__face--back card__face--back-${this.themeKey}'></div>
-                    <div class='card__face card__face--front card__face--front-${this.themeKey}'></div>
-                </div>
-            </button>
-        `;
-
+        this._cardElement.innerHTML = this.cardHtmlTemplate();
         this.setCardImage();
         this.registerEvent();
-
         return this._cardElement;
     }
 
     /**
      * Turns the card back over and updates the card model accordingly.
      */
-    turnCardBack(): void{
+    turnCardBack(): void {
         this.card.isFlipped = false;
         this._cardElement.classList.toggle('is-flipped');
     }
@@ -90,8 +85,8 @@ export class CardComponent {
     /**
      * Flips the card if it is not already flipped.
      */
-    flipCard():void {
-        if(this.card.isFlipped) {return;}
+    flipCard(): void {
+        if (this.card.isFlipped) { return; }
         this.card.isFlipped = true;
         this._cardElement.classList.toggle('is-flipped');
     }
@@ -101,7 +96,7 @@ export class CardComponent {
      *
      * @returns The pair identifier of the card.
      */
-    getCardPairId(): number{
+    getCardPairId(): number {
         return this.card.pairId;
     }
 
@@ -123,6 +118,22 @@ export class CardComponent {
      */
     private registerEvent(): void {
         this._cardElement.addEventListener('click', () => this.cardSelected(this.card));
+    }
+
+    /**
+     * Generates the HTML template for the card component.
+     *
+     * @returns The HTML string representing the card.
+     */
+    private cardHtmlTemplate(): string {
+        return /* html */ `
+      <button class='card' id='card-${this._cardId}'>
+        <div class='card__inner'>
+          <div class='card__face card__face--back card__face--back-${this.themeKey}'></div>
+          <div class='card__face card__face--front card__face--front-${this.themeKey}'></div>
+        </div>
+      </button>
+    `;
     }
 
 }
