@@ -9,7 +9,7 @@ import { AssetFile, Theme, ThemeKey } from "../types/game.types";
 export class ThemeService {
 
   private themes: Theme[] = [];
-  private previewFiles = import.meta.glob<{ default: string}>('../assets/images/theme-visual/*.svg', {
+  private previewFiles = import.meta.glob<string>('../assets/images/theme-visual/*.svg', {
     eager: true,       
     import: 'default'
   });
@@ -93,7 +93,7 @@ export class ThemeService {
    * @returns The list of discovered asset files.
    */
   private loadAssetFileNames():AssetFile[] {
-    const assetFiles: Record<string, { default: string }> = this.loadIconAssetFiles();
+    const assetFiles: Record<string, string> = this.loadIconAssetFiles();
     return this.mapAssetFiles(assetFiles);
   }
 
@@ -102,8 +102,8 @@ export class ThemeService {
    *
    * @returns The resolved icon asset map.
    */
-  private loadIconAssetFiles(): Record<string, { default: string }> {
-    return import.meta.glob<{ default: string }>('../assets/icons/*/*.svg', {
+  private loadIconAssetFiles(): Record<string, string> {
+    return import.meta.glob<string>('../assets/icons/*/*.svg', {
       eager: true,
       import: 'default'
     });
@@ -115,13 +115,13 @@ export class ThemeService {
    * @param assetFiles The loaded icon asset map.
    * @returns The mapped asset files.
    */
-  private mapAssetFiles(assetFiles: Record<string, { default: string }>): AssetFile[] {
+  private mapAssetFiles(assetFiles: Record<string, string>): AssetFile[] {
     const assetFileNames: AssetFile[] = [];
 
     Object.keys(assetFiles).forEach((fileName) => {
       assetFileNames.push({
         key: fileName,
-        url: assetFiles[fileName].default
+        url: assetFiles[fileName]
       });
     });
 

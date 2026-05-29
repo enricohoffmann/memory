@@ -67,7 +67,7 @@ h2 {
     }
 }
 
-.sumary-text {
+.summary-text {
     @include mixins.setup-font("Almarai", 20px, 400);
     padding: 2px 0px;
     opacity: 0;
@@ -81,7 +81,7 @@ h2 {
     }
 }
 
-.selection-seperator {
+.selection-separator {
     @include mixins.setup-display-flex(row, flex-start, center);
     box-sizing: border-box;
 
@@ -89,23 +89,23 @@ h2 {
 
     &--default {
 
-        .selection-seperator-diamond {
+        .selection-separator-diamond {
             opacity: 0;
         }
 
-        .selection-seperator-line {
+        .selection-separator-line {
             @include mixins.style-line(8px, 40px);
         }
 
     }
 
     &--completed {
-        .selection-seperator-diamond {
+        .selection-separator-diamond {
             opacity: 1;
             @include mixins.style-diamond(10px);
         }
 
-        .selection-seperator-line {
+        .selection-separator-line {
             @include mixins.style-line(4px, 30px);
         }
     }

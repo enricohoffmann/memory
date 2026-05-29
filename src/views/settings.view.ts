@@ -32,6 +32,7 @@ export class SettingsView {
   private themeService: ThemeService;
   private playerService: PlayerService;
   private boardSizeService: BoardSizeService;
+  private gameSetupService: GameSetupService;
 
   private themesComponent: SettingOptionGroupComponent;
   private playersComponent: SettingOptionGroupComponent;
@@ -39,6 +40,7 @@ export class SettingsView {
   private playButton: ButtonComponent;
 
   private previewHoverTimeout: number | null = null;
+  private readonly SUMMARY_TEXT_FADE_DELAY_MS = 100;
 
   /**
    * Creates a new settings view instance.
@@ -49,6 +51,7 @@ export class SettingsView {
     this.themeService = new ThemeService();
     this.playerService = new PlayerService();
     this.boardSizeService = new BoardSizeService();
+    this.gameSetupService = new GameSetupService();
 
     this.themesComponent = new SettingOptionGroupComponent(
       (themeId) => { this.changeThemeSelection(themeId); },
@@ -78,7 +81,9 @@ export class SettingsView {
     this.loadPlayers();
     this.loadBoardSizes();
     this.createOptionGroupSpecifications();
-    this.selectedThemeId = this.themes[0].id;
+    if (this.themes.length > 0) {
+      this.selectedThemeId = this.themes[0].id;
+    }
   }
 
   /**
@@ -89,7 +94,7 @@ export class SettingsView {
    */
   render(container: HTMLElement, gameState?: GameState): void {
     const sectionContainer = this.buildSettingsSection();
-    this.renderSettingsButton(sectionContainer);
+    this.renderSettingsButtonIntoContainer(sectionContainer);
     container.appendChild(sectionContainer);
     this.renderOptionGroupsIntoColumnOne();
     this.changeThemeSelection(this.selectedThemeId!);
@@ -97,15 +102,24 @@ export class SettingsView {
     if (gameState) { this.loadSettingsByGameState(gameState); }
   }
 
+  /**
+   * Loads available themes from the theme service.
+   */
   private loadThemes(): void {
     this.themeService.init();
     this.themes = this.themeService.getThemes();
   }
 
+  /**
+   * Loads available players from the player service.
+   */
   private loadPlayers(): void {
     this.players = this.playerService.getPlayers();
   }
 
+  /**
+   * Loads available board sizes from the board size service.
+   */
   private loadBoardSizes(): void {
     this.boardSizes = this.boardSizeService.getBoardSizes();
   }
@@ -135,26 +149,66 @@ export class SettingsView {
     this.changeThemeSelection(themeId);
   }
 
+  /**
+   * Creates all option-group specifications used by the settings form.
+   */
   private createOptionGroupSpecifications(): void {
-    const themeOptionGroupSpecification: OptionGroupSpecification<Theme> =
-      { optionName: 'theme', title: 'Game themes', firstElementIsActive: true, nodeName: 'article', iconPath: themeGroupeIcon, groupComponent: this.themesComponent, groupArray: this.themes };
+    this.optionGroupSpecifications = [];
+
+    const themeOptionGroupSpecification: OptionGroupSpecification<Theme> = this.createThemeOptionGroupSpecification();
     this.optionGroupSpecifications.push(themeOptionGroupSpecification);
-    const playerOptionGroupSpecification: OptionGroupSpecification<Player> =
-      { optionName: 'player', title: 'Choose player', firstElementIsActive: false, nodeName: 'article', iconPath: playerGroupIcon, groupComponent: this.playersComponent, groupArray: this.players };
+    const playerOptionGroupSpecification: OptionGroupSpecification<Player> = this.createPlayerOptionGroupSpecification();
     this.optionGroupSpecifications.push(playerOptionGroupSpecification);
-    const boardSizeOptionGroupSpecification: OptionGroupSpecification<BoardSize> =
-      { optionName: 'board', title: 'BoardSize', firstElementIsActive: false, nodeName: 'article', iconPath: boardSizeIcon, groupComponent: this.boardSizeComponent, groupArray: this.boardSizes };
+    const boardSizeOptionGroupSpecification: OptionGroupSpecification<BoardSize> = this.createBoardSizeOptionGroupSpecification();
     this.optionGroupSpecifications.push(boardSizeOptionGroupSpecification);
   }
 
+  /**
+   * Creates the option group specification for themes.
+   * @returns The theme option group specification.
+   */
+  private createThemeOptionGroupSpecification(): OptionGroupSpecification<Theme> {
+    return { optionName: 'theme', title: 'Game themes', firstElementIsActive: true, nodeName: 'article', iconPath: themeGroupeIcon, groupComponent: this.themesComponent, groupArray: this.themes };
+  }
+
+  /**
+   * Creates the option group specification for players.
+   * @returns The player option group specification.
+   */
+  private createPlayerOptionGroupSpecification(): OptionGroupSpecification<Player> {
+    return { optionName: 'player', title: 'Choose player', firstElementIsActive: false, nodeName: 'article', iconPath: playerGroupIcon, groupComponent: this.playersComponent, groupArray: this.players };
+  }
+
+  /**
+   * Creates the option group specification for board sizes.
+   * @returns The board size option group specification.
+   */
+  private createBoardSizeOptionGroupSpecification(): OptionGroupSpecification<BoardSize> {
+    return { optionName: 'board', title: 'BoardSize', firstElementIsActive: false, nodeName: 'article', iconPath: boardSizeIcon, groupComponent: this.boardSizeComponent, groupArray: this.boardSizes };
+  }
+
+  /**
+   * Builds the root settings section including static markup.
+   *
+   * @returns The created settings section element.
+   */
   private buildSettingsSection(): HTMLElement {
 
     const settingsSection: HTMLElement = document.createElement('section');
     settingsSection.classList.add('settings-section');
+    settingsSection.innerHTML = this.settingsHtmlTemplate();
+    return settingsSection;
+  }
 
-    settingsSection.innerHTML = /* html */ `
 
-        <header class='settings-section-header'>
+  /**
+   * Generates the HTML template for the settings section.
+   *
+   * @returns The HTML string representing the settings section.
+   */
+  private settingsHtmlTemplate(): string {
+    return /* html */ `
+     <header class='settings-section-header'>
           <h2>Settings</h2>
           <div class='settings-section-header__decorative-arrow'>
             <div class='settings-section-header__decorative-arrow__diamond'></div>
@@ -169,27 +223,30 @@ export class SettingsView {
               <img id='theme-preview-image' src='' name='Theme previewimage'/>
             </figure>
             <dl id='selection-container' class='settings-sub-grid__right__buttom'>
-              <p id='theme-selection' class='sumary-text sumary-text--show'>Theme</p>
-              <div class='selection-seperator selection-seperator--default'>
-                <div class='selection-seperator-line'></div>
-                <div class='selection-seperator-diamond'></div>
+              <p id='theme-selection' class='summary-text summary-text--show'>Theme</p>
+              <div class='selection-separator selection-separator--default'>
+                <div class='selection-separator-line'></div>
+                <div class='selection-separator-diamond'></div>
               </div>
-              <p id='player-selection' class='sumary-text sumary-text--show'>Player</p>
-              <div class='selection-seperator selection-seperator--default'>
-                <div class='selection-seperator-line'></div>
-                <div class='selection-seperator-diamond'></div>
+              <p id='player-selection' class='summary-text summary-text--show'>Player</p>
+              <div class='selection-separator selection-separator--default'>
+                <div class='selection-separator-line'></div>
+                <div class='selection-separator-diamond'></div>
               </div>
-              <p id='boardSize-selection' class='sumary-text sumary-text--show'>Board size</p>
+              <p id='boardSize-selection' class='summary-text summary-text--show'>Board size</p>
             </dl>
           </aside>
         </main>
-
-        `;
-
-    return settingsSection;
+    `
   }
 
-  private renderSettingsButton(container: HTMLElement): void {
+
+  /**
+   * Renders the settings button inside the provided container.
+   *
+   * @param container The container element where the settings button will be rendered.
+   */
+  private renderSettingsButtonIntoContainer(container: HTMLElement): void {
     const selectionContainer: Element | null = container.querySelector('#selection-container');
     if (selectionContainer) {
       selectionContainer.appendChild(this.playButton.renderButton());
@@ -197,6 +254,9 @@ export class SettingsView {
 
   }
 
+  /**
+   * Renders all option groups into the left settings column.
+   */
   private renderOptionGroupsIntoColumnOne(): void {
     const columnOne = document.getElementById('setting-sub-col-one');
     if (!columnOne) { return; }
@@ -213,7 +273,7 @@ export class SettingsView {
    * @param themeId The hovered theme id.
    */
   private hoverTheme(themeId: string): void {
-    if (this.previewHoverTimeout){clearTimeout(this.previewHoverTimeout);}
+    if (this.previewHoverTimeout) { clearTimeout(this.previewHoverTimeout); }
 
     this.previewHoverTimeout = window.setTimeout(() => {
       this.showThemePreviewImage(themeId);
@@ -224,8 +284,8 @@ export class SettingsView {
    * Restores the preview image to the currently selected theme after hover leaves.
    */
   private leaveThemeHover(): void {
-    if (this.previewHoverTimeout){clearTimeout(this.previewHoverTimeout);}
-    if(this.selectedThemeId){
+    if (this.previewHoverTimeout) { clearTimeout(this.previewHoverTimeout); }
+    if (this.selectedThemeId) {
       this.showThemePreviewImage(this.selectedThemeId);
     }
   }
@@ -271,6 +331,12 @@ export class SettingsView {
     this.checkIfAllSelectionCompleted();
   }
 
+  /**
+   * Builds an option group container based on a specification object.
+   *
+   * @param specification The option-group configuration.
+   * @returns The generated option-group container.
+   */
   private buildOptionGroupBySpecification(specification: OptionGroupSpecification<Theme | Player | BoardSize>): HTMLElement {
     const container = specification.groupComponent.buildContainer(specification);
 
@@ -278,58 +344,95 @@ export class SettingsView {
     return container;
   }
 
+  /**
+   * Updates the preview image for the given theme id.
+   *
+   * @param themeId The theme id used to resolve the preview image source.
+   */
   private showThemePreviewImage(themeId: string): void {
     const imageElement = document.getElementById('theme-preview-image') as HTMLImageElement;
     if (!imageElement) { return; }
     imageElement.src = this.themeService.getThemeImageById(themeId);
   }
 
+  /**
+   * Updates one summary line with a short fade transition.
+   *
+   * @param selectionName The summary key prefix to match.
+   * @param content The text content to display.
+   */
   private changeSettingsSelectionContent(selectionName: string, content: string): void {
-    const selectionElemets = document.querySelectorAll('#selection-container p');
-    if (!selectionElemets) { return; }
-
-    selectionElemets.forEach((element) => {
-      if (element.id.startsWith(selectionName)) {
-        const selectionElement = document.getElementById(element.id);
-        if (selectionElement) {
-          this.fadeOutSumaryText(selectionElement);
-
-          setTimeout(() => {
-            selectionElement.innerText = content;
-            this.fadeInSumaryText(selectionElement);
-          }, 100);
-
-        }
-      }
-
-    });
-
+    const selectionElement = this.findSelectionElement(selectionName);
+    if (!selectionElement) { return; }
+    this.updateSelectionTextWithFade(selectionElement, content);
   }
 
-  private fadeOutSumaryText(element: HTMLElement): void {
-    element.classList.add('sumary-text--hide');
-    element.classList.remove('sumary-text--show');
+  /**
+   * Finds the settings summary element for a given selection key.
+   *
+   * @param selectionName The summary key prefix to match.
+   * @returns The matching summary element or `null`.
+   */
+  private findSelectionElement(selectionName: string): HTMLElement | null {
+    const selector = `#selection-container p[id^='${selectionName}']`;
+    const selectionElement = document.querySelector(selector);
+    if (!(selectionElement instanceof HTMLElement)) { return null; }
+    return selectionElement;
   }
 
-  private fadeInSumaryText(element: HTMLElement): void {
-    element.classList.remove('sumary-text--hide');
-    element.classList.add('sumary-text--show');
+  /**
+   * Updates a summary element with fade-out and fade-in transitions.
+   *
+   * @param element The summary element to update.
+   * @param content The text content to display.
+   */
+  private updateSelectionTextWithFade(element: HTMLElement, content: string): void {
+    this.fadeOutSummaryText(element);
+    setTimeout(() => {
+      element.innerText = content;
+      this.fadeInSummaryText(element);
+    }, this.SUMMARY_TEXT_FADE_DELAY_MS);
   }
 
+  /**
+   * Applies the fade-out class state for a summary label.
+   *
+   * @param element The summary element to update.
+   */
+  private fadeOutSummaryText(element: HTMLElement): void {
+    element.classList.add('summary-text--hide');
+    element.classList.remove('summary-text--show');
+  }
+
+  /**
+   * Applies the fade-in class state for a summary label.
+   *
+   * @param element The summary element to update.
+   */
+  private fadeInSummaryText(element: HTMLElement): void {
+    element.classList.remove('summary-text--hide');
+    element.classList.add('summary-text--show');
+  }
+
+  /**
+   * Enables the start button when all required selections are set.
+   */
   private checkIfAllSelectionCompleted(): void {
     if (this.selectedThemeId !== null && this.selectedStartPlayerId !== null && this.selectedBoardSizeId !== null) {
       this.playButton.enableButton();
-      this.changeSelectionSeperatorView();
+      this.changeSelectionSeparatorView();
     }
   }
 
-  private changeSelectionSeperatorView(): void {
-    const seperators = document.querySelectorAll('.selection-seperator');
-    if (!seperators) { return; }
+  /**
+   * Switches all summary separators to their completed visual state.
+   */
+  private changeSelectionSeparatorView(): void {
+    const separators = document.querySelectorAll('.selection-separator');
 
-    seperators.forEach((seperator) => {
-      seperator.classList.remove('selection-seperator--default');
-      seperator.classList.add('selection-seperator--completed');
+    separators.forEach((separator) => {
+      separator.classList.remove('selection-separator--default');
+      separator.classList.add('selection-separator--completed');
     });
   }
 
@@ -351,24 +454,32 @@ export class SettingsView {
    * @returns The created game state, or `null` when setup validation fails.
    */
   private createNewGame(): (GameState | null) {
-    const theme = this.themeService.getThemeById(this.selectedThemeId!);
-    const boardSize = this.boardSizeService.getBoardSizeById(this.selectedBoardSizeId!);
+    if (!this.selectedThemeId || !this.selectedBoardSizeId || !this.selectedStartPlayerId) { return null; }
+
+    const theme = this.themeService.getThemeById(this.selectedThemeId);
+    const boardSize = this.boardSizeService.getBoardSizeById(this.selectedBoardSizeId);
     if (!theme || !boardSize) { return null; }
-    const gameConfig: GameConfig = {
+
+    const gameConfig: GameConfig = this.createNewGameConfig(theme, boardSize, this.selectedStartPlayerId);
+    const gameSetupResult = this.gameSetupService.setupGame(gameConfig, this.themes);
+    return gameSetupResult.success ? (gameSetupResult.gameState ?? null) : null;
+
+  }
+
+  /**
+   * Creates a new game configuration object from the current selections.
+   * @param theme The selected theme.
+   * @param boardSize The selected board size.
+   * @param selectedStartPlayerId The selected start player id.
+   * @returns The created game configuration object.
+   */
+  private createNewGameConfig(theme: Theme, boardSize: BoardSize, selectedStartPlayerId: string): GameConfig {
+    return {
       selectedTheme: theme,
       players: this.players,
-      selectedStartPlayerId: this.selectedStartPlayerId!,
+      selectedStartPlayerId,
       selectedBoardSize: boardSize
     };
-    const gameSetupService: GameSetupService = new GameSetupService();
-    const gameSetupResult = gameSetupService.setupGame(gameConfig, this.themes);
-
-    if (gameSetupResult.success && gameSetupResult.gameState) {
-      return gameSetupResult.gameState;
-    }
-
-    return null;
-
   }
 
   /**
